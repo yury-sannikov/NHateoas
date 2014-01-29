@@ -16,7 +16,7 @@ namespace NHateoas.Dynamic.Strategies
         #region AbstractStrategy
         public override string ClassKey(Type originalType)
         {
-            return _compositeStrategiesList.Aggregate("_"  + originalType.FullName, (s, strategy) => string.Format("{0}{1}_", s, strategy.ClassKey(originalType)));
+            return _compositeStrategiesList.Aggregate("_"  + originalType.FullName + "_", (s, strategy) => string.Format("{0}{1}_", s, strategy.ClassKey(originalType)));
         }
 
         public override void Configure(ITypeBuilderContainer container)
@@ -43,6 +43,14 @@ namespace NHateoas.Dynamic.Strategies
         {
             _compositeStrategiesList.Add(
                 new SimplePropertiesAggregatedStrategy(_objectType, _complexTypes)
+                );
+            return this;
+        }
+
+        public StrategyBuilder WithRouteInformation(Dictionary<string, string> routeInformation)
+        {
+            _compositeStrategiesList.Add(
+                new SimpleRoutesStrategy(routeInformation)
                 );
             return this;
         }

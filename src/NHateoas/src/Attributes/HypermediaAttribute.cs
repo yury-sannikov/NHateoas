@@ -43,9 +43,17 @@ namespace NHateoas.Attributes
             
             var payload = objectContent.Value;
 
+            var routes = new Dictionary<string, string>()
+            {
+                {"route1", "route1_value1"},
+                {"route2", "route1_value2"},
+                {"route3", "route1_value3"}
+            };
+
             var strategyBuilder = new StrategyBuilder()
                 .For(payload.GetType())
-                .WithSimpleProperties();
+                .WithSimpleProperties()
+                .WithRouteInformation(routes);
 
             var strategy = strategyBuilder.Build();
 
@@ -55,7 +63,7 @@ namespace NHateoas.Attributes
 
             var newinstance = Activator.CreateInstance(proxyType);
 
-            strategy.ActivateInstance(newinstance, payload, new Dictionary<string, string>());
+            strategy.ActivateInstance(newinstance, payload, routes);
 
             actionExecutedContext.Response.Content = new ObjectContent(newinstance.GetType(), newinstance, objectContent.Formatter);
 

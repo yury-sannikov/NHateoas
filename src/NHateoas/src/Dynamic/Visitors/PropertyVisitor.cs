@@ -11,11 +11,20 @@ namespace NHateoas.Dynamic.Visitors
 {
     internal class PropertyVisitor : ITypeBuilderVisitor
     {
-        private readonly PropertyInfo _propertyInfo;
+        private readonly Type _propertyType;
+        
+        private readonly string _propertyName;
         
         public PropertyVisitor(PropertyInfo propertyInfo)
         {
-            _propertyInfo = propertyInfo;
+            _propertyType = propertyInfo.PropertyType;
+            _propertyName = propertyInfo.Name;
+        }
+
+        public PropertyVisitor(Type propertyType, string propertyName)
+        {
+            _propertyType = propertyType;
+            _propertyName = propertyName;
         }
 
         public void Visit(ITypeBuilderProvider provider)
@@ -23,11 +32,11 @@ namespace NHateoas.Dynamic.Visitors
 
             var typeBuilder = provider.GetTypeBuilder();
 
-            FieldBuilder fieldBuilder = typeBuilder.DefineField(string.Format("_{0}", _propertyInfo.Name.ToLower()),
-                                                                 _propertyInfo.PropertyType, FieldAttributes.Private);
+            FieldBuilder fieldBuilder = typeBuilder.DefineField(string.Format("_{0}", _propertyName.ToLower()),
+                                                                 _propertyType, FieldAttributes.Private);
 
-            PropertyBuilder propertyBuilder = typeBuilder.DefineProperty(_propertyInfo.Name, PropertyAttributes.HasDefault,
-                                                                         _propertyInfo.PropertyType, null);
+            PropertyBuilder propertyBuilder = typeBuilder.DefineProperty(_propertyName, PropertyAttributes.HasDefault,
+                                                                         _propertyType, null);
 
             AddGetter(typeBuilder, fieldBuilder, propertyBuilder);
 
@@ -37,11 +46,11 @@ namespace NHateoas.Dynamic.Visitors
 
         private void AddSetter(System.Reflection.Emit.TypeBuilder typeBuilder, FieldBuilder fieldBuilder, PropertyBuilder propertyBuilder)
         {
-            MethodBuilder propertySetter = typeBuilder.DefineMethod("set_" + _propertyInfo.Name,
+            MethodBuilder propertySetter = typeBuilder.DefineMethod("set_" + _propertyName,
                                  MethodAttributes.Public |
                                 MethodAttributes.SpecialName |
                                 MethodAttributes.HideBySig,
-                                null, new Type[] { _propertyInfo.PropertyType });
+                                null, new Type[] { _propertyType });
             var propertySetterIl = propertySetter.GetILGenerator();
             propertySetterIl.Emit(OpCodes.Ldarg_0);
             propertySetterIl.Emit(OpCodes.Ldarg_1);
@@ -52,11 +61,11 @@ namespace NHateoas.Dynamic.Visitors
 
         private void AddGetter(System.Reflection.Emit.TypeBuilder typeBuilder, FieldBuilder fieldBuilder, PropertyBuilder propertyBuilder)
         {
-            MethodBuilder propertyGetter = typeBuilder.DefineMethod("get_" + _propertyInfo.Name,
+            MethodBuilder propertyGetter = typeBuilder.DefineMethod("get_" + _propertyName,
                                  MethodAttributes.Public |
                                 MethodAttributes.SpecialName |
                                 MethodAttributes.HideBySig,
-                                _propertyInfo.PropertyType, Type.EmptyTypes);
+                                _propertyType, Type.EmptyTypes);
             var ilGenerator = propertyGetter.GetILGenerator();
             ilGenerator.Emit(OpCodes.Ldarg_0);
             ilGenerator.Emit(OpCodes.Ldfld, fieldBuilder);

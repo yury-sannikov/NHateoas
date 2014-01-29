@@ -59,6 +59,7 @@
     <Compile Include="src\Dynamic\Interfaces\ITypeBuilderContainer.cs" />
     <Compile Include="src\Dynamic\ModuleBuilderFactory.cs" />
     <Compile Include="src\Dynamic\Strategies\AbstractStrategy.cs" />
+    <Compile Include="src\Dynamic\Strategies\SimpleRoutesStrategy.cs" />
     <Compile Include="src\Dynamic\Strategies\StrategyBuilder.cs" />
     <Compile Include="src\Dynamic\TypeBuilder.cs" />
     <Compile Include="src\Dynamic\Strategies\SimplePropertiesAggregatedStrategy.cs" />
