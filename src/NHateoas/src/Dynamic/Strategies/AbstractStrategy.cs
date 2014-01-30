@@ -14,7 +14,7 @@ namespace NHateoas.Dynamic.Strategies
 
         public abstract void Configure(ITypeBuilderContainer container);
 
-        public virtual void ActivateInstance(object proxyInstance, object originalInstance, Dictionary<string, string> routes)
+        public virtual void ActivateInstance(object proxyInstance, object originalInstance, Dictionary<string, object> routes)
         {
             
         }

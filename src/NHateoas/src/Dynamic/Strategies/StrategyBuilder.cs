@@ -26,7 +26,7 @@ namespace NHateoas.Dynamic.Strategies
         #endregion
 
         #region IInstanceActivator
-        public override void ActivateInstance(object proxyInstance, object originalInstance, Dictionary<string, string> routes)
+        public override void ActivateInstance(object proxyInstance, object originalInstance, Dictionary<string, object> routes)
         {
             _compositeStrategiesList.ForEach(a => a.ActivateInstance(proxyInstance, originalInstance, routes));
         }
@@ -47,7 +47,7 @@ namespace NHateoas.Dynamic.Strategies
             return this;
         }
 
-        public StrategyBuilder WithRouteInformation(Dictionary<string, string> routeInformation)
+        public StrategyBuilder WithRouteInformation(Dictionary<string, object> routeInformation)
         {
             _compositeStrategiesList.Add(
                 new SimpleRoutesStrategy(routeInformation)

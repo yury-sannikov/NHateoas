@@ -15,9 +15,9 @@ namespace NHateoas.Dynamic.Strategies
     {
         private const string ClassKeyString = "SR";
 
-        private readonly Dictionary<string, string> _routeInformation;
+        private readonly Dictionary<string, object> _routeInformation;
 
-        public SimpleRoutesStrategy(Dictionary<string, string> routeInformation)
+        public SimpleRoutesStrategy(Dictionary<string, object> routeInformation)
         {
             _routeInformation = routeInformation;
         }
@@ -33,12 +33,12 @@ namespace NHateoas.Dynamic.Strategies
         {
             foreach (var route in _routeInformation)
             {
-                container.AddVisitor(new PropertyVisitor(typeof(string), route.Key));    
+                container.AddVisitor(new PropertyVisitor(typeof(object), route.Key));    
             }
         }
 
         public override void ActivateInstance(object proxyInstance, object originalInstance,
-            Dictionary<string, string> routes)
+            Dictionary<string, object> routes)
         {
             proxyInstance.GetType().GetProperties().Where(p => routes.ContainsKey(p.Name)).ToList()
                 .ForEach(prop => prop.SetValue(proxyInstance, routes[prop.Name]));

@@ -7,6 +7,7 @@ using System.Web.Http;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
 using NHateoas.Sample.Models;
+using n_hateoas.Sample.Models;
 
 namespace NHateoas.Sample.Controllers
 {
@@ -15,16 +16,30 @@ namespace NHateoas.Sample.Controllers
     {
         private static readonly Product[] Products = { new Product() { Id = 1, Name = "Cup", Price = 2.99m } };
 
-        static ValuesController()
+        public ValuesController()
         {
             // Set up model-controller mapping.
             new HypermediaConfigurator<Product, ValuesController>()
-                .Map((model, controller) => controller.Get())
-                .Map((model, controller) => controller.Get(model.Id))
+                .For((model, controller) => controller.Get(model.Id))
+                    .Map((model, controller) => controller.Get(model.Name))
+                    .Map((model, controller) => controller.Post(model))
+                    .Map((model, controller) => controller.Put(model.Id, model))
+                    .Map((model, controller) => controller.Delete(model.Id))
+                        .MapReference<ProductDetails>(thisModel => thisModel.Id, 
+                            thatModel => thatModel.ProductId, 
+                            new {method = "POST"})
+
+                .For((model, controller) => controller.Get(model.Name))
+                    .Map((model, controller) => controller.Get(model.Id))
+                    .Map((model, controller) => controller.Post(model))
+                    .Map((model, controller) => controller.Put(model.Id, model))
+                    .Map((model, controller) => controller.Delete(model.Id))
+                .For((model, controller) => controller.Get())
+                    .Map((model, controller) => controller.Get(model.Id))
             .Configure();
         }
 
-        [Hypermedia]
+        //[Hypermedia]
         public IEnumerable<Product> Get()
         {
             return Products;
@@ -36,13 +51,19 @@ namespace NHateoas.Sample.Controllers
             return Products.First();
         }
 
+        [Hypermedia]
+        public Product Get(string name)
+        {
+            return Products.First();
+        }
+
         // POST api/values
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Product product)
         {
         }
 
         // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]Product product)
         {
         }
 

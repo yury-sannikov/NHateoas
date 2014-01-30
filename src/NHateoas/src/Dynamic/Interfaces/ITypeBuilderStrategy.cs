@@ -28,6 +28,6 @@ namespace NHateoas.Dynamic.Interfaces
         /// <param name="proxyInstance"></param>
         /// <param name="originalInstance"></param>
         /// <param name="routes"></param>
-        void ActivateInstance(object proxyInstance, object originalInstance, Dictionary<string, string> routes);
+        void ActivateInstance(object proxyInstance, object originalInstance, Dictionary<string, object> routes);
     }
 }
