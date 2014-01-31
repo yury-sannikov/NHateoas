@@ -123,7 +123,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\n-hateoas.Sample\NHateoas.Sample.csproj">
+    <ProjectReference Include="..\NHateoas.Sample\NHateoas.Sample.csproj">
       <Project>{1CE9C28A-1316-47F2-A4C8-AD19A11DCEB2}</Project>
       <Name>NHateoas.Sample</Name>
     </ProjectReference>

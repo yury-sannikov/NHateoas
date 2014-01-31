@@ -35,7 +35,7 @@ namespace NHateoas.Sample.Controllers
                     .Map((model, controller) => controller.Delete(model.Id))
                         .MapReference<ProductDetails>(thisModel => thisModel.Id, 
                             thatModel => thatModel.ProductId, 
-                            new {method = "POST"})
+                            new {method = "GET"})
 
                 .For((model, controller) => controller.Get(model.Name))
                     .Map((model, controller) => controller.Get(model.Id))
@@ -48,7 +48,7 @@ namespace NHateoas.Sample.Controllers
             .Configure();
         }
 
-        [Hypermedia]
+        //[Hypermedia]
         public IEnumerable<Product> Get()
         {
             return Products;
