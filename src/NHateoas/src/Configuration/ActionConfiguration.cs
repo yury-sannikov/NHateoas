@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
+using NHateoas.Response;
 using NHateoas.Routes;
 using NHateoas.Routes.RouteNameBuilders;
 using NHateoas.Routes.RoutesBuilders;
@@ -18,6 +19,7 @@ namespace NHateoas.Configuration
         private IRouteNameBuilder _routeNameBuilder = null;
         private IRoutesBuilder _routesBuilder = null;
         private IRouteValueSubstitution _routeNameSubstitution = null;
+        private IResponseTransformerFactory _responseTransformerFactory = null;
 
         public void AddMappingRule(MappingRule rule)
         {
@@ -50,6 +52,12 @@ namespace NHateoas.Configuration
         public bool RulesHasBeenBuilt
         {
             get { return _mappingRules.Any(rule => rule.HasUrls()); }
+        }
+
+        public IResponseTransformerFactory ResponseTransformerFactory
+        {
+            get { return _responseTransformerFactory ?? (_responseTransformerFactory = new ResponseTransformerFactory()); }
+            set { _responseTransformerFactory = value; }
         }
     }
 }

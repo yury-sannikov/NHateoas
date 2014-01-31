@@ -55,6 +55,11 @@
     <Compile Include="src\Configuration\HypermediaConfigurator.cs" />
     <Compile Include="src\Configuration\IControllerConfiguration.cs" />
     <Compile Include="src\Configuration\ParametersDelegateBuilder.cs" />
+    <Compile Include="src\Response\IResponseTransformerFactory.cs" />
+    <Compile Include="src\Response\IResponseTransformer.cs" />
+    <Compile Include="src\Response\ResponseTransformerFactory.cs" />
+    <Compile Include="src\Response\ResponseTransformers\EnumerableTransformer.cs" />
+    <Compile Include="src\Response\ResponseTransformers\ModelTransformer.cs" />
     <Compile Include="src\Routes\IRouteNameBuilder.cs" />
     <Compile Include="src\Configuration\MappingRule.cs" />
     <Compile Include="src\Configuration\ActionConfiguration.cs" />

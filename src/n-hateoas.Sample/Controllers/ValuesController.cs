@@ -14,7 +14,15 @@ namespace NHateoas.Sample.Controllers
     [HypermediaSource]
     public class ValuesController : ApiController
     {
-        private static readonly Product[] Products = { new Product() { Id = 1, Name = "Cup", Price = 2.99m } };
+        private static readonly Product[] Products =
+        {
+            new Product() { Id = 1, Name = "Item1", Price = 2.99m } ,
+            new Product() { Id = 2, Name = "Item2", Price = 3.99m } ,
+            new Product() { Id = 3, Name = "Item3", Price = 4.99m } ,
+            new Product() { Id = 4, Name = "Item4", Price = 5.99m } ,
+            new Product() { Id = 5, Name = "Item5", Price = 6.99m } 
+        
+        };
 
         public ValuesController()
         {
@@ -53,13 +61,13 @@ namespace NHateoas.Sample.Controllers
         }
 
         [Hypermedia]
-        public Product Get(string name)
+        public HttpResponseMessage Get(string name)
         {
-            return Products.First();
+            return Request.CreateResponse<Product>(HttpStatusCode.Unauthorized, Products.First());
         }
 
         // POST api/values
-        public void Post([FromBody]Product product)
+        public void Post([FromBody] Product product)
         {
         }
 

@@ -43,7 +43,13 @@ namespace NHateoas.Attributes
     {
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
+            if (actionExecutedContext.Response == null || actionExecutedContext.Response.Content == null)
+                return;
 
+            if (actionExecutedContext.Exception != null)
+                return;
+
+            //---- Getting configuration
             var actionDescriptor = actionExecutedContext.ActionContext.ActionDescriptor.ActionBinding.ActionDescriptor as
                 ReflectedHttpActionDescriptor;
             
@@ -54,10 +60,10 @@ namespace NHateoas.Attributes
                 Debug.Write(string.Format("Unable to get action descriptor for controller {0}", controllerType.ToString()));
                 return;
             }
-
-
             var actionConfiguration = HypermediaControllerConfiguration.Instance.GetcontrollerActionConfiguration(controllerType, actionDescriptor.MethodInfo);
 
+
+            // --- Setup routes first call
             if (!actionConfiguration.RulesHasBeenBuilt)
             {
                 var apiExplorer = GlobalConfiguration.Configuration.Services.GetApiExplorer();
@@ -65,96 +71,15 @@ namespace NHateoas.Attributes
                 RoutesBuilder.Build(controllerType, actionConfiguration, apiExplorer);
             }
 
-            var routesBuilder = actionConfiguration.RoutesBuilder;
-            var routeValueSubstitution = actionConfiguration.RouteValueSubstitution;
-
-            
             var objectContent = (ObjectContent) actionExecutedContext.Response.Content;
-            
+
             var payload = objectContent.Value;
-
-            Dictionary<string, object> routes = routesBuilder.Build(actionConfiguration.MappingRules, routeValueSubstitution, payload);
-
-            var strategyBuilder = new StrategyBuilder()
-                .For(payload.GetType())
-                .WithSimpleProperties()
-                .WithRouteInformation(routes);
-
-            var strategy = strategyBuilder.Build();
-
-            var typeBuilder = new TypeBuilder(payload.GetType(), strategy);
             
-            var proxyType = typeBuilder.BuildType();
+            var responseTransformer =  actionConfiguration.ResponseTransformerFactory.Get(payload);
 
-            var newinstance = Activator.CreateInstance(proxyType);
+            var transformed = responseTransformer.Transform(actionConfiguration, payload);
 
-            strategy.ActivateInstance(newinstance, payload, routes);
-
-            actionExecutedContext.Response.Content = new ObjectContent(newinstance.GetType(), newinstance, objectContent.Formatter);
-
-            /*
-            var objectContent = (ObjectContent) actionExecutedContext.Response.Content;
-            var payload = objectContent.Value;
-
-            var actiualType = actionExecutedContext.Response.Content.GetType();
-            Type[] actiualTypeParameters = actiualType.GetGenericArguments();
-
-
-            var tb = new TypeBuilder(payload.GetType(), null);
-            //tb.AddVisitor(new PropertyVisitor(typeof(PayloadDecorator).GetProperties()[0]));
-
-            var av = new AggregateTypeBuilder(typeof (PayloadDecorator), "_payloadDecorator");
-            av.AddVisitor(new AggregatedPropertyVisitor(typeof (PayloadDecorator).GetProperties()[0]))
-              .AddVisitor(new AggregatedPropertyVisitor(typeof (PayloadDecorator).GetProperties()[1]));
-            
-            tb.AddVisitor(av);
-
-            var newType = tb.BuildType();
-
-           
-            //var dg = new DecoratorGenerator();
-            //var newtype = dg.GetProxyType(payload.GetType(), payload.GetType());
-
-            var newinstance = Activator.CreateInstance(newType);
-
-            var aggfield = newType.GetField("_payloadDecorator",
-                         BindingFlags.NonPublic |
-                         BindingFlags.Instance);
-            aggfield.SetValue(newinstance, new PayloadDecorator()
-            {
-                Id = 99,
-                Name = "Test"
-            });
-
-            //var prop = newType.GetProperty("Data");
-            //prop.SetValue(newinstance, 10, null);
-
-            //var payloadDec = new PayloadDecorator();// {Object = payload};
-            //dynamic payloadDec = new ExpandoObject();
-            //payloadDec.Test = 1;
-
-            //TypeDescriptor.AddAttributes(payloadDec, new KnownTypeAttribute(typeof(Payload)));
-
-            //var objectContextDecorated = Activator.CreateInstance(actiualType, payload, objectContent.Formatter);
-
-            //actionExecutedContext.Response.Content = (ObjectContent)objectContextDecorated;
-            //actionExecutedContext.Response.Content = new ObjectContent(payloadDec.GetType(), payloadDec, objectContent.Formatter);
-            //actionExecutedContext.Response = actionExecutedContext.Request.CreateResponse(HttpStatusCode.OK, objectContent.Value);
-            //actionExecutedContext.Response.Content = new ObjectContent(payload.GetType(), payload, objectContent.Formatter);
-            actionExecutedContext.Response.Content = new ObjectContent(newinstance.GetType(), newinstance, objectContent.Formatter);
-
-
-            //actiualType.MakeGenericType();
-
-            //var res =
-            //    ((System.Net.Http.ObjectContent<System.Collections.Generic.IEnumerable<NHateoas.Sample.Models.Product>>)
-            //        actionExecutedContext.Response.Content).Value;
-
-            //actionExecutedContext.Response
-            //actionExecutedContext.Response = new HttpResponseMessage();
-            //var request = new HttpRequestMessage<Product>();
-            //ObjectContent<T> content = request.CreateContent<T>(operationInput, new MediaTypeHeaderValue(Constants.ContentTypeXml), new MediaTypeFormatterCollection() { new XmlMediaTypeFormatter() }, new FormatterSelector());
-            */
+            actionExecutedContext.Response.Content = new ObjectContent(transformed.GetType(), transformed, objectContent.Formatter);
         }
     }
 }
