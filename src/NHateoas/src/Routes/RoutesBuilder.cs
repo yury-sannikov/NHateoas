@@ -28,7 +28,7 @@ namespace NHateoas.Routes
                 if (actionDescriptor == null)
                     continue;
 
-                var rule = actionConfiguration.MappingRules.FirstOrDefault(r => r.Method == actionDescriptor.MethodInfo);
+                var rule = actionConfiguration.MappingRules.FirstOrDefault(r => r.MethodExpression.Method == actionDescriptor.MethodInfo);
 
                 if (rule == null)
                     continue;

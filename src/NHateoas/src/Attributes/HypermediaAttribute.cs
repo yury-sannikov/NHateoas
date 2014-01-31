@@ -65,11 +65,15 @@ namespace NHateoas.Attributes
                 RoutesBuilder.Build(controllerType, actionConfiguration, apiExplorer);
             }
 
-            Dictionary<string, object> routes = actionConfiguration.RoutesBuilder.Build(actionConfiguration.MappingRules);
+            var routesBuilder = actionConfiguration.RoutesBuilder;
+            var routeValueSubstitution = actionConfiguration.RouteValueSubstitution;
+
             
             var objectContent = (ObjectContent) actionExecutedContext.Response.Content;
             
             var payload = objectContent.Value;
+
+            Dictionary<string, object> routes = routesBuilder.Build(actionConfiguration.MappingRules, routeValueSubstitution, payload);
 
             var strategyBuilder = new StrategyBuilder()
                 .For(payload.GetType())

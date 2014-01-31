@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using NHateoas.Configuration;
@@ -9,7 +10,7 @@ namespace NHateoas.Routes.RoutesBuilders
 {
     internal class DefaultRoutesBuilder : IRoutesBuilder
     {
-        public Dictionary<string, object> Build(IEnumerable<MappingRule> mappingRules)
+        public Dictionary<string, object> Build(IEnumerable<MappingRule> mappingRules, IRouteValueSubstitution routeValueSubstitution, Object data)
         {
             var result = new Dictionary<string, object>();
 
@@ -21,7 +22,7 @@ namespace NHateoas.Routes.RoutesBuilders
                 if (ruleUrl == null)
                     continue;
 
-                result[ruleUrl.RouteName] = ruleUrl.Url;
+                result[ruleUrl.RouteName] = routeValueSubstitution.Substitute(ruleUrl.Url, mappingRule, data);
             }
             return result;
 

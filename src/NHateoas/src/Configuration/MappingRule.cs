@@ -11,11 +11,15 @@ namespace NHateoas.Configuration
     internal class MappingRule
     {
         private readonly MethodCallExpression _methodExpression;
+
         private readonly List<MappingRuleUrl> _urls = new List<MappingRuleUrl>();
+
+        private readonly Dictionary<string, Delegate> _parametersDelegates = null;
  
         public MappingRule(MethodCallExpression methodExpression)
         {
             _methodExpression = methodExpression;
+            _parametersDelegates = ParametersDelegateBuilder.Build(methodExpression);
         }
 
         public bool HasUrls()
@@ -28,14 +32,19 @@ namespace NHateoas.Configuration
             _urls.Add(url);
         }
 
-        public MethodInfo Method
+        public MethodCallExpression MethodExpression
         {
-            get { return _methodExpression.Method; }
+            get { return _methodExpression; }
         }
 
         public IEnumerable<MappingRuleUrl> Urls
         {
             get { return _urls; }
+        }
+
+        public Dictionary<string, Delegate> ParameterDelegates
+        {
+            get { return _parametersDelegates; }
         }
     }
 }

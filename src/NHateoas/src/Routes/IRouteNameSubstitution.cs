@@ -7,8 +7,8 @@ using NHateoas.Configuration;
 
 namespace NHateoas.Routes
 {
-    internal interface IRoutesBuilder
+    internal interface IRouteValueSubstitution
     {
-        Dictionary<string, object> Build(IEnumerable<MappingRule> mappingRules, IRouteValueSubstitution routeValueSubstitution, Object data);
+        string Substitute(string templateUrl, MappingRule mapping, Object data);
     }
 }

@@ -31,6 +31,7 @@ namespace NHateoas.Sample.Controllers
 
                 .For((model, controller) => controller.Get(model.Name))
                     .Map((model, controller) => controller.Get(model.Id))
+                    .Map((model, controller) => controller.Get(model.Name))
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
                     .Map((model, controller) => controller.Delete(model.Id))
@@ -39,7 +40,7 @@ namespace NHateoas.Sample.Controllers
             .Configure();
         }
 
-        //[Hypermedia]
+        [Hypermedia]
         public IEnumerable<Product> Get()
         {
             return Products;

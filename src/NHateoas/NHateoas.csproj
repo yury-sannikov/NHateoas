@@ -54,6 +54,7 @@
     <Compile Include="src\Configuration\ControllerConfiguration.cs" />
     <Compile Include="src\Configuration\HypermediaConfigurator.cs" />
     <Compile Include="src\Configuration\IControllerConfiguration.cs" />
+    <Compile Include="src\Configuration\ParametersDelegateBuilder.cs" />
     <Compile Include="src\Routes\IRouteNameBuilder.cs" />
     <Compile Include="src\Configuration\MappingRule.cs" />
     <Compile Include="src\Configuration\ActionConfiguration.cs" />
@@ -72,10 +73,12 @@
     <Compile Include="src\Dynamic\Visitors\AggregatedPropertyVisitor.cs" />
     <Compile Include="src\Dynamic\Visitors\AggregateTypeBuilder.cs" />
     <Compile Include="src\Dynamic\Visitors\PropertyVisitor.cs" />
+    <Compile Include="src\Routes\IRouteNameSubstitution.cs" />
     <Compile Include="src\Routes\IRoutesBuilder.cs" />
     <Compile Include="src\Routes\RoutesBuilder.cs" />
     <Compile Include="src\Routes\RouteNameBuilders\DefaultRouteNameBuilder.cs" />
     <Compile Include="src\Routes\RoutesBuilders\DefaultRoutesBuilder.cs" />
+    <Compile Include="src\Routes\RouteValueSubstitution\DefaultRouteValueSubstitution.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuGetPackage.ps1" />

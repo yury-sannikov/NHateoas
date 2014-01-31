@@ -8,6 +8,7 @@ using System.Web.Http.Controllers;
 using NHateoas.Routes;
 using NHateoas.Routes.RouteNameBuilders;
 using NHateoas.Routes.RoutesBuilders;
+using NHateoas.Routes.RouteValueSubstitution;
 
 namespace NHateoas.Configuration
 {
@@ -16,6 +17,8 @@ namespace NHateoas.Configuration
         private readonly List<MappingRule> _mappingRules = new List<MappingRule>();
         private IRouteNameBuilder _routeNameBuilder = null;
         private IRoutesBuilder _routesBuilder = null;
+        private IRouteValueSubstitution _routeNameSubstitution = null;
+
         public void AddMappingRule(MappingRule rule)
         {
             _mappingRules.Add(rule);
@@ -36,6 +39,12 @@ namespace NHateoas.Configuration
         {
             get { return _routesBuilder ?? (_routesBuilder = new DefaultRoutesBuilder()); }
             set { _routesBuilder = value; }
+        }
+
+        public IRouteValueSubstitution RouteValueSubstitution
+        {
+            get { return _routeNameSubstitution ?? (_routeNameSubstitution = new DefaultRouteValueSubstitution()); }
+            set { _routeNameSubstitution = value; }
         }
 
         public bool RulesHasBeenBuilt
