@@ -29,6 +29,7 @@ namespace NHateoas.Response.ResponseTransformers
             var newinstance = Activator.CreateInstance(proxyType);
 
             strategy.ActivateInstance(newinstance, payload, routes);
+
             return newinstance;
         }
 

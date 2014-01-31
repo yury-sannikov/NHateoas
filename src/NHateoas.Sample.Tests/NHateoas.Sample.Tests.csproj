@@ -9,8 +9,8 @@
     <ProjectGuid>{301CDC56-7A34-4F20-97A2-94436D5893A5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>n_hateoas.Sample.Tests</RootNamespace>
-    <AssemblyName>n-hateoas.Sample.Tests</AssemblyName>
+    <RootNamespace>NHateoas.Sample.Tests</RootNamespace>
+    <AssemblyName>NHateoas.Sample.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

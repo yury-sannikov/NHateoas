@@ -6,9 +6,9 @@ using System.Net.Http;
 using System.Web.Http;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
-using n_hateoas.Sample.Models;
+using NHateoas.Sample.Models;
 
-namespace n_hateoas.Sample.Controllers
+namespace NHateoas.Sample.Controllers
 {
     [HypermediaSource]
     public class ProductDetailsController : ApiController

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace n_hateoas.Sample.Models
+namespace NHateoas.Sample.Models
 {
     public class ProductDetails
     {

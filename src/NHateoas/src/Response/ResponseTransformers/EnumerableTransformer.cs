@@ -19,26 +19,33 @@ namespace NHateoas.Response.ResponseTransformers
             
             IResponseTransformer innerTransformer = null;
 
-            IList result = null;
+            IList resultList = null;
             
             foreach (var item in enumerable)
             {
                 if (innerTransformer == null)
+                {
                     innerTransformer = actionConfiguration.ResponseTransformerFactory.Get(item);
+                    if (innerTransformer == null)
+                        throw new Exception(string.Format("Unable to get response transformer for response type {0}", item.GetType()));
+                }
 
                 var transformed = innerTransformer.Transform(actionConfiguration, item);
 
-                if (result == null)
+                if (transformed == null)
+                    continue;
+
+                if (resultList == null)
                 {
                     var resultType = typeof (List<>).MakeGenericType(new [] {transformed.GetType()});
 
-                    result = (IList)Activator.CreateInstance(resultType);
+                    resultList = (IList)Activator.CreateInstance(resultType);
                 }
                 
-                result.Add(transformed);
+                resultList.Add(transformed);
             }
 
-            return result;
+            return resultList;
 
         }
 

@@ -7,7 +7,7 @@ using System.Web.Http;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
 using NHateoas.Sample.Models;
-using n_hateoas.Sample.Models;
+using NHateoas.Sample.Models;
 
 namespace NHateoas.Sample.Controllers
 {
