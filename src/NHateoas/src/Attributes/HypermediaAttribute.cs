@@ -51,6 +51,9 @@ namespace NHateoas.Attributes
 
             var actionConfiguration = HypermediaControllerConfiguration.Instance.GetcontrollerActionConfiguration(controllerType, actionDescriptor.MethodInfo);
 
+            if (actionConfiguration == null)
+                return;
+
             if (!actionConfiguration.RulesHasBeenBuilt)
             {
                 var apiExplorer = GlobalConfiguration.Configuration.Services.GetApiExplorer();

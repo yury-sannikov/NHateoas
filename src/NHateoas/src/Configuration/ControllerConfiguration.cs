@@ -33,7 +33,14 @@ namespace NHateoas.Configuration
 
         public ActionConfiguration GetcontrollerActionConfiguration(Type controllerType, MethodInfo actionMethodInfo)
         {
-            return _controllerRules[controllerType][actionMethodInfo];
+            if (!_controllerRules.ContainsKey(controllerType))
+                return null;
+            var controller = _controllerRules[controllerType];
+
+            if (!controller.ContainsKey(actionMethodInfo))
+                return null;
+
+            return controller[actionMethodInfo];
         }
 
     }
