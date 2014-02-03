@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using System.Web.ModelBinding;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
 using NHateoas.Sample.Models;
@@ -31,6 +32,8 @@ namespace NHateoas.Sample.Controllers
             // Set up model-controller mapping.
             new HypermediaConfigurator<Product, ValuesController>()
                 .For((model, controller) => controller.Get(model.Id))
+                    .Map((model, controller) => controller.Get())
+                    .Map((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
                     .Map((model, controller) => controller.Get(model.Name))
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
@@ -40,6 +43,8 @@ namespace NHateoas.Sample.Controllers
                             new {method = "GET"})
 
                 .For((model, controller) => controller.Get(model.Name))
+                    .Map((model, controller) => controller.Get())
+                    .Map((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
                     .Map((model, controller) => controller.Get(model.Id))
                     .Map((model, controller) => controller.Get(model.Name))
                     .Map((model, controller) => controller.Post(model))
@@ -57,12 +62,18 @@ namespace NHateoas.Sample.Controllers
         }
 
         [Hypermedia]
+        public IEnumerable<Product> Get(string query, int skip, int limit)
+        {
+            return Products;
+        }
+
+        [Hypermedia]
         public Product Get(int id)
         {
             return Products.First();
         }
 
-        [Hypermedia]
+        [Hypermedia(returnType: typeof(Product))]
         public HttpResponseMessage Get(string name)
         {
             return Request.CreateResponse<Product>(HttpStatusCode.Unauthorized, Products.First());
