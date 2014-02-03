@@ -49,7 +49,9 @@ namespace NHateoas.Attributes
                 return;
             }
 
-            var actionConfiguration = HypermediaControllerConfiguration.Instance.GetcontrollerActionConfiguration(controllerType, actionDescriptor.MethodInfo);
+            IHypermediaControllerConfiguration controllerConfiguration = HypermediaControllerConfiguration.Instance;
+            
+            var actionConfiguration = controllerConfiguration.GetcontrollerActionConfiguration(controllerType, actionDescriptor.MethodInfo);
 
             if (actionConfiguration == null)
                 return;
@@ -58,7 +60,7 @@ namespace NHateoas.Attributes
             {
                 var apiExplorer = GlobalConfiguration.Configuration.Services.GetApiExplorer();
 
-                RoutesBuilder.Build(controllerType, actionConfiguration, apiExplorer);
+                RoutesBuilder.Build(controllerConfiguration, controllerType, actionDescriptor.MethodInfo, apiExplorer);
             }
 
             var objectContent = (ObjectContent) actionExecutedContext.Response.Content;

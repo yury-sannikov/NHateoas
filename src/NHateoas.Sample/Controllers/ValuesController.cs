@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.ModelBinding;
@@ -38,11 +39,10 @@ namespace NHateoas.Sample.Controllers
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
                     .Map((model, controller) => controller.Delete(model.Id))
-                        .MapReference<ProductDetails>(thisModel => thisModel.Id, 
-                            thatModel => thatModel.ProductId, 
-                            new {method = "GET"})
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
 
-                .For((model, controller) => controller.Get(model.Name))
+                 .For((model, controller) => controller.Get(model.Name))
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
                     .Map((model, controller) => controller.Get())
                     .Map((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
                     .Map((model, controller) => controller.Get(model.Id))
@@ -50,8 +50,10 @@ namespace NHateoas.Sample.Controllers
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
                     .Map((model, controller) => controller.Delete(model.Id))
+
                 .For((model, controller) => controller.Get())
                     .Map((model, controller) => controller.Get(model.Id))
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
             .Configure();
         }
 

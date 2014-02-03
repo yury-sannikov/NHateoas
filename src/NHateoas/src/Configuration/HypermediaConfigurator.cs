@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Web.Http;
@@ -51,9 +52,14 @@ namespace NHateoas.Configuration
             return this;
         }
 
-        public HypermediaConfigurator<TModel, TController> MapReference<TOtherModel>(Expression<Func<TModel, Object>> expressionThis,
-            Expression<Func<TOtherModel, Object>> expressionThat, object configuration)
+        public HypermediaConfigurator<TModel, TController> MapReference<TOtherController>(Expression<Func<TModel, TOtherController, Object>> expression)
         {
+            AddNewRule(expression.Body);
+            return this;
+        }
+        public HypermediaConfigurator<TModel, TController> MapReference<TOtherController>(Expression<Action<TModel, TOtherController>> expression)
+        {
+            AddNewRule(expression.Body);
             return this;
         }
 

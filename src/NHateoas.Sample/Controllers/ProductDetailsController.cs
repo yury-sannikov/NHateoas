@@ -11,7 +11,6 @@ using NHateoas;
 
 namespace NHateoas.Sample.Controllers
 {
-
     public class ProductDetailsControllerHypermediaConfigurator : IHypermediaApiControllerConfigurator
     {
         public void ConfigureHypermedia()
@@ -21,7 +20,13 @@ namespace NHateoas.Sample.Controllers
                     .Map((model, controller) => controller.GetByProductId(model.ProductId))
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
-                    .Map((model, controller) => controller.Delete(model.Id));
+                    .Map((model, controller) => controller.Delete(model.Id))
+                .For((model, controller) => controller.GetByProductId(model.ProductId))
+                    .Map((model, controller) => controller.GetByProductId(model.ProductId))
+                    .Map((model, controller) => controller.Post(model))
+                    .Map((model, controller) => controller.Put(model.Id, model))
+                    .Map((model, controller) => controller.Delete(model.Id))
+                .Configure();
         }
     }
 
