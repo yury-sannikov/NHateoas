@@ -7,15 +7,14 @@ using System.Web.Http;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
 using NHateoas.Sample.Models;
+using NHateoas;
 
 namespace NHateoas.Sample.Controllers
 {
-    [HypermediaSource]
-    public class ProductDetailsController : ApiController
-    {
-        private static readonly ProductDetails[] Details = { new ProductDetails() { Id = 1, ProductId = 1, Details = "Cup details" } };
 
-        public ProductDetailsController()
+    public class ProductDetailsControllerHypermediaConfigurator : IHypermediaApiControllerConfigurator
+    {
+        public void ConfigureHypermedia()
         {
             new HypermediaConfigurator<ProductDetails, ProductDetailsController>()
                 .For((model, controller) => controller.Get(model.Id))
@@ -23,8 +22,13 @@ namespace NHateoas.Sample.Controllers
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
                     .Map((model, controller) => controller.Delete(model.Id));
-
         }
+    }
+
+    [HypermediaSource]
+    public class ProductDetailsController : ApiController
+    {
+        private static readonly ProductDetails[] Details = { new ProductDetails() { Id = 1, ProductId = 1, Details = "Cup details" } };
 
         // GET api/productdetails
         public IEnumerable<ProductDetails> Get()

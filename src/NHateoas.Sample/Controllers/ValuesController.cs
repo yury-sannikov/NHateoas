@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
 using NHateoas.Sample.Models;
@@ -11,8 +12,9 @@ using NHateoas.Sample.Models;
 
 namespace NHateoas.Sample.Controllers
 {
+
     [HypermediaSource]
-    public class ValuesController : ApiController
+    public class ValuesController : ApiController, IHypermediaApiControllerConfigurator
     {
         private static readonly Product[] Products =
         {
@@ -24,7 +26,7 @@ namespace NHateoas.Sample.Controllers
         
         };
 
-        public ValuesController()
+        public void ConfigureHypermedia()
         {
             // Set up model-controller mapping.
             new HypermediaConfigurator<Product, ValuesController>()
@@ -48,7 +50,7 @@ namespace NHateoas.Sample.Controllers
             .Configure();
         }
 
-        //[Hypermedia]
+        [Hypermedia]
         public IEnumerable<Product> Get()
         {
             return Products;
