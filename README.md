@@ -1,6 +1,6 @@
 # NHateoas
 
-> **Tip:**   Currently NHateoas is in a <!---prototying stage-->. We are considering different mediatype formats at this moment.
+> **Tip:**   Currently NHateoas is in a **prototying stage**. We are considering different mediatype formats at this moment.
 
 HATEOAS (Hypermedia as the engine of application state) implementation for ASP.Net WebAPI
 
@@ -159,7 +159,7 @@ public static class WebApiConfig
 }
 ```
 
-After doing that your GET request you will yield the following response:
+After doing that your GET `http://localhost:*/api/values` request you will yield the following response:
 
 ```json
 [
@@ -179,7 +179,23 @@ After doing that your GET request you will yield the following response:
 ]
 ```
 
-> **Tip:**   Currently NHateoas is in a <!---prototying stage-->. We are considering different mediatype formats at this moment. We considering [Siren](https://github.com/kevinswiber/siren) as a main hypermedia format.
+After doing that your GET `http://localhost:*/api/values/1` request you will yield the following response:
+
+```json
+{
+    "Id":1,
+    "Name":"Item1",
+    "Price":2.99,
+    "get_productdetails_by_id":"api/Values/1/ProductDetails",
+    "query_product":"api/Values",
+    "query_product_by_query_skip_limit":"api/Values?query=:query&skip=:skip&limit=:limit",
+    "get_product_by_id":"api/Values/1",
+    "get_product_by_name":"api/Values/Item1",
+    "post_product_by_product":"api/Values"
+}
+```
+
+> **Tip:**   Currently NHateoas is in a **prototying stage**. We are considering different mediatype formats at this moment. We considering [Siren](https://github.com/kevinswiber/siren) as a main hypermedia format. Hypermedia information format will be configured per action basis.
 
 
 ## More information
