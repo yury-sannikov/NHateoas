@@ -54,6 +54,11 @@ namespace NHateoas.Sample.Controllers
                 .For((model, controller) => controller.Get())
                     .Map((model, controller) => controller.Get(model.Id))
                     .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+
+                    .For((model, controller) => controller.Post(model))
+                    .Map((model, controller) => controller.Get(model.Id))
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+
             .Configure();
         }
 
@@ -82,11 +87,15 @@ namespace NHateoas.Sample.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody] Product product)
+        [HttpPost]
+        [Hypermedia(returnType: typeof(Product))]
+        public HttpResponseMessage Post([FromBody]Product product)
         {
+            return Request.CreateResponse<Product>(HttpStatusCode.Created, Products.First());
         }
 
         // PUT api/values/5
+        [HttpPut]
         public void Put(int id, [FromBody]Product product)
         {
         }
