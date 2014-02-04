@@ -10,7 +10,6 @@ using System.Web.ModelBinding;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
 using NHateoas.Sample.Models;
-using NHateoas.Sample.Models;
 
 namespace NHateoas.Sample.Controllers
 {

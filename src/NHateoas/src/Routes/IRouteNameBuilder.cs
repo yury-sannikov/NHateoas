@@ -7,10 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 
-namespace NHateoas.Configuration
+namespace NHateoas.Routes
 {
     internal interface IRouteNameBuilder
     {
-        string Build(Type controller, ReflectedHttpActionDescriptor actionDescriptor, string method);
+        string Build(Type controller, MethodInfo actionMethodInfo, string method);
     }
 }

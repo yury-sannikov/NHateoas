@@ -9,25 +9,25 @@ using System.Web.Http.Controllers;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
 
-namespace NHateoas.Routes.RouteNameBuilders
+namespace NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder
 {
     internal class DefaultRouteNameBuilder : IRouteNameBuilder
     {
-        public string Build(Type controller, ReflectedHttpActionDescriptor actionDescriptor, string method)
+        public string Build(Type controller, MethodInfo actionMethodInfo, string method)
         {
             var methodName = method.ToLower();
             var name = new StringBuilder();
 
-            var returnType = actionDescriptor.ReturnType;
+            var returnType = actionMethodInfo.ReturnType;
 
-            if (returnType != null)
+            if (returnType != typeof(void))
             {
                 if (typeof (HttpResponseMessage).IsAssignableFrom(returnType))
                 {
-                    var attributes = actionDescriptor.GetCustomAttributes<HypermediaAttribute>();
-                    if (attributes != null && attributes.Count > 0)
+                    var attributes = actionMethodInfo.GetCustomAttributes<HypermediaAttribute>().ToList();
+                    if (attributes.Any())
                     {
-                        returnType = attributes[0].ReturnType;
+                        returnType = attributes.First().ReturnType;
                     }
                 }
                 
@@ -44,7 +44,7 @@ namespace NHateoas.Routes.RouteNameBuilders
             if (returnType != null)
                 name.AppendFormat("_{0}", returnType.Name.ToLower());
 
-            var parameters = actionDescriptor.MethodInfo.GetParameters();
+            var parameters = actionMethodInfo.GetParameters();
 
             if (parameters.Any())
                 name.AppendFormat("_by");

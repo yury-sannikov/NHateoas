@@ -13,7 +13,7 @@ namespace NHateoas.Response.ResponseTransformers
     {
         public object Transform(ActionConfiguration actionConfiguration, object payload)
         {
-            Dictionary<string, object> routes = actionConfiguration.RoutesBuilder.Build(actionConfiguration.MappingRules, actionConfiguration.RouteValueSubstitution, payload);
+            Dictionary<string, object> routes = actionConfiguration.RoutesBuilder.Build(payload);
 
             var strategyBuilder = new StrategyBuilder()
                 .For(payload.GetType())

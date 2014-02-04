@@ -14,7 +14,7 @@ namespace NHateoas.Configuration
     public class HypermediaConfigurator<TModel, TController>
     {
         private readonly Dictionary<MethodInfo, ActionConfiguration>  _rules = new Dictionary<MethodInfo, ActionConfiguration>();
-        private MethodInfo _currentAction = null;
+        private ActionConfiguration _currentActionConfiguration = null;
 
         public HypermediaConfigurator<TModel, TController> Map(Expression<Func<TModel, TController, IEnumerable<TModel>>> expression)
         {
@@ -65,10 +65,11 @@ namespace NHateoas.Configuration
 
         private void SetCurrentAction(Expression methodExpression)
         {
-            _currentAction = ((MethodCallExpression)methodExpression).Method;
-            if (!_rules.ContainsKey(_currentAction))
+            var currentAction = ((MethodCallExpression)methodExpression).Method;
+            if (!_rules.ContainsKey(currentAction))
             {
-                _rules.Add(_currentAction, new ActionConfiguration());
+                ActionConfiguration = new ActionConfiguration(typeof(TController), currentAction);
+                _rules.Add(currentAction, ActionConfiguration);
             }
         }
 
@@ -76,16 +77,25 @@ namespace NHateoas.Configuration
         {
             var methodExpression = (MethodCallExpression)expression;
             var rule = new MappingRule(methodExpression);
-            Rules.AddMappingRule(rule);
+            ActionConfiguration.AddMappingRule(rule);
         }
 
-        private ActionConfiguration Rules
+        private ActionConfiguration ActionConfiguration
         {
-            get { return _rules[_currentAction]; }
+            get { return _currentActionConfiguration; }
+            set
+            {
+                if (_currentActionConfiguration != null)
+                    _currentActionConfiguration.Configure();
+                _currentActionConfiguration = value;
+            }
         }
 
         public void Configure()
         {
+            if (_currentActionConfiguration != null)
+                _currentActionConfiguration.Configure();
+
             var controllerConfiguration = HypermediaControllerConfiguration.Instance;
 
             if (controllerConfiguration.IsConfigured(typeof(TController)))

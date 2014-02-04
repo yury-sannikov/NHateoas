@@ -45,23 +45,14 @@ namespace NHateoas.Attributes
 
             if (actionDescriptor == null)
             {
-                Debug.Write(string.Format("Unable to get action descriptor for controller {0}", controllerType.ToString()));
+                Debug.Write(string.Format("Unable to get action descriptor for controller {0}", controllerType));
                 return;
             }
 
-            IHypermediaControllerConfiguration controllerConfiguration = HypermediaControllerConfiguration.Instance;
-            
-            var actionConfiguration = controllerConfiguration.GetcontrollerActionConfiguration(controllerType, actionDescriptor.MethodInfo);
+            var actionConfiguration = HypermediaControllerConfiguration.Instance.GetcontrollerActionConfiguration(controllerType, actionDescriptor.MethodInfo);
 
             if (actionConfiguration == null)
                 return;
-
-            if (!actionConfiguration.RulesHasBeenBuilt)
-            {
-                var apiExplorer = GlobalConfiguration.Configuration.Services.GetApiExplorer();
-
-                RoutesBuilder.Build(controllerConfiguration, controllerType, actionDescriptor.MethodInfo, apiExplorer);
-            }
 
             var objectContent = (ObjectContent) actionExecutedContext.Response.Content;
 

@@ -5,6 +5,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Description;
 
 namespace NHateoas.Configuration
 {
@@ -12,7 +15,7 @@ namespace NHateoas.Configuration
     {
         private readonly MethodCallExpression _methodExpression;
 
-        private readonly List<MappingRuleUrl> _urls = new List<MappingRuleUrl>();
+        private readonly List<ApiDescription> _apiDescriptions = new List<ApiDescription>();
 
         private readonly Dictionary<string, Delegate> _parametersDelegates = null;
  
@@ -20,16 +23,26 @@ namespace NHateoas.Configuration
         {
             _methodExpression = methodExpression;
             _parametersDelegates = ParametersDelegateBuilder.Build(methodExpression);
+
+            MapApiDesctiption();
         }
 
-        public bool HasUrls()
+        private void MapApiDesctiption()
         {
-            return _urls.Count > 0;
-        }
+            var apiExplorer = GlobalConfiguration.Configuration.Services.GetApiExplorer();
 
-        public void AddUrl(MappingRuleUrl url)
-        {
-            _urls.Add(url);
+            foreach (var description in apiExplorer.ApiDescriptions)
+            {
+                var actionDescriptor = description.ActionDescriptor as ReflectedHttpActionDescriptor;
+
+                if (actionDescriptor == null)
+                    continue;
+
+                if (_methodExpression.Method != actionDescriptor.MethodInfo)
+                    continue;
+
+                _apiDescriptions.Add(description);
+            }
         }
 
         public MethodCallExpression MethodExpression
@@ -37,9 +50,9 @@ namespace NHateoas.Configuration
             get { return _methodExpression; }
         }
 
-        public IEnumerable<MappingRuleUrl> Urls
+        public IEnumerable<ApiDescription> ApiDescriptions
         {
-            get { return _urls; }
+            get { return _apiDescriptions; }
         }
 
         public Dictionary<string, Delegate> ParameterDelegates

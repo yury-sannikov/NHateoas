@@ -9,6 +9,6 @@ namespace NHateoas.Routes
 {
     internal interface IRoutesBuilder
     {
-        Dictionary<string, object> Build(IEnumerable<MappingRule> mappingRules, IRouteValueSubstitution routeValueSubstitution, Object data);
+        Dictionary<string, object> Build(Object data);
     }
 }
