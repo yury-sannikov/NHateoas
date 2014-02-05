@@ -23,6 +23,11 @@ namespace NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder
             GenerateLinkNames();
         }
 
+        public Dictionary<string, IList<string>> GetRels()
+        {
+            return _apiDescriptionToRouteNameDictionary.ToList().ToDictionary(ks => ks.Key, vs => (IList<string>)new List<string>{vs.Value});
+        }
+
         private void GenerateLinkNames()
         {
             var mappingRules = _actionConfiguration.MappingRules;

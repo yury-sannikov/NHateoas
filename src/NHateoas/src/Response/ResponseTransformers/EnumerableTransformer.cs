@@ -10,7 +10,7 @@ namespace NHateoas.Response.ResponseTransformers
 {
     internal class EnumerableTransformer : IResponseTransformer
     {
-        public object Transform(ActionConfiguration actionConfiguration, object payload)
+        public object Transform(IActionConfiguration actionConfiguration, object payload)
         {
             var enumerable = payload as IEnumerable;
 

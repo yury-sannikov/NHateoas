@@ -53,9 +53,13 @@
     <Compile Include="src\Attributes\HypermediaSourceAttribute.cs" />
     <Compile Include="src\Configuration\ControllerConfiguration.cs" />
     <Compile Include="src\Configuration\HypermediaConfigurator.cs" />
+    <Compile Include="src\Configuration\IActionConfiguration.cs" />
     <Compile Include="src\Configuration\IControllerConfiguration.cs" />
     <Compile Include="src\Configuration\ParametersDelegateBuilder.cs" />
     <Compile Include="src\Configuration\QueryParameter.cs" />
+    <Compile Include="src\Dynamic\Interfaces\IStrategyBuilderFactory.cs" />
+    <Compile Include="src\Dynamic\StrategyBuilderFactories\DefaultStrategyBuilderFactory.cs" />
+    <Compile Include="src\Dynamic\StrategyBuilderFactories\StrategyCache.cs" />
     <Compile Include="src\HypermediaInitializer.cs" />
     <Compile Include="src\I12n\HypermediaInitializerTypeResolver.cs" />
     <Compile Include="src\IHypermediaApiController.cs" />

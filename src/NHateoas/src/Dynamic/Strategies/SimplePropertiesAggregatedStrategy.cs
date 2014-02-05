@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NHateoas.Dynamic.Interfaces;
 using NHateoas.Dynamic.Visitors;
+using NHateoas.Routes;
 
 namespace NHateoas.Dynamic.Strategies
 {
@@ -49,7 +50,7 @@ namespace NHateoas.Dynamic.Strategies
             }
         }
 
-        public override void ActivateInstance(object proxyInstance, object originalInstance, Dictionary<string, object> routes)
+        public override void ActivateInstance(object proxyInstance, object originalInstance, IRoutesBuilder routesBuilder)
         {
             var aggregateFieldInfo = proxyInstance.GetType().GetField(AggregateFieldName,
                          BindingFlags.NonPublic |

@@ -11,16 +11,11 @@ namespace NHateoas.Response.ResponseTransformers
 {
     class ModelTransformer : IResponseTransformer
     {
-        public object Transform(ActionConfiguration actionConfiguration, object payload)
+        public object Transform(IActionConfiguration actionConfiguration, object payload)
         {
-            Dictionary<string, object> routes = actionConfiguration.RoutesBuilder.Build(payload);
+            var strategyFactory = actionConfiguration.StrategyBuilderFactory;
 
-            var strategyBuilder = new StrategyBuilder()
-                .For(payload.GetType())
-                .WithSimpleProperties()
-                .WithRouteInformation(routes);
-
-            var strategy = strategyBuilder.Build();
+            var strategy = strategyFactory.Build(actionConfiguration, payload.GetType());
 
             var typeBuilder = new TypeBuilder(payload.GetType(), strategy);
 
@@ -28,7 +23,7 @@ namespace NHateoas.Response.ResponseTransformers
 
             var newinstance = Activator.CreateInstance(proxyType);
 
-            strategy.ActivateInstance(newinstance, payload, routes);
+            strategy.ActivateInstance(newinstance, payload, actionConfiguration.RoutesBuilder);
 
             return newinstance;
         }

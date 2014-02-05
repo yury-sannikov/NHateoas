@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using NHateoas.Dynamic.Interfaces;
+using NHateoas.Dynamic.Strategies;
+using NHateoas.Dynamic.StrategyBuilderFactories;
 using NHateoas.Response;
 using NHateoas.Routes;
 using NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder;
@@ -14,13 +17,14 @@ using NHateoas.Routes.RouteValueSubstitution;
 
 namespace NHateoas.Configuration
 {
-    internal class ActionConfiguration
+    internal class ActionConfiguration : IActionConfiguration
     {
         private readonly Type _controllerType;
         private readonly MethodInfo _actionMethodInfo;
         private readonly List<MappingRule> _mappingRules = new List<MappingRule>();
         private IRoutesBuilder _routesBuilder = null;
         private IResponseTransformerFactory _responseTransformerFactory = null;
+        private IStrategyBuilderFactory _strategyBuilderFactory;
 
         public ActionConfiguration(Type controllerType, MethodInfo actionMethodInfo)
         {
@@ -30,10 +34,7 @@ namespace NHateoas.Configuration
 
         public void Configure()
         {
-            // Create instances accoring to configuration
-
-            _routesBuilder = new SimpleRoutesBuilder(this);
-            _responseTransformerFactory = new ResponseTransformerFactory();
+            CreateConcreteInstances();
         }
 
         public Type ControllerType
@@ -66,6 +67,18 @@ namespace NHateoas.Configuration
         {
             get { return _responseTransformerFactory; }
             set { _responseTransformerFactory = value; }
+        }
+
+        public IStrategyBuilderFactory StrategyBuilderFactory
+        {
+            get { return _strategyBuilderFactory; }
+        }
+
+        protected virtual void CreateConcreteInstances()
+        {
+            _routesBuilder = new SimpleRoutesBuilder(this);
+            _responseTransformerFactory = new ResponseTransformerFactory();
+            _strategyBuilderFactory = new DefaultStrategyBuilderFactory();
         }
 
     }

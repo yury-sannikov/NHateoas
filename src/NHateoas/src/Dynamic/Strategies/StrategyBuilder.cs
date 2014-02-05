@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NHateoas.Dynamic.Interfaces;
+using NHateoas.Routes;
 
 namespace NHateoas.Dynamic.Strategies
 {
@@ -26,9 +27,9 @@ namespace NHateoas.Dynamic.Strategies
         #endregion
 
         #region IInstanceActivator
-        public override void ActivateInstance(object proxyInstance, object originalInstance, Dictionary<string, object> routes)
+        public override void ActivateInstance(object proxyInstance, object originalInstance, IRoutesBuilder routesBuilder)
         {
-            _compositeStrategiesList.ForEach(a => a.ActivateInstance(proxyInstance, originalInstance, routes));
+            _compositeStrategiesList.ForEach(a => a.ActivateInstance(proxyInstance, originalInstance, routesBuilder));
         }
         #endregion
 
@@ -47,7 +48,7 @@ namespace NHateoas.Dynamic.Strategies
             return this;
         }
 
-        public StrategyBuilder WithRouteInformation(Dictionary<string, object> routeInformation)
+        public StrategyBuilder WithPlainRouteInformation(IList<string> routeInformation)
         {
             _compositeStrategiesList.Add(
                 new SimpleRoutesStrategy(routeInformation)

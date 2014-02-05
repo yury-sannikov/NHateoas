@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NHateoas.Dynamic.Interfaces;
+using NHateoas.Routes;
 
 namespace NHateoas.Dynamic.Strategies
 {
@@ -14,9 +15,8 @@ namespace NHateoas.Dynamic.Strategies
 
         public abstract void Configure(ITypeBuilderContainer container);
 
-        public virtual void ActivateInstance(object proxyInstance, object originalInstance, Dictionary<string, object> routes)
+        public virtual void ActivateInstance(object proxyInstance, object originalInstance, IRoutesBuilder routesBuilder)
         {
-            
         }
        
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NHateoas.Routes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +28,7 @@ namespace NHateoas.Dynamic.Interfaces
         /// </summary>
         /// <param name="proxyInstance"></param>
         /// <param name="originalInstance"></param>
-        /// <param name="routes"></param>
-        void ActivateInstance(object proxyInstance, object originalInstance, Dictionary<string, object> routes);
+        /// <param name="routesBuilder"></param>
+        void ActivateInstance(object proxyInstance, object originalInstance, IRoutesBuilder routesBuilder);
     }
 }

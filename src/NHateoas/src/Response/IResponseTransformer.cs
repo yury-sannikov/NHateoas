@@ -9,7 +9,7 @@ namespace NHateoas.Response
 {
     internal interface IResponseTransformer
     {
-        object Transform(ActionConfiguration actionConfiguration, object payload);
+        object Transform(IActionConfiguration actionConfiguration, object payload);
 
         bool CanTransform(object data);
     }
