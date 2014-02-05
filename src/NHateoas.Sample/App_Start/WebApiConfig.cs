@@ -16,37 +16,6 @@ namespace NHateoas.Sample
         {
             config.MapHttpAttributeRoutes();
 
-/*
-            config.Routes.MapHttpRoute(
-                name: "GetById",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional },
-                constraints: new { id = @"\d+" }
-            );
-
-            config.Routes.MapHttpRoute(
-                name: "GetByName",
-                routeTemplate: "api/{controller}/{name}"
-            );
-
-            config.Routes.MapHttpRoute(
-                "DefaultApiPost", 
-                "api/{controller}",
-                new { controller = "Products", action = "Post" }, 
-                new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) });
-
-            
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}"
-            );
-
-            config.Routes.MapHttpRoute(
-                name: "DefaultApiWithAction",
-                routeTemplate: "api/{controller}/{action}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-  */          
             // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
             // To avoid processing unexpected or malicious queries, use the validation settings on QueryableAttribute to validate incoming queries.
             // For more information, visit http://go.microsoft.com/fwlink/?LinkId=279712.

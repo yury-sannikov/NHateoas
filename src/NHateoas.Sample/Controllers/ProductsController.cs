@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using System.Web.Http.Description;
 using System.Web.ModelBinding;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
@@ -15,7 +16,7 @@ namespace NHateoas.Sample.Controllers
 {
 
     [HypermediaSource]
-    [RoutePrefix("api/Products")]
+    [RoutePrefix("api/Product")]
     public class ProductsController : ApiController, IHypermediaApiControllerConfigurator
     {
         private static readonly Product[] Products =
@@ -35,30 +36,30 @@ namespace NHateoas.Sample.Controllers
                 .For((model, controller) => controller.Get(model.Id))
                     .Map((model, controller) => controller.Get())
                     .Map((model, controller) => controller.Get(model.Id))
-                    //.Map((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
-                    //.Map((model, controller) => controller.Get(model.Name))
+                    .Map((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
+                    .Map((model, controller) => controller.Get(model.Name))
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
                     .Map((model, controller) => controller.Delete(model.Id))
-                    //.MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
-                    /*
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                    
                  .For((model, controller) => controller.Get(model.Name))
                     .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
                     .Map((model, controller) => controller.Get())
                     .Map((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
                     .Map((model, controller) => controller.Get(model.Id))
-                    //.Map((model, controller) => controller.Get(model.Name))
+                    .Map((model, controller) => controller.Get(model.Name))
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
                     .Map((model, controller) => controller.Delete(model.Id))
-                    */
+                    
                 .For((model, controller) => controller.Get())
                     .Map((model, controller) => controller.Get(model.Id))
-                    //.MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
 
                 .For((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Get(model.Id))
-                    //.MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
 
             .Configure();
         }
@@ -84,18 +85,19 @@ namespace NHateoas.Sample.Controllers
             return Products.First();
         }
         
-        /*
-        [Hypermedia(returnType: typeof(Product))]
+        [Route("{name}")]
+        [ResponseType(typeof(Product))]
+        [Hypermedia]
         public HttpResponseMessage Get(string name)
         {
             return Request.CreateResponse<Product>(HttpStatusCode.Unauthorized, Products.First());
         }
-        */
 
         // POST api/values
         [HttpPost]
         [Route("")]
-        //[Hypermedia(returnType: typeof(Product))]
+        [ResponseType(typeof(Product))]
+        [Hypermedia]
         public HttpResponseMessage Post([FromBody]Product product)
         {
             return Request.CreateResponse<Product>(HttpStatusCode.Created, Products.First());
@@ -103,13 +105,13 @@ namespace NHateoas.Sample.Controllers
 
         // PUT api/values/5
         [HttpPut]
-        [Route("")]
+        [Route("{id:int}")]
         public void Put(int id, [FromBody]Product product)
         {
         }
 
         // DELETE api/values/5
-        [Route("")]
+        [Route("{id:int}")]
         public void Delete(int id)
         {
         }

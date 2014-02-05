@@ -8,7 +8,7 @@ using NHateoas.Attributes;
 using NHateoas.Configuration;
 using NHateoas.Sample.Models;
 using NHateoas;
-/*
+
 namespace NHateoas.Sample.Controllers
 {
     public class ProductDetailsControllerHypermediaConfigurator : IHypermediaApiControllerConfigurator
@@ -31,42 +31,47 @@ namespace NHateoas.Sample.Controllers
     }
 
     [HypermediaSource]
+    [RoutePrefix("api/ProductDetails")]
     public class ProductDetailsController : ApiController
     {
         private static readonly ProductDetails[] Details = { new ProductDetails() { Id = 1, ProductId = 1, Details = "Cup details" } };
 
         // GET api/productdetails
+        [Route("")]
         public IEnumerable<ProductDetails> Get()
         {
             return Details;
         }
 
         // GET api/productdetails/5
+        [Route("{id:int}")]
         public ProductDetails Get(int id)
         {
             return Details.First();
         }
-        
-        [ActionName("DetailsByProductId")]
+
+        [Route("~/api/Product/{id}/Details")]
         public ProductDetails GetByProductId(int id)
         {
             return Details.First();
         }
 
         // POST api/productdetails
+        [Route("")]        
         public void Post([FromBody]ProductDetails value)
         {
         }
 
         // PUT api/productdetails/5
+        [Route("{id:int}")]
         public void Put(int id, [FromBody]ProductDetails value)
         {
         }
 
         // DELETE api/productdetails/5
+        [Route("{id:int}")]
         public void Delete(int id)
         {
         }
     }
 }
-*/
