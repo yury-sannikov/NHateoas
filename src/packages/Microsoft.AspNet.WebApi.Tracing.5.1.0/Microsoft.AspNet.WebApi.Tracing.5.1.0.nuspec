@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.AspNet.WebApi.Tracing</id>
+    <version>5.1.0</version>
+    <title>Microsoft ASP.NET Web API 2.1 Tracing</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://aspnetwebstack.codeplex.com/license</licenseUrl>
+    <projectUrl>http://www.asp.net/web-api</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Enables ASP.NET Web API tracing using System.Diagnostics.</description>
+    <summary>Enables ASP.NET Web API tracing using System.Diagnostics.</summary>
+    <releaseNotes>Please visit http://go.microsoft.com/fwlink/?LinkId=389866 to view the release notes.</releaseNotes>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <language>en-US</language>
+    <tags>Microsoft AspNet WebApi AspNetWebApi Diagnostics Tracing</tags>
+    <dependencies>
+      <dependency id="Microsoft.AspNet.WebApi.Core" version="[5.1.0, 5.2.0)" />
+    </dependencies>
+  </metadata>
+</package>

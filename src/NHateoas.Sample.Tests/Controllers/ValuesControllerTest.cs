@@ -18,7 +18,7 @@ namespace NHateoas.Sample.Tests.Controllers
         public void Get()
         {
             // Arrange
-            ValuesController controller = new ValuesController();
+            ProductsController controller = new ProductsController();
 
             // Act
             IEnumerable<Product> result = controller.Get();

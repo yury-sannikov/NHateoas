@@ -8,7 +8,7 @@ using NHateoas.Attributes;
 using NHateoas.Configuration;
 using NHateoas.Sample.Models;
 using NHateoas;
-
+/*
 namespace NHateoas.Sample.Controllers
 {
     public class ProductDetailsControllerHypermediaConfigurator : IHypermediaApiControllerConfigurator
@@ -46,7 +46,7 @@ namespace NHateoas.Sample.Controllers
         {
             return Details.First();
         }
-
+        
         [ActionName("DetailsByProductId")]
         public ProductDetails GetByProductId(int id)
         {
@@ -69,3 +69,4 @@ namespace NHateoas.Sample.Controllers
         }
     }
 }
+*/
