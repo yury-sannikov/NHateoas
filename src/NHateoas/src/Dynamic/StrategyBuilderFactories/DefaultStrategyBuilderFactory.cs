@@ -18,7 +18,10 @@ namespace NHateoas.Dynamic.StrategyBuilderFactories
             return StrategyCache.GetCachedOrAdd(key,
                 () =>
                 {
-                    var rels = actionConfiguration.RoutesBuilder.GetRels();
+                    var rels =
+                        (Dictionary<string, IList<string>>)
+                            actionConfiguration.MetadataProvider.GetMetadataByType(
+                                typeof (Dictionary<string, IList<string>>));
 
                     IList<string> topRels = rels.Values.ToList().ConvertAll(c => c.FirstOrDefault());
 

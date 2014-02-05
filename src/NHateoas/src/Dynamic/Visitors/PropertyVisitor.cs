@@ -27,12 +27,17 @@ namespace NHateoas.Dynamic.Visitors
             _propertyName = propertyName;
         }
 
+        public static string PropertyFieldName(string propertyName)
+        {
+            return string.Format("_{0}", propertyName.ToLower());
+        }
+
         public void Visit(ITypeBuilderProvider provider)
         {
 
             var typeBuilder = provider.GetTypeBuilder();
 
-            FieldBuilder fieldBuilder = typeBuilder.DefineField(string.Format("_{0}", _propertyName.ToLower()),
+            FieldBuilder fieldBuilder = typeBuilder.DefineField(PropertyFieldName(_propertyName),
                                                                  _propertyType, FieldAttributes.Private);
 
             PropertyBuilder propertyBuilder = typeBuilder.DefineProperty(_propertyName, PropertyAttributes.HasDefault,

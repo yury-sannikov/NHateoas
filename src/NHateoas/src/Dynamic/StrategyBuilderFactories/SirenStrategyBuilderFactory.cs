@@ -18,14 +18,13 @@ namespace NHateoas.Dynamic.StrategyBuilderFactories
             return StrategyCache.GetCachedOrAdd(key,
                 () =>
                 {
-                    var rels = actionConfiguration.RoutesBuilder.GetRels();
-
-                    IList<string> topRels = rels.Values.ToList().ConvertAll(c => c.FirstOrDefault());
+                    var sirenMetadataTypes = actionConfiguration.MetadataProvider.GetRegisteredMetadataTypes().ToList();
 
                     var strategyBuilder = new StrategyBuilder()
                         .For(returnType)
-                        .WithSimpleProperties()
-                        .WithPlainRouteInformation(topRels);
+                        .WithSimpleProperties();
+
+                    sirenMetadataTypes.ForEach(metadataType => strategyBuilder.WithTypedMetadataProperty(metadataType, metadataType.Name.ToLower()));
 
                     return strategyBuilder.Build();
                 });

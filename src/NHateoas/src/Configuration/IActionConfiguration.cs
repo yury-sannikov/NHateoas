@@ -18,7 +18,7 @@ namespace NHateoas.Configuration
 
         IEnumerable<MappingRule> MappingRules { get; }
 
-        IRoutesBuilder RoutesBuilder { get; }
+        IMetadataProvider MetadataProvider { get; }
 
         IResponseTransformerFactory ResponseTransformerFactory { get; }
 

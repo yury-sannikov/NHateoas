@@ -10,39 +10,38 @@ using System.Web.Http.Description;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
 
-namespace NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder
+namespace NHateoas.Routes.RouteMetadataProviders
 {
     internal class DefaultRouteNameBuilder : IRouteNameBuilder
     {
-        public string Build(Type controller, MethodInfo actionMethodInfo, string method)
+        public List<string> Build(MappingRule mappingRule, string method)
         {
             var methodName = method.ToLower();
             var name = new StringBuilder();
+            
+            var actionMethodInfo = mappingRule.MethodExpression.Method;
 
             var returnType = actionMethodInfo.ReturnType;
 
-            if (returnType != typeof(void))
+            if (typeof (HttpResponseMessage).IsAssignableFrom(returnType))
             {
-                if (typeof (HttpResponseMessage).IsAssignableFrom(returnType))
+                var attributes = actionMethodInfo.GetCustomAttributes<ResponseTypeAttribute>().ToList();
+                if (attributes.Any())
                 {
-                    var attributes = actionMethodInfo.GetCustomAttributes<ResponseTypeAttribute>().ToList();
-                    if (attributes.Any())
-                    {
-                        returnType = attributes.First().ResponseType;
-                    }
+                    returnType = attributes.First().ResponseType;
                 }
+            }
                 
-                if (returnType.IsGenericType && typeof (IEnumerable<>).IsAssignableFrom(returnType.GetGenericTypeDefinition()))
-                {
-                    returnType = returnType.GetGenericArguments()[0];
+            if (returnType.IsGenericType && typeof (IEnumerable<>).IsAssignableFrom(returnType.GetGenericTypeDefinition()))
+            {
+                returnType = returnType.GetGenericArguments()[0];
 
-                    methodName = "query";
-                }
+                methodName = "query";
             }
 
             name.Append(methodName);
 
-            if (returnType != null)
+            if (returnType != typeof(void))
                 name.AppendFormat("_{0}", returnType.Name.ToLower());
 
             var parameters = actionMethodInfo.GetParameters();
@@ -58,7 +57,7 @@ namespace NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder
                 name.AppendFormat("_{0}", parameterInfo.Name.ToLower());
             }
 
-            return name.ToString();
+            return new List<string> {name.ToString()};
         }
     }
 }

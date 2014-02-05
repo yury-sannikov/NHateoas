@@ -7,25 +7,45 @@ using System.Threading.Tasks;
 using NHateoas.Configuration;
 using NHateoas.Routes.RouteValueSubstitution;
 
-namespace NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder
+namespace NHateoas.Routes.RouteMetadataProviders.SimpleMetadataProvider
 {
-    internal class SimpleRoutesBuilder : IRoutesBuilder
+    internal class SimpleMetadataProvider : IMetadataProvider
     {
         private IRouteNameBuilder _routeNameBuilder = null;
         private IRouteValueSubstitution _routeNameSubstitution = null;
         private readonly Dictionary<string, string> _apiDescriptionToRouteNameDictionary = new Dictionary<string, string>();
         private readonly IActionConfiguration _actionConfiguration;
 
-        public SimpleRoutesBuilder(IActionConfiguration actionConfiguration)
+        public SimpleMetadataProvider(IActionConfiguration actionConfiguration)
         {
             _actionConfiguration = actionConfiguration;
 
             GenerateLinkNames();
         }
 
-        public Dictionary<string, IList<string>> GetRels()
+        public object GetMetadataByType(Type metadataType, params object[] values)
         {
-            return _apiDescriptionToRouteNameDictionary.ToList().ToDictionary(ks => ks.Key, vs => (IList<string>)new List<string>{vs.Value});
+            if (typeof (Dictionary<string, object>).IsAssignableFrom(metadataType))
+            {
+                return Build(values[0]);
+            }
+            
+            if (typeof (Dictionary<string, IList<string>>).IsAssignableFrom(metadataType))
+            {
+                return GetRels();
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public IList<Type> GetRegisteredMetadataTypes()
+        {
+            return new List<Type> { typeof(Dictionary<string, object>), typeof(Dictionary<string, IList<string>>) };
+        }
+
+        private Dictionary<string, IList<string>> GetRels()
+        {
+            return _apiDescriptionToRouteNameDictionary.ToList().ToDictionary(ks => ks.Key, vs => (IList<string>)new List<string> { vs.Value });
         }
 
         private void GenerateLinkNames()
@@ -39,15 +59,13 @@ namespace NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder
                 if (apiDescription == null)
                     continue;
 
-                var ruleMethod = mappingRule.MethodExpression.Method;
+                var routeName = RouteNameBuilder.Build(mappingRule, apiDescription.HttpMethod.Method);
 
-                var routeName = RouteNameBuilder.Build(ruleMethod.DeclaringType, ruleMethod, apiDescription.HttpMethod.Method);
-
-                _apiDescriptionToRouteNameDictionary.Add(apiDescription.ID, routeName);
+                _apiDescriptionToRouteNameDictionary.Add(apiDescription.ID, routeName.FirstOrDefault());
             }
         }
 
-        public Dictionary<string, object> Build(Object data)
+        private Dictionary<string, object> Build(Object data)
         {
             var result = new Dictionary<string, object>();
             

@@ -6,11 +6,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
+using NHateoas.Configuration;
 
 namespace NHateoas.Routes
 {
     internal interface IRouteNameBuilder
     {
-        string Build(Type controller, MethodInfo actionMethodInfo, string method);
+        List<string> Build(MappingRule mappingRule, string method);
     }
 }

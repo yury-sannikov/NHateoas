@@ -28,7 +28,7 @@ namespace NHateoas.Dynamic.Interfaces
         /// </summary>
         /// <param name="proxyInstance"></param>
         /// <param name="originalInstance"></param>
-        /// <param name="routesBuilder"></param>
-        void ActivateInstance(object proxyInstance, object originalInstance, IRoutesBuilder routesBuilder);
+        /// <param name="metadataProvider"></param>
+        void ActivateInstance(object proxyInstance, object originalInstance, IMetadataProvider metadataProvider);
     }
 }

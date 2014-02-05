@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
@@ -13,6 +15,26 @@ namespace NHateoas.Attributes
     [AttributeUsage(AttributeTargets.Method)]
     public class HypermediaAttribute : ActionFilterAttribute
     {
+        private readonly List<string> _rels = new List<string>();
+        public HypermediaAttribute()
+        {
+        }
+
+        public HypermediaAttribute(string rel)
+        {
+            _rels.Add(rel);
+        }
+
+        public HypermediaAttribute(string[] rels)
+        {
+            _rels.AddRange(rels.ToList());
+        }
+
+        public List<string> Rels
+        {
+            get { return _rels; }
+        }
+
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
             if (actionExecutedContext.Response == null || actionExecutedContext.Response.Content == null)

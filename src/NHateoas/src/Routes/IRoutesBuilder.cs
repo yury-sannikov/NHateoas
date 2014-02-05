@@ -7,10 +7,10 @@ using NHateoas.Configuration;
 
 namespace NHateoas.Routes
 {
-    internal interface IRoutesBuilder
+    internal interface IMetadataProvider
     {
-        Dictionary<string, IList<string>> GetRels();
-
-        Dictionary<string, object> Build(Object data);
+        object GetMetadataByType(Type metadataType, params object[] values);
+        
+        IList<Type> GetRegisteredMetadataTypes();
     }
 }

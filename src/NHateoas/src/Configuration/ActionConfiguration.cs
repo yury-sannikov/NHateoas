@@ -8,13 +8,11 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using NHateoas.Dynamic.Interfaces;
-using NHateoas.Dynamic.Strategies;
 using NHateoas.Dynamic.StrategyBuilderFactories;
 using NHateoas.Response;
 using NHateoas.Routes;
-using NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder;
-using NHateoas.Routes.RouteBuilders.SirenRoutesBuilder;
-using NHateoas.Routes.RouteValueSubstitution;
+using NHateoas.Routes.RouteMetadataProviders.SimpleMetadataProvider;
+using NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider;
 
 namespace NHateoas.Configuration
 {
@@ -23,12 +21,12 @@ namespace NHateoas.Configuration
         private readonly Type _controllerType;
         private readonly MethodInfo _actionMethodInfo;
         private readonly List<MappingRule> _mappingRules = new List<MappingRule>();
-        private IRoutesBuilder _routesBuilder = null;
+        private IMetadataProvider _metadataProvider = null;
         private IResponseTransformerFactory _responseTransformerFactory = null;
         private IStrategyBuilderFactory _strategyBuilderFactory;
 
         private Type _strategyBuilderFactoryType = typeof(DefaultStrategyBuilderFactory);
-        private Type _routesBuilderType = typeof(SimpleRoutesBuilder);
+        private Type _metadataProviderType = typeof(SimpleMetadataProvider);
 
         public ActionConfiguration(Type controllerType, MethodInfo actionMethodInfo)
         {
@@ -39,14 +37,14 @@ namespace NHateoas.Configuration
         public void UseSirenSpecification()
         {
             _strategyBuilderFactoryType = typeof(SirenStrategyBuilderFactory);
-            _routesBuilderType = typeof(SirenRoutesBuilder);
+            _metadataProviderType = typeof(SirenMetadataProvider);
         }
 
         public void Configure()
         {
             _responseTransformerFactory = new ResponseTransformerFactory();
 
-            _routesBuilder = (IRoutesBuilder)Activator.CreateInstance(_routesBuilderType, this);
+            _metadataProvider = (IMetadataProvider)Activator.CreateInstance(_metadataProviderType, this);
             _strategyBuilderFactory = (IStrategyBuilderFactory)Activator.CreateInstance(_strategyBuilderFactoryType);
         }
 
@@ -70,10 +68,10 @@ namespace NHateoas.Configuration
             get { return _mappingRules; }
         }
 
-        public IRoutesBuilder RoutesBuilder
+        public IMetadataProvider MetadataProvider
         {
-            get { return _routesBuilder; }
-            set { _routesBuilder = value; }
+            get { return _metadataProvider; }
+            set { _metadataProvider = value; }
         }
 
         public IResponseTransformerFactory ResponseTransformerFactory

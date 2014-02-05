@@ -50,7 +50,7 @@ namespace NHateoas.Dynamic.Strategies
             }
         }
 
-        public override void ActivateInstance(object proxyInstance, object originalInstance, IRoutesBuilder routesBuilder)
+        public override void ActivateInstance(object proxyInstance, object originalInstance, IMetadataProvider metadataProvider)
         {
             var aggregateFieldInfo = proxyInstance.GetType().GetField(AggregateFieldName,
                          BindingFlags.NonPublic |

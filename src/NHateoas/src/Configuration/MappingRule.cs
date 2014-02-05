@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
+using NHateoas.Attributes;
 
 namespace NHateoas.Configuration
 {
@@ -18,6 +19,8 @@ namespace NHateoas.Configuration
         private readonly List<ApiDescription> _apiDescriptions = new List<ApiDescription>();
 
         private readonly Dictionary<string, Delegate> _parametersDelegates = null;
+        
+        private readonly List<string> _rels = new List<string>();
  
         public MappingRule(MethodCallExpression methodExpression)
         {
@@ -25,6 +28,16 @@ namespace NHateoas.Configuration
             _parametersDelegates = ParametersDelegateBuilder.Build(methodExpression);
 
             MapApiDesctiption();
+
+            AddRelsFromAttribute(methodExpression);
+        }
+
+        private void AddRelsFromAttribute(MethodCallExpression methodExpression)
+        {
+            var attribute = methodExpression.Method.GetCustomAttributes<HypermediaAttribute>().FirstOrDefault();
+
+            if (attribute != null && attribute.Rels.Any())
+                _rels.AddRange(attribute.Rels);
         }
 
         private void MapApiDesctiption()
@@ -59,5 +72,11 @@ namespace NHateoas.Configuration
         {
             get { return _parametersDelegates; }
         }
+
+        public List<string> Rels
+        {
+            get { return _rels; }
+        }
+
     }
 }

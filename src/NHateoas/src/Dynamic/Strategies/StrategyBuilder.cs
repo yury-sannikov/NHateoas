@@ -27,9 +27,9 @@ namespace NHateoas.Dynamic.Strategies
         #endregion
 
         #region IInstanceActivator
-        public override void ActivateInstance(object proxyInstance, object originalInstance, IRoutesBuilder routesBuilder)
+        public override void ActivateInstance(object proxyInstance, object originalInstance, IMetadataProvider metadataProvider)
         {
-            _compositeStrategiesList.ForEach(a => a.ActivateInstance(proxyInstance, originalInstance, routesBuilder));
+            _compositeStrategiesList.ForEach(a => a.ActivateInstance(proxyInstance, originalInstance, metadataProvider));
         }
         #endregion
 
@@ -52,6 +52,14 @@ namespace NHateoas.Dynamic.Strategies
         {
             _compositeStrategiesList.Add(
                 new SimpleRoutesStrategy(routeInformation)
+                );
+            return this;
+        }
+
+        public StrategyBuilder WithTypedMetadataProperty(Type metadataType, string propertyName)
+        {
+            _compositeStrategiesList.Add(
+                new TypedMetadataPropertyStrategy(metadataType, propertyName)
                 );
             return this;
         }

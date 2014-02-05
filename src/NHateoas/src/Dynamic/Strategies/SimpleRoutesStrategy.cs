@@ -39,9 +39,9 @@ namespace NHateoas.Dynamic.Strategies
         }
 
         public override void ActivateInstance(object proxyInstance, object originalInstance,
-            IRoutesBuilder routesBuilder)
+            IMetadataProvider metadataProvider)
         {
-            Dictionary<string, object> routes = routesBuilder.Build(originalInstance);
+            var routes = (Dictionary<string, object>)metadataProvider.GetMetadataByType(typeof(Dictionary<string, object>), originalInstance);
 
             proxyInstance.GetType().GetProperties().Where(p => routes.ContainsKey(p.Name)).ToList()
                 .ForEach(prop => prop.SetValue(proxyInstance, routes[prop.Name]));

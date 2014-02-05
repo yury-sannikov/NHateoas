@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using NHateoas.Attributes;
 
 namespace NHateoas.Configuration
 {
@@ -66,6 +67,16 @@ namespace NHateoas.Configuration
         public HypermediaConfigurator<TModel, TController> UseSirenSpecification()
         {
             ActionConfiguration.UseSirenSpecification();
+            return this;
+        }
+
+        public HypermediaConfigurator<TModel, TController> WithRel(string rel)
+        {
+            if (ActionConfiguration == null || !ActionConfiguration.MappingRules.Any())
+                throw new Exception("WithRel should be used after Map");
+
+            ActionConfiguration.MappingRules.Last().Rels.Add(rel);
+
             return this;
         }
 

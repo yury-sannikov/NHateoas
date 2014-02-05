@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -42,6 +43,8 @@ namespace NHateoas.Sample.Controllers
                         .Map((model, controller) => controller.Post(model))
                         .Map((model, controller) => controller.Put(model.Id, model))
                         .Map((model, controller) => controller.Delete(model.Id))
+                            .WithRel("delete-product")
+                            .WithRel("delete-by-id")
                         .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
                     
                  .For((model, controller) => controller.Get(model.Name))
@@ -81,8 +84,8 @@ namespace NHateoas.Sample.Controllers
         {
             return Products;
         }
-        
-        [Hypermedia]
+
+        [Hypermedia(rels: new[]{"get-by-id", "get"})]
         [Route("{id:int}")]
         public Product Get(int id)
         {
@@ -101,7 +104,7 @@ namespace NHateoas.Sample.Controllers
         [HttpPost]
         [Route("")]
         [ResponseType(typeof(Product))]
-        [Hypermedia]
+        [Hypermedia(rels: new[] { "create-product"})]
         public HttpResponseMessage Post([FromBody]Product product)
         {
             return Request.CreateResponse<Product>(HttpStatusCode.Created, Products.First());
@@ -110,12 +113,14 @@ namespace NHateoas.Sample.Controllers
         // PUT api/values/5
         [HttpPut]
         [Route("{id:int}")]
+        [Hypermedia]
         public void Put(int id, [FromBody]Product product)
         {
         }
 
         // DELETE api/values/5
         [Route("{id:int}")]
+        [Hypermedia]
         public void Delete(int id)
         {
         }

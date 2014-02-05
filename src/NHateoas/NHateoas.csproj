@@ -58,6 +58,7 @@
     <Compile Include="src\Configuration\ParametersDelegateBuilder.cs" />
     <Compile Include="src\Configuration\QueryParameter.cs" />
     <Compile Include="src\Dynamic\Interfaces\IStrategyBuilderFactory.cs" />
+    <Compile Include="src\Dynamic\Strategies\TypedMetadataPropertyStrategy.cs" />
     <Compile Include="src\Dynamic\StrategyBuilderFactories\DefaultStrategyBuilderFactory.cs" />
     <Compile Include="src\Dynamic\StrategyBuilderFactories\SirenStrategyBuilderFactory.cs" />
     <Compile Include="src\Dynamic\StrategyBuilderFactories\StrategyCache.cs" />
@@ -89,9 +90,11 @@
     <Compile Include="src\Dynamic\Visitors\PropertyVisitor.cs" />
     <Compile Include="src\Routes\IRouteNameSubstitution.cs" />
     <Compile Include="src\Routes\IRoutesBuilder.cs" />
-    <Compile Include="src\Routes\RouteBuilders\SimpleRoutesBuilder\DefaultRouteNameBuilder.cs" />
-    <Compile Include="src\Routes\RouteBuilders\SimpleRoutesBuilder\SimpleRoutesBuilder.cs" />
-    <Compile Include="src\Routes\RouteBuilders\SirenRoutesBuilder\SirenRoutesBuilder.cs" />
+    <Compile Include="src\Routes\RouteMetadataProviders\DefaultRouteNameBuilder.cs" />
+    <Compile Include="src\Routes\RouteMetadataProviders\SimpleMetadataProvider\SimpleMetadataProvider.cs" />
+    <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\MetadataPlainObjects\Links.cs" />
+    <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\SirenRelNameBuilder.cs" />
+    <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\SirenRoutesBuilder.cs" />
     <Compile Include="src\Routes\RouteValueSubstitution\DefaultRouteValueSubstitution.cs" />
   </ItemGroup>
   <ItemGroup>
