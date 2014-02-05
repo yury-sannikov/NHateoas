@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
+using System.Web.Http.Description;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
 
@@ -24,10 +25,10 @@ namespace NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder
             {
                 if (typeof (HttpResponseMessage).IsAssignableFrom(returnType))
                 {
-                    var attributes = actionMethodInfo.GetCustomAttributes<HypermediaAttribute>().ToList();
+                    var attributes = actionMethodInfo.GetCustomAttributes<ResponseTypeAttribute>().ToList();
                     if (attributes.Any())
                     {
-                        returnType = attributes.First().ReturnType;
+                        returnType = attributes.First().ResponseType;
                     }
                 }
                 

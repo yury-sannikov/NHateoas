@@ -13,20 +13,6 @@ namespace NHateoas.Attributes
     [AttributeUsage(AttributeTargets.Method)]
     public class HypermediaAttribute : ActionFilterAttribute
     {
-        private readonly Type _returnType;
-
-        public HypermediaAttribute() : this(null)
-        {
-            
-        }
-
-        public HypermediaAttribute(Type returnType)
-        {
-            _returnType = returnType;
-        }
-
-        public Type ReturnType{ get { return _returnType; }}
-
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
             if (actionExecutedContext.Response == null || actionExecutedContext.Response.Content == null)
