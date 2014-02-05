@@ -92,6 +92,9 @@
     <Compile Include="src\Routes\IRoutesBuilder.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\DefaultRouteNameBuilder.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SimpleMetadataProvider\SimpleMetadataProvider.cs" />
+    <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\ActionsGenerator.cs" />
+    <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\LinksGenerator.cs" />
+    <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\MetadataPlainObjects\Actions.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\MetadataPlainObjects\Links.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\SirenRelNameBuilder.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\SirenRoutesBuilder.cs" />

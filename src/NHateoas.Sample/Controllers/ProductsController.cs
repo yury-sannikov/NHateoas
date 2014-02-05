@@ -71,6 +71,10 @@ namespace NHateoas.Sample.Controllers
             .Configure();
         }
 
+        /// <summary>
+        /// Get products collection
+        /// </summary>
+        /// <returns></returns>
         [Hypermedia]
         [Route("")]
         public IEnumerable<Product> Get()
@@ -78,6 +82,13 @@ namespace NHateoas.Sample.Controllers
             return Products;
         }
         
+        /// <summary>
+        /// Search for products by query and do pagination using skip and limit parameters
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="skip"></param>
+        /// <param name="limit"></param>
+        /// <returns></returns>
         [Hypermedia]
         [Route("")]
         public IEnumerable<Product> Get(string query, int skip, int limit)
@@ -85,6 +96,11 @@ namespace NHateoas.Sample.Controllers
             return Products;
         }
 
+        /// <summary>
+        /// Get product by product id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Hypermedia(rels: new[]{"get-by-id", "get"})]
         [Route("{id:int}")]
         public Product Get(int id)
@@ -92,6 +108,11 @@ namespace NHateoas.Sample.Controllers
             return Products.First();
         }
         
+        /// <summary>
+        /// Get first product by produt name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [Route("{name}")]
         [ResponseType(typeof(Product))]
         [Hypermedia]
@@ -100,7 +121,12 @@ namespace NHateoas.Sample.Controllers
             return Request.CreateResponse<Product>(HttpStatusCode.Unauthorized, Products.First());
         }
 
-        // POST api/values
+
+        /// <summary>
+        /// Create new product and return created object back with database generated ID
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("")]
         [ResponseType(typeof(Product))]
@@ -110,7 +136,11 @@ namespace NHateoas.Sample.Controllers
             return Request.CreateResponse<Product>(HttpStatusCode.Created, Products.First());
         }
 
-        // PUT api/values/5
+        /// <summary>
+        /// Modify existing product objects
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="product"></param>
         [HttpPut]
         [Route("{id:int}")]
         [Hypermedia]
@@ -118,7 +148,10 @@ namespace NHateoas.Sample.Controllers
         {
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// Delete product by ID 
+        /// </summary>
+        /// <param name="id"></param>
         [Route("{id:int}")]
         [Hypermedia]
         public void Delete(int id)

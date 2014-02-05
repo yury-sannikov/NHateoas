@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,9 +12,12 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider.MetadataP
     {
     }
 
+    [DataContract]
     public class SirenLink
     {
-        public List<string> rel { get; set; }
-        public string href { get; set; }
+        [DataMember(Name = "rel")]
+        public List<string> RelList { get; set; }
+        [DataMember(Name = "href")]
+        public string Href { get; set; }
     }
 }
