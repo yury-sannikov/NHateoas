@@ -63,6 +63,12 @@ namespace NHateoas.Configuration
             return this;
         }
 
+        public HypermediaConfigurator<TModel, TController> UseSirenSpecification()
+        {
+            ActionConfiguration.UseSirenSpecification();
+            return this;
+        }
+
         private void SetCurrentAction(Expression methodExpression)
         {
             var currentAction = ((MethodCallExpression)methodExpression).Method;

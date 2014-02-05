@@ -5,18 +5,19 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using NHateoas.Configuration;
+using NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder;
 using NHateoas.Routes.RouteValueSubstitution;
 
-namespace NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder
+namespace NHateoas.Routes.RouteBuilders.SirenRoutesBuilder
 {
-    internal class SimpleRoutesBuilder : IRoutesBuilder
+    internal class SirenRoutesBuilder : IRoutesBuilder
     {
         private IRouteNameBuilder _routeNameBuilder = null;
         private IRouteValueSubstitution _routeNameSubstitution = null;
         private readonly Dictionary<string, string> _apiDescriptionToRouteNameDictionary = new Dictionary<string, string>();
         private readonly IActionConfiguration _actionConfiguration;
 
-        public SimpleRoutesBuilder(IActionConfiguration actionConfiguration)
+        public SirenRoutesBuilder(IActionConfiguration actionConfiguration)
         {
             _actionConfiguration = actionConfiguration;
 

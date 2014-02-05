@@ -13,6 +13,7 @@ using NHateoas.Dynamic.StrategyBuilderFactories;
 using NHateoas.Response;
 using NHateoas.Routes;
 using NHateoas.Routes.RouteBuilders.SimpleRoutesBuilder;
+using NHateoas.Routes.RouteBuilders.SirenRoutesBuilder;
 using NHateoas.Routes.RouteValueSubstitution;
 
 namespace NHateoas.Configuration
@@ -26,15 +27,27 @@ namespace NHateoas.Configuration
         private IResponseTransformerFactory _responseTransformerFactory = null;
         private IStrategyBuilderFactory _strategyBuilderFactory;
 
+        private Type _strategyBuilderFactoryType = typeof(DefaultStrategyBuilderFactory);
+        private Type _routesBuilderType = typeof(SimpleRoutesBuilder);
+
         public ActionConfiguration(Type controllerType, MethodInfo actionMethodInfo)
         {
             _controllerType = controllerType;
             _actionMethodInfo = actionMethodInfo;
         }
 
+        public void UseSirenSpecification()
+        {
+            _strategyBuilderFactoryType = typeof(SirenStrategyBuilderFactory);
+            _routesBuilderType = typeof(SirenRoutesBuilder);
+        }
+
         public void Configure()
         {
-            CreateConcreteInstances();
+            _responseTransformerFactory = new ResponseTransformerFactory();
+
+            _routesBuilder = (IRoutesBuilder)Activator.CreateInstance(_routesBuilderType, this);
+            _strategyBuilderFactory = (IStrategyBuilderFactory)Activator.CreateInstance(_strategyBuilderFactoryType);
         }
 
         public Type ControllerType
@@ -72,13 +85,6 @@ namespace NHateoas.Configuration
         public IStrategyBuilderFactory StrategyBuilderFactory
         {
             get { return _strategyBuilderFactory; }
-        }
-
-        protected virtual void CreateConcreteInstances()
-        {
-            _routesBuilder = new SimpleRoutesBuilder(this);
-            _responseTransformerFactory = new ResponseTransformerFactory();
-            _strategyBuilderFactory = new DefaultStrategyBuilderFactory();
         }
 
     }
