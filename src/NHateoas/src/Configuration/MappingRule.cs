@@ -36,8 +36,8 @@ namespace NHateoas.Configuration
         {
             var attribute = methodExpression.Method.GetCustomAttributes<HypermediaAttribute>().FirstOrDefault();
 
-            if (attribute != null && attribute.Rels.Any())
-                _rels.AddRange(attribute.Rels);
+            if (attribute != null && attribute.Names.Any())
+                _rels.AddRange(attribute.Names);
         }
 
         private void MapApiDesctiption()

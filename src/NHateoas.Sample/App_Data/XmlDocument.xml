@@ -481,54 +481,79 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:NHateoas.Sample.Controllers.ProductsController">
+            <summary>
+            ProductsController provides CRUD operations against Product class
+            </summary>
+        </member>
         <member name="M:NHateoas.Sample.Controllers.ProductsController.Get">
             <summary>
             Get products collection
             </summary>
-            <returns></returns>
+            <returns>Product collection</returns>
         </member>
         <member name="M:NHateoas.Sample.Controllers.ProductsController.Get(System.String,System.Int32,System.Int32)">
             <summary>
             Search for products by query and do pagination using skip and limit parameters
             </summary>
-            <param name="query"></param>
-            <param name="skip"></param>
-            <param name="limit"></param>
+            <param name="query">Query to be executed</param>
+            <param name="skip">Records to skip</param>
+            <param name="limit">Result limit</param>
             <returns></returns>
         </member>
         <member name="M:NHateoas.Sample.Controllers.ProductsController.Get(System.Int32)">
             <summary>
             Get product by product id
             </summary>
-            <param name="id"></param>
-            <returns></returns>
+            <param name="id">Product ID</param>
+            <returns>Product instance</returns>
         </member>
         <member name="M:NHateoas.Sample.Controllers.ProductsController.Get(System.String)">
             <summary>
             Get first product by produt name
             </summary>
-            <param name="name"></param>
-            <returns></returns>
+            <param name="name">Product name to search</param>
+            <returns>First product with mathing name</returns>
         </member>
         <member name="M:NHateoas.Sample.Controllers.ProductsController.Post(NHateoas.Sample.Models.Product)">
             <summary>
             Create new product and return created object back with database generated ID
             </summary>
-            <param name="product"></param>
-            <returns></returns>
+            <param name="product">Product to create</param>
+            <returns>Product with database identifier</returns>
         </member>
         <member name="M:NHateoas.Sample.Controllers.ProductsController.Put(System.Int32,NHateoas.Sample.Models.Product)">
             <summary>
             Modify existing product objects
             </summary>
-            <param name="id"></param>
-            <param name="product"></param>
+            <param name="id">Product ID</param>
+            <param name="product">Updated product</param>
         </member>
         <member name="M:NHateoas.Sample.Controllers.ProductsController.Delete(System.Int32)">
             <summary>
             Delete product by ID 
             </summary>
-            <param name="id"></param>
+            <param name="id">Product ID</param>
+        </member>
+        <member name="T:NHateoas.Sample.Models.Product">
+            <summary>
+            This class represent Product
+            </summary>
+        </member>
+        <member name="P:NHateoas.Sample.Models.Product.Id">
+            <summary>
+            Product ID
+            </summary>
+        </member>
+        <member name="P:NHateoas.Sample.Models.Product.Name">
+            <summary>
+            Product name
+            </summary>
+        </member>
+        <member name="P:NHateoas.Sample.Models.Product.Price">
+            <summary>
+            Product price
+            </summary>
         </member>
     </members>
 </doc>

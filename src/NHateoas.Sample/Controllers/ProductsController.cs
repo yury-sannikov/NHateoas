@@ -16,6 +16,9 @@ using NHateoas.Sample.Models;
 namespace NHateoas.Sample.Controllers
 {
 
+    /// <summary>
+    /// ProductsController provides CRUD operations against Product class
+    /// </summary>
     [HypermediaSource]
     [RoutePrefix("api/Product")]
     public class ProductsController : ApiController, IHypermediaApiControllerConfigurator
@@ -36,37 +39,37 @@ namespace NHateoas.Sample.Controllers
             new HypermediaConfigurator<Product, ProductsController>()
                 .For((model, controller) => controller.Get(model.Id))
                     .UseSirenSpecification()
-                        .Map((model, controller) => controller.Get())
-                        .Map((model, controller) => controller.Get(model.Id))
-                        .Map((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
-                        .Map((model, controller) => controller.Get(model.Name))
-                        .Map((model, controller) => controller.Post(model))
-                        .Map((model, controller) => controller.Put(model.Id, model))
-                        .Map((model, controller) => controller.Delete(model.Id))
-                            .WithRel("delete-product")
-                            .WithRel("delete-by-id")
-                        .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                    .Map((model, controller) => controller.Get())
+                    .Map((model, controller) => controller.Get(model.Id))
+                    .Map((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
+                    .Map((model, controller) => controller.Get(model.Name))
+                    .Map((model, controller) => controller.Post(model))
+                    .Map((model, controller) => controller.Put(model.Id, model))
+                    .Map((model, controller) => controller.Delete(model.Id))
+                        .Named("delete-product")
+                        .Named("delete-by-id")
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
                     
                  .For((model, controller) => controller.Get(model.Name))
                     .UseSirenSpecification()
-                        .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
-                        .Map((model, controller) => controller.Get())
-                        .Map((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
-                        .Map((model, controller) => controller.Get(model.Id))
-                        .Map((model, controller) => controller.Get(model.Name))
-                        .Map((model, controller) => controller.Post(model))
-                        .Map((model, controller) => controller.Put(model.Id, model))
-                        .Map((model, controller) => controller.Delete(model.Id))
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                    .Map((model, controller) => controller.Get())
+                    .Map((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
+                    .Map((model, controller) => controller.Get(model.Id))
+                    .Map((model, controller) => controller.Get(model.Name))
+                    .Map((model, controller) => controller.Post(model))
+                    .Map((model, controller) => controller.Put(model.Id, model))
+                    .Map((model, controller) => controller.Delete(model.Id))
                     
                 .For((model, controller) => controller.Get())
                     .UseSirenSpecification()
-                        .Map((model, controller) => controller.Get(model.Id))
-                        .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                    .Map((model, controller) => controller.Get(model.Id))
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
 
                 .For((model, controller) => controller.Post(model))
                     .UseSirenSpecification()
-                        .Map((model, controller) => controller.Get(model.Id))
-                        .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                    .Map((model, controller) => controller.Get(model.Id))
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
 
             .Configure();
         }
@@ -74,7 +77,7 @@ namespace NHateoas.Sample.Controllers
         /// <summary>
         /// Get products collection
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Product collection</returns>
         [Hypermedia]
         [Route("")]
         public IEnumerable<Product> Get()
@@ -85,9 +88,9 @@ namespace NHateoas.Sample.Controllers
         /// <summary>
         /// Search for products by query and do pagination using skip and limit parameters
         /// </summary>
-        /// <param name="query"></param>
-        /// <param name="skip"></param>
-        /// <param name="limit"></param>
+        /// <param name="query">Query to be executed</param>
+        /// <param name="skip">Records to skip</param>
+        /// <param name="limit">Result limit</param>
         /// <returns></returns>
         [Hypermedia]
         [Route("")]
@@ -99,9 +102,9 @@ namespace NHateoas.Sample.Controllers
         /// <summary>
         /// Get product by product id
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [Hypermedia(rels: new[]{"get-by-id", "get"})]
+        /// <param name="id">Product ID</param>
+        /// <returns>Product instance</returns>
+        [Hypermedia(Names = new []{"get-by-id", "get"})]
         [Route("{id:int}")]
         public Product Get(int id)
         {
@@ -111,8 +114,8 @@ namespace NHateoas.Sample.Controllers
         /// <summary>
         /// Get first product by produt name
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <param name="name">Product name to search</param>
+        /// <returns>First product with mathing name</returns>
         [Route("{name}")]
         [ResponseType(typeof(Product))]
         [Hypermedia]
@@ -125,12 +128,12 @@ namespace NHateoas.Sample.Controllers
         /// <summary>
         /// Create new product and return created object back with database generated ID
         /// </summary>
-        /// <param name="product"></param>
-        /// <returns></returns>
+        /// <param name="product">Product to create</param>
+        /// <returns>Product with database identifier</returns>
         [HttpPost]
         [Route("")]
         [ResponseType(typeof(Product))]
-        [Hypermedia(rels: new[] { "create-product"})]
+        [Hypermedia(Names = new []{"create-product"})]
         public HttpResponseMessage Post([FromBody]Product product)
         {
             return Request.CreateResponse<Product>(HttpStatusCode.Created, Products.First());
@@ -139,8 +142,8 @@ namespace NHateoas.Sample.Controllers
         /// <summary>
         /// Modify existing product objects
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="product"></param>
+        /// <param name="id">Product ID</param>
+        /// <param name="product">Updated product</param>
         [HttpPut]
         [Route("{id:int}")]
         [Hypermedia]
@@ -151,7 +154,7 @@ namespace NHateoas.Sample.Controllers
         /// <summary>
         /// Delete product by ID 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Product ID</param>
         [Route("{id:int}")]
         [Hypermedia]
         public void Delete(int id)

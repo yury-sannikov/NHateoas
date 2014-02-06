@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using NHateoas.Configuration;
@@ -20,7 +21,7 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
 
             result.AddRange(from mappingRule in mappingRules
                 let apiDescription = mappingRule.ApiDescriptions.OrderBy(d => d.RelativePath.Length).FirstOrDefault()
-                where apiDescription != null
+                where apiDescription != null &&  apiDescription.HttpMethod != HttpMethod.Get
                 let routeNames = routeRelations[apiDescription.ID]
                 select new MetadataPlainObjects.Action()
                 {

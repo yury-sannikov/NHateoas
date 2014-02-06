@@ -70,7 +70,7 @@ namespace NHateoas.Configuration
             return this;
         }
 
-        public HypermediaConfigurator<TModel, TController> WithRel(string rel)
+        public HypermediaConfigurator<TModel, TController> Named(string rel)
         {
             if (ActionConfiguration == null || !ActionConfiguration.MappingRules.Any())
                 throw new Exception("WithRel should be used after Map");
