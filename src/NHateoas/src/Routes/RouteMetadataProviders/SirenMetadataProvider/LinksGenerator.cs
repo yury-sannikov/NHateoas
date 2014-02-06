@@ -21,7 +21,8 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
 
             result.AddRange(from mappingRule in mappingRules
                 let apiDescription = mappingRule.ApiDescriptions.OrderBy(d => d.RelativePath.Length).FirstOrDefault()
-                where apiDescription != null && apiDescription.HttpMethod == HttpMethod.Get
+                let isLink = mappingRule.Type == MappingRule.RuleType.LinkRule || (mappingRule.Type == MappingRule.RuleType.Default && apiDescription.HttpMethod == HttpMethod.Get)
+                where apiDescription != null && isLink
                 let routeNames = routeRelations[apiDescription.ID]
                 select new MetadataPlainObjects.SirenLink()
                 {

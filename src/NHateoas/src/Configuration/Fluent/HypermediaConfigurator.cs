@@ -9,116 +9,95 @@ using System.Text;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using NHateoas.Attributes;
+using NHateoas.Configuration.Fluent;
 
 namespace NHateoas.Configuration
 {
     public class HypermediaConfigurator<TModel, TController>
     {
-        private readonly Dictionary<MethodInfo, ActionConfiguration>  _rules = new Dictionary<MethodInfo, ActionConfiguration>();
-        private ActionConfiguration _currentActionConfiguration = null;
+        private readonly HypermediaConfigurationLogic<TModel, TController> _logic =
+            new HypermediaConfigurationLogic<TModel, TController>();
+
+        private readonly SirenConfigurator<TModel, TController> _sirenConfigurator;
+
+        public HypermediaConfigurator()
+        {
+            _sirenConfigurator = new SirenConfigurator<TModel, TController>(this, _logic);    
+        }
 
         public HypermediaConfigurator<TModel, TController> Map(Expression<Func<TModel, TController, IEnumerable<TModel>>> expression)
         {
-            AddNewRule(expression.Body);
+            _logic.AddNewRule(expression.Body);
             return this;
         }
 
         public HypermediaConfigurator<TModel, TController> Map(Expression<Func<TModel, TController, TModel>> expression)
         {
-            AddNewRule(expression.Body);
+            _logic.AddNewRule(expression.Body);
             return this;
         }
 
         public HypermediaConfigurator<TModel, TController> Map(Expression<Action<TModel, TController>> expression)
         {
-            AddNewRule(expression.Body);
+            _logic.AddNewRule(expression.Body);
             return this;
         }
 
         public HypermediaConfigurator<TModel, TController> For(Expression<Func<TModel, TController, IEnumerable<TModel>>> expression)
         {
-            SetCurrentAction(expression.Body);
+            _logic.SetCurrentAction(expression.Body);
             return this;
         }
 
         public HypermediaConfigurator<TModel, TController> For(Expression<Func<TModel, TController, TModel>> expression)
         {
-            SetCurrentAction(expression.Body);
+            _logic.SetCurrentAction(expression.Body);
             return this;
         }
 
         public HypermediaConfigurator<TModel, TController> For(Expression<Action<TModel, TController>> expression)
         {
-            SetCurrentAction(expression.Body);
+            _logic.SetCurrentAction(expression.Body);
             return this;
         }
 
         public HypermediaConfigurator<TModel, TController> MapReference<TOtherController>(Expression<Func<TModel, TOtherController, Object>> expression)
         {
-            AddNewRule(expression.Body);
+            _logic.AddNewRule(expression.Body);
             return this;
         }
         public HypermediaConfigurator<TModel, TController> MapReference<TOtherController>(Expression<Action<TModel, TOtherController>> expression)
         {
-            AddNewRule(expression.Body);
+            _logic.AddNewRule(expression.Body);
             return this;
         }
 
-        public HypermediaConfigurator<TModel, TController> UseSirenSpecification()
+        public SirenConfigurator<TModel, TController> UseSirenSpecification()
         {
-            ActionConfiguration.UseSirenSpecification();
-            return this;
+            _logic.ActionConfiguration.UseSirenSpecification();
+            return _sirenConfigurator;
         }
 
         public HypermediaConfigurator<TModel, TController> Named(string rel)
         {
-            if (ActionConfiguration == null || !ActionConfiguration.MappingRules.Any())
-                throw new Exception("WithRel should be used after Map");
+            if (_logic.ActionConfigurationMappingRule == null)
+                throw new Exception("Named should be used after Map");
 
-            ActionConfiguration.MappingRules.Last().Rels.Add(rel);
-
+            _logic.ActionConfigurationMappingRule.Names.Add(rel);
             return this;
-        }
-
-        private void SetCurrentAction(Expression methodExpression)
-        {
-            var currentAction = ((MethodCallExpression)methodExpression).Method;
-            if (!_rules.ContainsKey(currentAction))
-            {
-                ActionConfiguration = new ActionConfiguration(typeof(TController), currentAction);
-                _rules.Add(currentAction, ActionConfiguration);
-            }
-        }
-
-        private void AddNewRule(Expression expression)
-        {
-            var methodExpression = (MethodCallExpression)expression;
-            var rule = new MappingRule(methodExpression);
-            ActionConfiguration.AddMappingRule(rule);
-        }
-
-        private ActionConfiguration ActionConfiguration
-        {
-            get { return _currentActionConfiguration; }
-            set
-            {
-                if (_currentActionConfiguration != null)
-                    _currentActionConfiguration.Configure();
-                _currentActionConfiguration = value;
-            }
         }
 
         public void Configure()
         {
-            if (_currentActionConfiguration != null)
-                _currentActionConfiguration.Configure();
+            if (_logic.ActionConfiguration != null)
+                _logic.ActionConfiguration.Configure();
 
             var controllerConfiguration = HypermediaControllerConfiguration.Instance;
 
             if (controllerConfiguration.IsConfigured(typeof(TController)))
                 return;
 
-            controllerConfiguration.Setup(typeof(TController), _rules);
+            controllerConfiguration.Setup(typeof(TController), _logic.Rules);
         }
     }
 }

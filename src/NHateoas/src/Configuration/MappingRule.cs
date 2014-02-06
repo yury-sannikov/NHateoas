@@ -19,9 +19,18 @@ namespace NHateoas.Configuration
         private readonly List<ApiDescription> _apiDescriptions = new List<ApiDescription>();
 
         private readonly Dictionary<string, Delegate> _parametersDelegates = null;
-        
+
         private readonly List<string> _rels = new List<string>();
- 
+
+        public enum RuleType
+        {
+            Default,
+            LinkRule,
+            ActionRule
+        }
+
+        private RuleType _ruleType = RuleType.Default;
+
         public MappingRule(MethodCallExpression methodExpression)
         {
             _methodExpression = methodExpression;
@@ -73,10 +82,15 @@ namespace NHateoas.Configuration
             get { return _parametersDelegates; }
         }
 
-        public List<string> Rels
+        public List<string> Names
         {
             get { return _rels; }
         }
 
+        public RuleType Type
+        {
+            get { return _ruleType; }
+            set { _ruleType = value; }
+        }
     }
 }

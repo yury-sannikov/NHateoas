@@ -11,8 +11,8 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
 
         public List<string> Build(MappingRule mappingRule, string method)
         {
-            if (mappingRule.Rels.Any())
-                return mappingRule.Rels;
+            if (mappingRule.Names.Any())
+                return mappingRule.Names;
 
             return _defaultRouteNameBuilder.Value.Build(mappingRule, method);
         }

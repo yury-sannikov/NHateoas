@@ -53,7 +53,9 @@
     <Compile Include="src\Attributes\HypermediaAttribute.cs" />
     <Compile Include="src\Attributes\HypermediaSourceAttribute.cs" />
     <Compile Include="src\Configuration\ControllerConfiguration.cs" />
-    <Compile Include="src\Configuration\HypermediaConfigurator.cs" />
+    <Compile Include="src\Configuration\Fluent\SirenConfigurator.cs" />
+    <Compile Include="src\Configuration\HypermediaConfigurationLogic.cs" />
+    <Compile Include="src\Configuration\Fluent\HypermediaConfigurator.cs" />
     <Compile Include="src\Configuration\IActionConfiguration.cs" />
     <Compile Include="src\Configuration\IControllerConfiguration.cs" />
     <Compile Include="src\Configuration\ParametersDelegateBuilder.cs" />
