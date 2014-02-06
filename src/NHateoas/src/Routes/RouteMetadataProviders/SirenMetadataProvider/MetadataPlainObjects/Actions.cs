@@ -18,7 +18,7 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider.MetadataP
         [DataMember(Name = "name")]
         public string FieldName { get; set; }
 
-        [DataMember(Name = "type")]
+        [DataMember(Name = "type", EmitDefaultValue = false)]
         public string FieldType { get; set; }
 
         [DataMember(Name = "value", EmitDefaultValue = false)]

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http.Description;
 using NHateoas.Configuration;
 using NHateoas.Routes.RouteValueSubstitution;
 
@@ -30,11 +32,39 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
                     Method = apiDescription.HttpMethod.Method,
                     Title = apiDescription.Documentation,
                     ActionName = routeNames.FirstOrDefault(),
-                    ActionFields = null,
-                    ContentType = null
+                    ActionFields = ActionFieldsGenerator.Generate(mappingRule, apiDescription, originalObject),
+                    ContentType = DeduceContentType(mappingRule, apiDescription, originalObject)
                 });
 
             return result;
+        }
+
+        public static string DeduceContentType(MappingRule mappingRule, ApiDescription apiDescription, object originalObject)
+        {
+            if (mappingRule.ContentType != null)
+                return mappingRule.ContentType.MediaType;
+
+            if (apiDescription.HttpMethod != HttpMethod.Post)
+                return null;
+
+            if (IsOrContains(typeof(System.Web.HttpPostedFileBase), originalObject.GetType()))
+                return "multipart/form-data";
+
+            return "application/x-www-form-urlencoded";
+        }
+
+        private static bool IsOrContains(Type searchType, Type type)
+        {
+            if (searchType.IsAssignableFrom(type))
+                return true;
+            
+            if (type.IsGenericType && typeof (IEnumerable<>).IsAssignableFrom(type.GetGenericTypeDefinition()))
+                return IsOrContains(searchType.GetGenericTypeDefinition(), type);
+            
+            if (!type.IsClass)
+                return false;
+            
+            return type.GetProperties().Any( p => IsOrContains(searchType, p.PropertyType));
         }
     }
 }

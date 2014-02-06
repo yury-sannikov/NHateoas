@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -115,6 +116,16 @@ namespace NHateoas.Configuration.Fluent
         public SirenConfigurator<TModel, TController> AsAction()
         {
             SetActionNameType("AsAction", string.Empty, false, MappingRule.RuleType.ActionRule);
+            return this;
+        }
+
+        public SirenConfigurator<TModel, TController> WithContentType(string contentType)
+        {
+            if (_logic.ActionConfigurationMappingRule == null)
+                throw new Exception("WithContentType should be used after MapXX method");
+            
+            _logic.ActionConfigurationMappingRule.ContentType = new ContentType(contentType);
+
             return this;
         }
 

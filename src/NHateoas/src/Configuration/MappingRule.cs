@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Mime;
 using System.Reflection;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -92,5 +94,7 @@ namespace NHateoas.Configuration
             get { return _ruleType; }
             set { _ruleType = value; }
         }
+
+        public ContentType ContentType { get; set; }
     }
 }
