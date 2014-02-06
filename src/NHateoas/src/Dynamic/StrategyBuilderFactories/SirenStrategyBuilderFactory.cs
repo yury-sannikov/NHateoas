@@ -22,7 +22,7 @@ namespace NHateoas.Dynamic.StrategyBuilderFactories
 
                     var strategyBuilder = new StrategyBuilder()
                         .For(returnType)
-                        .WithSimpleProperties();
+                        .WithPayloadPropertyStrategy(returnType, "properties");
 
                     sirenMetadataTypes.ForEach(metadataType => strategyBuilder.WithTypedMetadataProperty(metadataType, metadataType.Name.ToLower()));
 

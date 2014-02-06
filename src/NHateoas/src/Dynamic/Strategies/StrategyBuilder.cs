@@ -63,6 +63,14 @@ namespace NHateoas.Dynamic.Strategies
                 );
             return this;
         }
+        
+        public StrategyBuilder WithPayloadPropertyStrategy(Type metadataType, string propertyName)
+        {
+            _compositeStrategiesList.Add(
+                new PayloadPropertyStrategy(metadataType, propertyName)
+                );
+            return this;
+        }
 
         public ITypeBuilderStrategy Build()
         {

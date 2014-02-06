@@ -61,6 +61,7 @@
     <Compile Include="src\Configuration\ParametersDelegateBuilder.cs" />
     <Compile Include="src\Configuration\QueryParameter.cs" />
     <Compile Include="src\Dynamic\Interfaces\IStrategyBuilderFactory.cs" />
+    <Compile Include="src\Dynamic\Strategies\PayloadPropertyStrategy.cs" />
     <Compile Include="src\Dynamic\Strategies\TypedMetadataPropertyStrategy.cs" />
     <Compile Include="src\Dynamic\StrategyBuilderFactories\DefaultStrategyBuilderFactory.cs" />
     <Compile Include="src\Dynamic\StrategyBuilderFactories\SirenStrategyBuilderFactory.cs" />
