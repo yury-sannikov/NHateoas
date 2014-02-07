@@ -33,10 +33,22 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
                     Title = apiDescription.Documentation,
                     ActionName = routeNames.FirstOrDefault(),
                     ActionFields = ActionFieldsGenerator.Generate(mappingRule, apiDescription, originalObject),
-                    ContentType = DeduceContentType(mappingRule, apiDescription, originalObject)
+                    ContentType = DeduceContentType(mappingRule, apiDescription, originalObject),
+                    Class = GetClassArray(mappingRule)
                 });
 
             return result;
+        }
+
+        public static string[] GetClassArray(MappingRule mappingRule)
+        {
+            var returnType = mappingRule.MethodExpression.Method.ReturnType;
+            if (returnType.IsGenericType && typeof(IEnumerable<>).IsAssignableFrom(returnType.GetGenericTypeDefinition()))
+            {
+                return new[] {"query"};
+            }
+
+            return null;
         }
 
         public static string DeduceContentType(MappingRule mappingRule, ApiDescription apiDescription, object originalObject)

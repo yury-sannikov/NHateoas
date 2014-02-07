@@ -34,6 +34,9 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider.MetadataP
     {
         [DataMember(Name = "name")]
         public string ActionName { get; set; }
+        
+        [DataMember(Name = "class", EmitDefaultValue = false)]
+        public string[] Class { get; set; }
 
         [DataMember(Name = "title", EmitDefaultValue = false)]
         public string Title { get; set; }
