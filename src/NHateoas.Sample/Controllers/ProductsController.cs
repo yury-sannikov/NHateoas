@@ -130,7 +130,7 @@ namespace NHateoas.Sample.Controllers
         [Hypermedia]
         public HttpResponseMessage Get(string name)
         {
-            return Request.CreateResponse<Product>(HttpStatusCode.Unauthorized, Products.First());
+            return Request.CreateResponse<Product>(HttpStatusCode.OK, Products.First());
         }
 
 
