@@ -10,8 +10,8 @@ namespace NHateoas.Configuration
 {
     internal class HypermediaConfigurationLogic<TModel, TController>
     {
-        private readonly Dictionary<MethodInfo, ActionConfiguration> _rules =
-            new Dictionary<MethodInfo, ActionConfiguration>();
+        private readonly Dictionary<MethodInfo, IActionConfiguration> _rules =
+            new Dictionary<MethodInfo, IActionConfiguration>();
 
         private ActionConfiguration _currentActionConfiguration = null;
 
@@ -53,7 +53,7 @@ namespace NHateoas.Configuration
         }
 
 
-        public Dictionary<MethodInfo, ActionConfiguration> Rules
+        public Dictionary<MethodInfo, IActionConfiguration> Rules
         {
             get { return _rules; }
         }

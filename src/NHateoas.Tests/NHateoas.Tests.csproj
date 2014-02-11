@@ -81,8 +81,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Attributes\HypermediaAttribute.cs" />
-    <Compile Include="Configuration\ActionConfiguration.cs" />
+    <Compile Include="Attributes\HypermediaAttributeTest.cs" />
+    <Compile Include="Configuration\ActionConfigurationTest.cs" />
+    <Compile Include="Configuration\ControllerConfigurationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

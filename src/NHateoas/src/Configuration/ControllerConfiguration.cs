@@ -14,7 +14,7 @@ namespace NHateoas.Configuration
     {
         private static readonly Lazy<HypermediaControllerConfiguration> _controllerConfigurationInstance = new Lazy<HypermediaControllerConfiguration>(LazyThreadSafetyMode.ExecutionAndPublication);
 
-        private readonly ConcurrentDictionary<Type, Dictionary<MethodInfo, ActionConfiguration>> _controllerRules = new ConcurrentDictionary<Type, Dictionary<MethodInfo, ActionConfiguration>>();
+        private readonly ConcurrentDictionary<Type, Dictionary<MethodInfo, IActionConfiguration>> _controllerRules = new ConcurrentDictionary<Type, Dictionary<MethodInfo, IActionConfiguration>>();
 
         public static IHypermediaControllerConfiguration Instance 
         {
@@ -26,12 +26,12 @@ namespace NHateoas.Configuration
             return _controllerRules.ContainsKey(controllerType);
         }
 
-        public void Setup(Type controllerType, Dictionary<MethodInfo, ActionConfiguration> rules)
+        public void Setup(Type controllerType, Dictionary<MethodInfo, IActionConfiguration> rules)
         {
             _controllerRules.TryAdd(controllerType, rules);
         }
 
-        public ActionConfiguration GetcontrollerActionConfiguration(Type controllerType, MethodInfo actionMethodInfo)
+        public IActionConfiguration GetcontrollerActionConfiguration(Type controllerType, MethodInfo actionMethodInfo)
         {
             if (!_controllerRules.ContainsKey(controllerType))
                 return null;
