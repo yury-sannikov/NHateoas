@@ -24,9 +24,7 @@ namespace NHateoas.Dynamic
 
         private readonly List<ITypeBuilderVisitor> _typeBuilderVisitors = new List<ITypeBuilderVisitor>();
 
-        private static readonly ConcurrentDictionary<string, Type> _cache = new ConcurrentDictionary<string, Type>();
-
-        private static readonly ReaderWriterLockSlim _readerWriterLockSlim = new ReaderWriterLockSlim();
+        private static readonly ConcurrentDictionary<string, Lazy<Type>> _cache = new ConcurrentDictionary<string, Lazy<Type>>();
 
         class TypeBuilderProvider : ITypeBuilderProvider
         {
@@ -46,78 +44,34 @@ namespace NHateoas.Dynamic
         public TypeBuilder(Type originalType, ITypeBuilderStrategy typeBuilderStrategy)
         {
             _originalType = originalType;
+            
             _typeBuilderStrategy = typeBuilderStrategy;
 
             _typeBuilderStrategy.Configure(this);
         }
 
+        private Type TypeFactory()
+        {
+            var moduleBuilder = ModuleBuilderFactory.Instance;
+
+            var className = string.Format("{0}.{1}", _typeBuilderStrategy.ClassKey(_originalType), _originalType.Name);
+
+            var typeBuilder = moduleBuilder.DefineType(className, _typeAttributes, _parentType);
+
+            var provider = new TypeBuilderProvider(typeBuilder);
+
+            _typeBuilderVisitors.ForEach(v => v.Visit(provider));
+
+            return typeBuilder.CreateType();
+
+        }
+
         public Type BuildType()
         {
-            _readerWriterLockSlim.EnterUpgradeableReadLock();
-
-            try
-            {
-                var cachedType = GetTypeFromCache();
-
-                if (cachedType != null)
-                    return cachedType;
-
-                _readerWriterLockSlim.EnterWriteLock();
-
-                try
-                {
-                    // Double lock pattern. Other thread might already created the same type while waiting on entering lock
-                    cachedType = GetTypeFromCache();
-
-                    if (cachedType != null)
-                        return cachedType;
-
-                    var moduleBuilder = ModuleBuilderFactory.Instance;
-
-                    var className = string.Format("{0}.{1}", _typeBuilderStrategy.ClassKey(_originalType), _originalType.Name);
-
-                    var typeBuilder = moduleBuilder.DefineType(className, _typeAttributes, _parentType);
-
-                    var provider = new TypeBuilderProvider(typeBuilder);
-
-                    _typeBuilderVisitors.ForEach(v => v.Visit(provider));
-
-                    var resultType = typeBuilder.CreateType();
-
-                    StoreTypeToCache(resultType);
-
-                    return resultType;
-                }
-                finally
-                {
-                    _readerWriterLockSlim.ExitWriteLock();
-                }
-            }
-            finally 
-            {
-                _readerWriterLockSlim.ExitUpgradeableReadLock();
-            }
-        }
-
-        private void StoreTypeToCache(Type resultType)
-        {
             var key = _typeBuilderStrategy.ClassKey(_originalType);
 
-            _cache.TryAdd(key, resultType);
-        }
+            return _cache.GetOrAdd(key, new Lazy<Type>(TypeFactory, LazyThreadSafetyMode.ExecutionAndPublication)).Value;
 
-        private Type GetTypeFromCache()
-        {
-            var key = _typeBuilderStrategy.ClassKey(_originalType);
-
-            if (!_cache.ContainsKey(key))
-                return null;
-            
-            Type resultType;
-
-            _cache.TryGetValue(key, out resultType);
-
-            return resultType;
         }
 
         public ITypeBuilderContainer AddVisitor(ITypeBuilderVisitor visitor)
