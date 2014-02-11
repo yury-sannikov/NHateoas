@@ -1,0 +1,39 @@
+<div >
+    <h1>API Discovery</h1>
+   
+   
+    <ul class="thumbnails">
+        <li ng-repeat="event in arrayOfEvents()|orderBy:sortorder" class="span5">
+            <div class="well">
+                <div class="row"><h2 class="span6">Properties</h2>
+                </div>
+                <div class="row" ng-repeat="(key, value) in nonFunctions(event)">
+                    <p class="span1">{{key}}</p>
+                    <p>{{value}}</p>
+                </div>
+                <br/>
+                <div class="well" ng-show="hasKeys(event.queryLinks()) || hasKeys(event.queryActions())">
+                    <div class="row" ng-show="hasKeys(event.queryLinks())"><h4 class="span6">Links</h4>
+                    </div>
+                    <span ng-repeat="(key, value) in event.queryLinks()" >
+                        <a ng-click="navigate(event, key)">{{key}}</a>
+                    </span>
+                    
+                    <div class="row" ng-show="hasKeys(event.queryActions())"><h4 class="span6">Actions</h4>
+                    </div>
+
+                    <div ng-repeat="action in event.queryActions()">
+                        <a href="#" ng-click="showForm = !showForm">{{action.name}}</a>
+                        <form id="{{action.name}}" method="{{action.method}}" enctype="{{action.type}}" ng-show="showForm">
+                            <fieldset ng-repeat="field in action.fields">
+                                <label for="{{action.name+field.name}}">{{field.name}}</label>
+                                <input id="{{action.name+field.name}}" type="{{field.name}}" required />
+                            </fieldset>
+                            <button type="submit" class="btn btn-primary" ng-click="submit(event, action)">Submit</button>
+                        </form>
+                     </div>
+                </div>
+             </div>
+        </li>
+    </ul>
+</div>

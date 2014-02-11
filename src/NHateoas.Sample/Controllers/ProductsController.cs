@@ -113,7 +113,7 @@ namespace NHateoas.Sample.Controllers
         /// </summary>
         /// <param name="id">Product ID</param>
         /// <returns>Product instance</returns>
-        [Hypermedia(Names = new []{"get-by-id", "get"})]
+        [Hypermedia(Names = new []{"get-by-id"})]
         [Route("{id:int}")]
         public Product Get(int id)
         {

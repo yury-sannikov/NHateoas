@@ -28,10 +28,9 @@ namespace NHateoas.Sample
 
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
                         "~/content/js/app.js",
-                        "~/content/js/controllers/EntityListController.js",
+                        "~/content/js/controllers/ApiDiscoveryController.js",
                         "~/content/js/controllers/MainMenuController.js",
-                        "~/content/js/filters.js",
-                        "~/content/js/services/EntityData.js"));
+                        "~/content/js/services/ApiData.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                         "~/Scripts/bootstrap.min.js"));
