@@ -15,7 +15,7 @@ namespace NHateoas.Tests.Configuration
     {
         private Fixture _fixture;
 
-        [SetUp]
+        [TestFixtureSetUp]
         public void Setup()
         {
             _fixture = new Fixture();

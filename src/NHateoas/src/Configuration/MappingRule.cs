@@ -33,12 +33,12 @@ namespace NHateoas.Configuration
 
         private RuleType _ruleType = RuleType.Default;
 
-        public MappingRule(MethodCallExpression methodExpression)
+        public MappingRule(MethodCallExpression methodExpression, IApiExplorer apiExplorer = null)
         {
             _methodExpression = methodExpression;
             _parametersDelegates = ParametersDelegateBuilder.Build(methodExpression);
 
-            MapApiDesctiption();
+            MapApiDesctiption(apiExplorer);
 
             AddRelsFromAttribute(methodExpression);
         }
@@ -51,9 +51,10 @@ namespace NHateoas.Configuration
                 _rels.AddRange(attribute.Names);
         }
 
-        private void MapApiDesctiption()
+        private void MapApiDesctiption(IApiExplorer apiExplorer)
         {
-            var apiExplorer = GlobalConfiguration.Configuration.Services.GetApiExplorer();
+            if (apiExplorer == null)
+                apiExplorer = GlobalConfiguration.Configuration.Services.GetApiExplorer();
 
             foreach (var description in apiExplorer.ApiDescriptions)
             {

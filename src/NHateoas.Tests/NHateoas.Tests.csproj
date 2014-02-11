@@ -84,6 +84,8 @@
     <Compile Include="Attributes\HypermediaAttributeTest.cs" />
     <Compile Include="Configuration\ActionConfigurationTest.cs" />
     <Compile Include="Configuration\ControllerConfigurationTest.cs" />
+    <Compile Include="Configuration\MappingRuleTest.cs" />
+    <Compile Include="Configuration\ParametersDelegateBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +96,9 @@
       <Project>{0451baef-df2e-4b98-8644-94ee9415e389}</Project>
       <Name>NHateoas</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dynamic\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
