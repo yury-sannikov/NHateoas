@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using NHateoas.Configuration;
+using System.Web;
 
 namespace NHateoas.Routes.RouteValueSubstitution
 {
@@ -15,10 +17,14 @@ namespace NHateoas.Routes.RouteValueSubstitution
         {
             var methodParameters = mapping.MethodExpression.Method.GetParameters();
 
+            var expressionArguments = mapping.MethodExpression.Arguments.GetEnumerator();
+
             var result = new StringBuilder(templateUrl);
 
             foreach (var methodParameter in methodParameters)
             {
+                expressionArguments.MoveNext();
+
                 var parameterTemplateName = string.Format("{{{0}}}", methodParameter.Name);
 
                 if (!templateUrl.Contains(parameterTemplateName))
@@ -40,7 +46,20 @@ namespace NHateoas.Routes.RouteValueSubstitution
                     continue;
                 }
 
-                result.Replace(parameterTemplateName, paramResult.ToString());
+                var stringResult = paramResult.ToString();
+
+                var expressionArgunemt = (expressionArguments.Current as MethodCallExpression);
+                
+                if (expressionArgunemt != null && expressionArgunemt.Method.DeclaringType == typeof (QueryParameter))
+                {
+                    result.Replace(parameterTemplateName, stringResult);    
+                }
+                else
+                {
+                    result.Replace(parameterTemplateName, HttpUtility.UrlEncode(stringResult));
+                }
+
+                
             }
 
             return result.ToString();
