@@ -30,7 +30,7 @@ namespace NHateoas.Tests.Configuration
         [Test]
         public void DefaultCtor()
         {
-            Expression<Func<FakeClass, int>> lambda = (FakeClass test) => test.FakeMethod();
+            Expression<Func<ControllerSample, int>> lambda = (test) => test.FakeMethod();
             var methodCallExpression = (MethodCallExpression) lambda.Body;
             var apiExplorerMoq = new Mock<IApiExplorer>();
             apiExplorerMoq.Setup(_ => _.ApiDescriptions).Returns(new Collection<ApiDescription>()
@@ -52,7 +52,7 @@ namespace NHateoas.Tests.Configuration
         [Test]
         public void MapApiDescription()
         {
-            Expression<Func<FakeClass, int>> lambda = (FakeClass test) => test.FakeMethod();
+            Expression<Func<ControllerSample, int>> lambda = (test) => test.FakeMethod();
             var methodCallExpression = (MethodCallExpression) lambda.Body;
 
             var actionDescriptor =
@@ -81,7 +81,7 @@ namespace NHateoas.Tests.Configuration
         [Test]
         public void GetRelsFromAttributes()
         {
-            Expression<Func<FakeClass, int>> lambda = (FakeClass test) => test.FakeMethodWithAttribute();
+            Expression<Func<ControllerSample, int>> lambda = (test) => test.FakeMethodWithAttribute();
             var methodCallExpression = (MethodCallExpression)lambda.Body;
 
             var apiExplorerMoq = new Mock<IApiExplorer>();
@@ -100,20 +100,6 @@ namespace NHateoas.Tests.Configuration
             Assume.That(mappingRule.Names, Is.Not.Empty);
             Assume.That(mappingRule.Names, Is.EquivalentTo(new [] {"rel-name"})); 
             Assume.That(mappingRule.Type, Is.EqualTo(MappingRule.RuleType.Default));
-        }
-    }
-
-    class FakeClass
-    {
-        public int FakeMethod()
-        {
-            return 0;
-        }
-        
-        [Hypermedia(Names = new []{"rel-name"})]
-        public int FakeMethodWithAttribute()
-        {
-            return 0;
         }
     }
 }

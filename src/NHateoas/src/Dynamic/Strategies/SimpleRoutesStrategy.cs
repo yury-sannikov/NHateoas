@@ -34,14 +34,14 @@ namespace NHateoas.Dynamic.Strategies
         {
             foreach (var route in _routeInformation)
             {
-                container.AddVisitor(new PropertyVisitor(typeof(object), route));    
+                container.AddVisitor(new PropertyVisitor(typeof(string), route));    
             }
         }
 
         public override void ActivateInstance(object proxyInstance, object originalInstance,
             IMetadataProvider metadataProvider)
         {
-            var routes = (Dictionary<string, object>)metadataProvider.GetMetadataByType(typeof(Dictionary<string, object>), originalInstance);
+            var routes = (Dictionary<string, string>)metadataProvider.GetMetadataByType(typeof(Dictionary<string, string>), originalInstance);
 
             proxyInstance.GetType().GetProperties().Where(p => routes.ContainsKey(p.Name)).ToList()
                 .ForEach(prop => prop.SetValue(proxyInstance, routes[prop.Name]));

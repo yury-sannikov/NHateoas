@@ -25,7 +25,7 @@ namespace NHateoas.Routes.RouteMetadataProviders.SimpleMetadataProvider
 
         public object GetMetadataByType(Type metadataType, params object[] values)
         {
-            if (typeof (Dictionary<string, object>).IsAssignableFrom(metadataType))
+            if (typeof (Dictionary<string, string>).IsAssignableFrom(metadataType))
             {
                 return Build(values[0]);
             }
@@ -65,9 +65,9 @@ namespace NHateoas.Routes.RouteMetadataProviders.SimpleMetadataProvider
             }
         }
 
-        private Dictionary<string, object> Build(Object data)
+        private Dictionary<string, string> Build(Object data)
         {
-            var result = new Dictionary<string, object>();
+            var result = new Dictionary<string, string>();
             
             var mappingRules = _actionConfiguration.MappingRules;
 
