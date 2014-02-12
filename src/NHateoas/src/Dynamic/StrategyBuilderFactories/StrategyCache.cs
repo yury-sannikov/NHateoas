@@ -18,5 +18,10 @@ namespace NHateoas.Dynamic.StrategyBuilderFactories
         {
             return _cache.GetOrAdd(key, new Lazy<ITypeBuilderStrategy>(factory, LazyThreadSafetyMode.ExecutionAndPublication)).Value;
         }
+
+        internal static void Teardown()
+        {
+            _cache.Clear();
+        }
     }
 }

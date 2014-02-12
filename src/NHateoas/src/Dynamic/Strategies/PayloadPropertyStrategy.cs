@@ -19,7 +19,7 @@ namespace NHateoas.Dynamic.Strategies
 
         public override string ClassKey(Type originalType)
         {
-            return string.Format("PP{0}",originalType.GetHashCode());
+            return string.Format("PP{0}",originalType.FullName.GetHashCode());
         }
 
         public override void ActivateInstance(object proxyInstance, object originalInstance, IMetadataProvider metadataProvider)

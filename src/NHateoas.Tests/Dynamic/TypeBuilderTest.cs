@@ -3,6 +3,7 @@ using System.Reflection;
 using Moq;
 using NHateoas.Dynamic;
 using NHateoas.Dynamic.Interfaces;
+using NHateoas.Dynamic.StrategyBuilderFactories;
 using NUnit.Framework;
 
 namespace NHateoas.Tests.Dynamic
@@ -19,6 +20,13 @@ namespace NHateoas.Tests.Dynamic
             var type = typeBuilder.BuildType();
             Assume.That(type.Name, Is.EqualTo(GetType().Name));
             Assume.That(type.FullName, Is.StringContaining("key." + GetType().Name));
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            TypeBuilder.Teardown();
+            StrategyCache.Teardown();
         }
 
         [Test]

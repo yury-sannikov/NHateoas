@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Markup;
+using Newtonsoft.Json.Bson;
 using NHateoas.Dynamic.Interfaces;
 
 namespace NHateoas.Dynamic
@@ -80,5 +81,9 @@ namespace NHateoas.Dynamic
             return this;
         }
 
+        internal static void Teardown()
+        {
+            _cache.Clear();
+        }
     }
 }

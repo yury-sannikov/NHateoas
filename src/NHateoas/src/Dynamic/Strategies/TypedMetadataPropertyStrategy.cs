@@ -24,7 +24,7 @@ namespace NHateoas.Dynamic.Strategies
 
         public override string ClassKey(Type originalType)
         {
-            return string.Format("TM{0}",originalType.GetHashCode());
+            return string.Format("TM{0}",originalType.FullName.GetHashCode());
         }
 
         public override void Configure(ITypeBuilderContainer container)

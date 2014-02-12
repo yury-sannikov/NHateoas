@@ -87,6 +87,7 @@
     <Compile Include="Configuration\MappingRuleTest.cs" />
     <Compile Include="Configuration\ParametersDelegateBuilderTest.cs" />
     <Compile Include="Dynamic\StrategyBuilderFactories\DefaultStrategyBuilderFactoryTest.cs" />
+    <Compile Include="Dynamic\StrategyBuilderFactories\SirenStrategyBuilderFactoryTest.cs" />
     <Compile Include="Dynamic\TypeBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleModelController.cs" />
