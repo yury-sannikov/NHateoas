@@ -1,10 +1,10 @@
 'use strict';
 
 nhateoasSampleApp.controller('ApiDiscoveryController',
-    function EventListController($scope, $location, $route, entityData) {
+    function EventListController($scope, $location, $route, apiData) {
 
         if ($location.url() == '/') {
-            $scope.events = entityData.getAllEvents();
+            $scope.events = apiData.getAllEvents();
         }
 
 
