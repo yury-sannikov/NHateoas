@@ -31,7 +31,7 @@ namespace NHateoas.Response.ResponseTransformers
         public bool CanTransform(object data)
         {
             var type = data.GetType();
-            return type.IsClass && !type.IsGenericType;
+            return type.IsClass && !type.IsGenericType && !type.IsAbstract && type.IsPublic && type.IsVisible;
         }
     }
 }
