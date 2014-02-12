@@ -12,40 +12,11 @@ namespace NHateoas.Dynamic.StrategyBuilderFactories
 {
     internal static class StrategyCache
     {
-        private static ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
-        private static Dictionary<string, ITypeBuilderStrategy> _cache = new Dictionary<string, ITypeBuilderStrategy>();
+        private static ConcurrentDictionary<string, Lazy<ITypeBuilderStrategy>> _cache = new ConcurrentDictionary<string, Lazy<ITypeBuilderStrategy>>();
 
         public static ITypeBuilderStrategy GetCachedOrAdd(string key, Func<ITypeBuilderStrategy> factory)
         {
-            _lock.EnterUpgradeableReadLock();
-            try
-            {
-                if (_cache.ContainsKey(key))
-                    return _cache[key];
-
-                _lock.EnterWriteLock();
-                try
-                {
-                    if (_cache.ContainsKey(key))
-                        return _cache[key];
-
-                    var strategy = factory();
-
-                    _cache.Add(key, strategy);
-
-                    return strategy;
-
-                }
-                finally
-                {
-                    _lock.ExitWriteLock();
-                }
-
-            }
-            finally 
-            {
-                _lock.ExitUpgradeableReadLock();
-            }
+            return _cache.GetOrAdd(key, new Lazy<ITypeBuilderStrategy>(factory, LazyThreadSafetyMode.ExecutionAndPublication)).Value;
         }
     }
 }
