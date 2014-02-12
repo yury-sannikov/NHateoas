@@ -20,6 +20,7 @@ namespace NHateoas.Dynamic
         private readonly Type _originalType;
         private readonly Type _parentType = typeof(Object);
         private readonly ITypeBuilderStrategy _typeBuilderStrategy;
+        private readonly List<Type> _parentInterfaces = new List<Type>();
 
         private const TypeAttributes _typeAttributes = TypeAttributes.Public | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit;
 
@@ -57,7 +58,7 @@ namespace NHateoas.Dynamic
 
             var className = string.Format("{0}.{1}", _typeBuilderStrategy.ClassKey(_originalType), _originalType.Name);
 
-            var typeBuilder = moduleBuilder.DefineType(className, _typeAttributes, _parentType);
+            var typeBuilder = moduleBuilder.DefineType(className, _typeAttributes, _parentType, _parentInterfaces.ToArray());
 
             var provider = new TypeBuilderProvider(typeBuilder);
 
@@ -78,6 +79,12 @@ namespace NHateoas.Dynamic
         public ITypeBuilderContainer AddVisitor(ITypeBuilderVisitor visitor)
         {
             _typeBuilderVisitors.Add(visitor);
+            return this;
+        }
+
+        public ITypeBuilderContainer WithInterface(Type parentInterface)
+        {
+            _parentInterfaces.Add(parentInterface);
             return this;
         }
 
