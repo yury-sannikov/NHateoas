@@ -152,7 +152,7 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>-->
-  <Target Name="AfterBuild">
+  <Target Name="AfterBuild" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Delete Files=".\NuGet.log" />
     <Exec WorkingDirectory="$(MSBuildProjectDirectory)" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " ContinueOnError="True" Command="PowerShell.exe -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Unrestricted -Command &quot;&amp; {.\NuGetPackage.ps1} &quot;" IgnoreExitCode="true">
       <Output TaskParameter="ExitCode" PropertyName="ExitCode" />

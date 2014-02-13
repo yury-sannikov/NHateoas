@@ -40,5 +40,7 @@ using System.Security;
 [assembly: InternalsVisibleTo("NHateoas.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
+#if !DEBUG
 [assembly: AllowPartiallyTrustedCallers]
+#endif
 [assembly: SecurityRules(SecurityRuleSet.Level2, SkipVerificationInFullTrust = true)]
