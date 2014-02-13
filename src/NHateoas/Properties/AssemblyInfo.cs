@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+using System.Security;
+
 [assembly: AssemblyTitle("NHateoas")]
 [assembly: AssemblyDescription("Project template made by EyeCatch (http://www.eyecatch.no/)")]
 [assembly: AssemblyConfiguration("")]
@@ -37,3 +39,7 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("NHateoas.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
+
+[assembly: AllowPartiallyTrustedCallers]
+[assembly: SecurityTransparent]
+[assembly: SecurityRules(SecurityRuleSet.Level2, SkipVerificationInFullTrust = true)]
