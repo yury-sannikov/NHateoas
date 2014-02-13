@@ -14,6 +14,7 @@ using NHateoas.Attributes;
 
 namespace NHateoas.Configuration
 {
+    [SecuritySafeCritical]
     internal class MappingRule
     {
         private readonly MethodCallExpression _methodExpression;

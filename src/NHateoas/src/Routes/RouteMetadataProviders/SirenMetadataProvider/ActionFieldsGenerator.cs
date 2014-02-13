@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -11,6 +12,7 @@ using NHateoas.Configuration;
 
 namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
 {
+    [SecuritySafeCritical]
     internal static class ActionFieldsGenerator
     {
         public static MetadataPlainObjects.Fields Generate(MappingRule mappingRule, ApiDescription apiDescription, object originalObject)

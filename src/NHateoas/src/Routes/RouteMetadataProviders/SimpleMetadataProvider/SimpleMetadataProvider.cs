@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using NHateoas.Configuration;
@@ -9,6 +10,7 @@ using NHateoas.Routes.RouteValueSubstitution;
 
 namespace NHateoas.Routes.RouteMetadataProviders.SimpleMetadataProvider
 {
+    [SecuritySafeCritical]
     internal class SimpleMetadataProvider : IMetadataProvider
     {
         private IRouteNameBuilder _routeNameBuilder = null;

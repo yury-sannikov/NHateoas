@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Dispatcher;
@@ -12,6 +13,7 @@ namespace NHateoas.I12n
     /// Override DefaultHttpControllerTypeResolver to search for and invoke IHypermediaApiControllerConfigurator
     /// Controller itself can implement IHypermediaApiControllerConfigurator if it has empty default constructor
     /// </summary>
+    [SecurityCritical]
     internal class HypermediaInitializerTypeResolver : DefaultHttpControllerTypeResolver
     {
         public HypermediaInitializerTypeResolver()

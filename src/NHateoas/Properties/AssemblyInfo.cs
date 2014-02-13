@@ -41,5 +41,4 @@ using System.Security;
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
 [assembly: AllowPartiallyTrustedCallers]
-[assembly: SecurityTransparent]
 [assembly: SecurityRules(SecurityRuleSet.Level2, SkipVerificationInFullTrust = true)]

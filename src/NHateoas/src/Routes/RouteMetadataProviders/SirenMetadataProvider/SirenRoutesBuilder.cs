@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using NHateoas.Configuration;
 using NHateoas.Routes.RouteMetadataProviders.SimpleMetadataProvider;
 using NHateoas.Routes.RouteValueSubstitution;
 
 namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
 {
+    [SecuritySafeCritical]
     internal class SirenMetadataProvider : IMetadataProvider
     {
         private readonly IRouteNameBuilder _routeNameBuilder = new SirenRelNameBuilder();

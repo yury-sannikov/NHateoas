@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Description;
@@ -10,6 +11,7 @@ using NHateoas.Routes.RouteValueSubstitution;
 
 namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
 {
+    [SecuritySafeCritical]
     internal static class LinksGenerator
     {
         public static MetadataPlainObjects.Links Generate(IActionConfiguration actionConfiguration, Dictionary<string, List<string>> routeRelations, object originalObject)

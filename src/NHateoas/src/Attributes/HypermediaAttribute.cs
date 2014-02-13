@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
@@ -12,6 +13,7 @@ using NHateoas.Routes;
 namespace NHateoas.Attributes
 {
 
+    [SecurityCritical]
     [AttributeUsage(AttributeTargets.Method)]
     public class HypermediaAttribute : ActionFilterAttribute
     {
@@ -25,7 +27,8 @@ namespace NHateoas.Attributes
             get { return _names; }
             set { _names = value; }
         }
-
+        
+        [SecurityCritical]
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
             var content = ActionResponseTransformer.Transform(actionExecutedContext);

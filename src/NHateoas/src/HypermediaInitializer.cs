@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -11,6 +12,7 @@ namespace NHateoas
 {
     public static class HypermediaInitializer
     {
+        [SecuritySafeCritical]
         public static void InitializeHypermedia(this HttpConfiguration configuration)
         {
             IAssembliesResolver assembliesResolver = configuration.Services.GetAssembliesResolver();

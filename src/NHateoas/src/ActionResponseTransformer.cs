@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
@@ -11,6 +12,7 @@ using NHateoas.Configuration;
 
 namespace NHateoas
 {
+    [SecuritySafeCritical]
     internal static class ActionResponseTransformer
     {
         public static ObjectContent Transform(HttpActionExecutedContext actionExecutedContext)
