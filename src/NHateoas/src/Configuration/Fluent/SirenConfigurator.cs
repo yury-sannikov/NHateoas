@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Mime;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NHateoas.Configuration.Fluent
 {
+    [SecuritySafeCritical]
     public class SirenConfigurator<TModel, TController>
     {
         private readonly HypermediaConfigurator<TModel, TController> _hypermediaConfigurator;

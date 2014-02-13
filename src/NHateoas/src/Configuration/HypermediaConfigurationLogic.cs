@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NHateoas.Configuration
 {
+    [SecuritySafeCritical]
     internal class HypermediaConfigurationLogic<TModel, TController>
     {
         private readonly Dictionary<MethodInfo, IActionConfiguration> _rules =

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Reflection;
+using System.Security;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Controllers;
@@ -13,6 +14,7 @@ using NHateoas.Configuration.Fluent;
 
 namespace NHateoas.Configuration
 {
+    [SecuritySafeCritical]
     public class HypermediaConfigurator<TModel, TController>
     {
         private readonly HypermediaConfigurationLogic<TModel, TController> _logic =
