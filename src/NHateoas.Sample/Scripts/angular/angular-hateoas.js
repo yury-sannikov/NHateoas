@@ -150,7 +150,7 @@ angular.module("hateoas", ["ngResource"])
 				            {
 				                invokeAction: {
 				                    method: meta.method,
-				                    isArray: meta.class.indexOf('query') !== -1
+				                    isArray: meta.class.indexOf('__query') !== -1
 				                }
 				            }
                             );
@@ -190,7 +190,7 @@ angular.module("hateoas", ["ngResource"])
 			            var href, isQuery = false;
 			            if (angular.isObject(hrefOrObject)) {
 			                href = hrefOrObject.href;
-			                isQuery = hrefOrObject.original.indexOf("query") !== -1;
+			                isQuery = hrefOrObject.original.indexOf("__query") !== -1;
 			            } else {
 			                href = hrefOrObject;
 			            }
@@ -237,7 +237,7 @@ angular.module("hateoas", ["ngResource"])
 					if (data[linksKey]) {
 					    var relLinks = arrayToObject("rel", "href", data[linksKey]);
 					    for (var key in relLinks) {
-					        if (key == 'query') continue;
+					        if (key == '__query') continue;
 					        data[fixFunctionName(key)] = linksBuilder(relLinks[key]);
                         }
 					    delete data[linksKey];
