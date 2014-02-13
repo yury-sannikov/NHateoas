@@ -79,6 +79,7 @@ namespace NHateoas.Configuration
         public IEnumerable<ApiDescription> ApiDescriptions
         {
             get { return _apiDescriptions; }
+            set { _apiDescriptions.Clear(); _apiDescriptions.AddRange(value); }
         }
 
         public Dictionary<string, Delegate> ParameterDelegates

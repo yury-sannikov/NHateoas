@@ -14,6 +14,8 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
         private readonly IRouteNameBuilder _routeNameBuilder = new SirenRelNameBuilder();
         private readonly Dictionary<string, List<string>> _apiDescriptionToRouteNameDictionary = new Dictionary<string, List<string>>();
         private readonly IActionConfiguration _actionConfiguration;
+        // Add this as class name or additional link rel for IEnumerable responses. This is a hint for AngularJS provider how to query resource
+        public static string QueryClassName = "__query"; 
 
         public SirenMetadataProvider(IActionConfiguration actionConfiguration)
         {

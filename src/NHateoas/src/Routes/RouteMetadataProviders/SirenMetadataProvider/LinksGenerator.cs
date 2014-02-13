@@ -42,7 +42,7 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
             var returnType = mapping.MethodExpression.Method.ReturnType;
 
             if (returnType.IsGenericType && typeof(IEnumerable<>).IsAssignableFrom(returnType.GetGenericTypeDefinition()))
-                result.Add("query");
+                result.Add(SirenMetadataProvider.QueryClassName);
             
             return result;
         }

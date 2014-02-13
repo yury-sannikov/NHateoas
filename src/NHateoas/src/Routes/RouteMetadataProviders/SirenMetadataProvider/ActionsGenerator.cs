@@ -42,18 +42,18 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
             return result;
         }
 
-        public static string[] GetClassArray(MappingRule mappingRule)
+        private static string[] GetClassArray(MappingRule mappingRule)
         {
             var returnType = mappingRule.MethodExpression.Method.ReturnType;
             if (returnType.IsGenericType && typeof(IEnumerable<>).IsAssignableFrom(returnType.GetGenericTypeDefinition()))
             {
-                return new[] {"query"};
+                return new[] { SirenMetadataProvider.QueryClassName };
             }
 
             return null;
         }
 
-        public static string DeduceContentType(MappingRule mappingRule, ApiDescription apiDescription, object originalObject)
+        private static string DeduceContentType(MappingRule mappingRule, ApiDescription apiDescription, object originalObject)
         {
             if (mappingRule.ContentType != null)
                 return mappingRule.ContentType.MediaType;

@@ -30,6 +30,11 @@ namespace NHateoas.Tests
             return null;
         }
 
+        public IEnumerable<ModelSample> ControllerQueryMethod(int id, string name, string query, int skip)
+        {
+            return null;
+        }
+
         public ModelSample ControllerMethodPut(int id, [FromBody] ModelSample model)
         {
             return null;
