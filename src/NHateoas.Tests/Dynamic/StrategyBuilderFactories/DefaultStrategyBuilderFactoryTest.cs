@@ -50,7 +50,7 @@ namespace NHateoas.Tests.Dynamic.StrategyBuilderFactories
             var originalType = typeof(IsolatedModelSample);
             var strategy = _defaultStrategyFactory.Build(_actionConfiguration, originalType);
             var classKey = strategy.ClassKey(originalType);
-            Assume.That(classKey, Is.EqualTo("_NHateoas.Tests.Dynamic.StrategyBuilderFactories.IsolatedModelSample_SP_SR_0_0_"));
+            Assume.That(classKey, Is.StringContaining("_NHateoas.Tests.Dynamic.StrategyBuilderFactories.IsolatedModelSample_SP_SR"));
         }
         
         [Test]
@@ -81,20 +81,20 @@ namespace NHateoas.Tests.Dynamic.StrategyBuilderFactories
             _actionConfiguration.Configure();
             var originalType = typeof(ModelSample);
             var strategy = _defaultStrategyFactory.Build(_actionConfiguration, originalType);
-            Assume.That(strategy.ClassKey(originalType), Is.EqualTo("_NHateoas.Tests.ModelSample_SP_SR_3567185397_1_"));
+            Assume.That(strategy.ClassKey(originalType), Is.StringContaining("_NHateoas.Tests.ModelSample_SP_SR"));
             
             var typeBuilder = new TypeBuilder(originalType, strategy);
             var type = typeBuilder.BuildType();
             Assume.That(type.Name, Is.EqualTo(originalType.Name));
-            Assume.That(type.FullName, Is.StringContaining("_NHateoas.Tests.ModelSample_SP_SR_3567185397_1_." + originalType.Name));
+            Assume.That(type.FullName, Is.StringContaining("_NHateoas.Tests.ModelSample_SP_SR"));
 
             var props = type.GetProperties();
             Assume.That(props, Is.Not.Empty);
             
             var propNames = props.ToList().ConvertAll(p => p.Name);
-            Assume.That(propNames, Is.EquivalentTo(new[] { "Id", "Name", "Price", "get_modelsample_by_id_name_query_skip" }));
+            Assume.That(propNames, Is.EquivalentTo(new[] { "Id", "Name", "Price", "EMailAddress", "get_modelsample_by_id_name_query_skip" }));
             var propTypes = props.ToList().ConvertAll(p => p.PropertyType.Name);
-            Assume.That(propTypes, Is.EquivalentTo(new[] { "Int32", "String", "Double", "String" }));
+            Assume.That(propTypes, Is.EquivalentTo(new[] { "Int32", "String", "Double", "String", "String" }));
 
 
             var instance = Activator.CreateInstance(type);
@@ -102,7 +102,7 @@ namespace NHateoas.Tests.Dynamic.StrategyBuilderFactories
             strategy.ActivateInstance(instance, original, _actionConfiguration.MetadataProvider);
 
             var propValues = props.ToList().ConvertAll(p => p.GetValue(instance).ToString());
-            Assume.That(propValues, Is.EquivalentTo(new[] { original.Id.ToString(), original.Name, original.Price.ToString(), "/api" }));
+            Assume.That(propValues, Is.EquivalentTo(new[] { original.Id.ToString(), original.Name, original.Price.ToString(), original.EMailAddress, "/api" }));
         }
     }
     

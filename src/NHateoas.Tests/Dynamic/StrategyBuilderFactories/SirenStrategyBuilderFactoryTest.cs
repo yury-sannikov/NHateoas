@@ -55,7 +55,7 @@ namespace NHateoas.Tests.Dynamic.StrategyBuilderFactories
             var originalType = typeof(IsolatedModelSample);
             var strategy = _defaultStrategyFactory.Build(_actionConfiguration, originalType);
             var classKey = strategy.ClassKey(originalType);
-            Assume.That(classKey, Is.EqualTo("_NHateoas.Tests.Dynamic.StrategyBuilderFactories.IsolatedModelSample_PP1668983739_TM1668983739_TM1668983739_"));
+            Assume.That(classKey, Is.StringContaining("_NHateoas.Tests.Dynamic.StrategyBuilderFactories.IsolatedModelSample_PP"));
         }
         
         [Test]
@@ -102,12 +102,12 @@ namespace NHateoas.Tests.Dynamic.StrategyBuilderFactories
             _actionConfiguration.Configure();
             var originalType = typeof(ModelSample);
             var strategy = _defaultStrategyFactory.Build(_actionConfiguration, originalType);
-            Assume.That(strategy.ClassKey(originalType), Is.EqualTo("_NHateoas.Tests.ModelSample_PP1598079207_TM1598079207_TM1598079207_"));
+            Assume.That(strategy.ClassKey(originalType), Is.StringContaining("_NHateoas.Tests.ModelSample_PP"));
             
             var typeBuilder = new TypeBuilder(originalType, strategy);
             var type = typeBuilder.BuildType();
             Assume.That(type.Name, Is.EqualTo(originalType.Name));
-            Assume.That(type.FullName, Is.StringContaining("_NHateoas.Tests.ModelSample_PP1598079207_TM1598079207_TM1598079207_." + originalType.Name));
+            Assume.That(type.FullName, Is.StringContaining("_NHateoas.Tests.ModelSample_PP"));
 
             var props = type.GetProperties();
             Assume.That(props, Is.Not.Empty);
@@ -120,7 +120,7 @@ namespace NHateoas.Tests.Dynamic.StrategyBuilderFactories
                 pt.GetProperties().ToList().ForEach(sp => propNames.Add(sp.Name));
             });
 
-            Assume.That(propNames, Is.EquivalentTo(new[] { "properties", "Id", "Name", "Price", "links", "RelList", "Href", "actions", "ActionName", "Class", "Title", "Method", "Href", "ContentType", "ActionFields" }));
+            Assume.That(propNames, Is.EquivalentTo(new[] { "properties", "Id", "Name", "Price", "EMailAddress", "links", "RelList", "Href", "actions", "ActionName", "Class", "Title", "Method", "Href", "ContentType", "ActionFields" }));
             var propTypes = props.ToList().ConvertAll(p => p.PropertyType.Name);
             Assume.That(propTypes, Is.EquivalentTo(new[] { "ModelSample", "Links", "Actions"}));
 
@@ -130,12 +130,13 @@ namespace NHateoas.Tests.Dynamic.StrategyBuilderFactories
             {
                 Id = 1,
                 Name = "test",
-                Price = 3.0
+                Price = 3.0,
+                EMailAddress = "aa.bb@ccc"
             };
             strategy.ActivateInstance(instance, original, _actionConfiguration.MetadataProvider);
 
             var result = JsonConvert.SerializeObject(instance);
-            Assume.That(result, Is.EqualTo("{\"properties\":{\"Id\":1,\"Name\":\"test\",\"Price\":3.0},\"links\":[{\"rel\":[\"get_modelsample_by_id_name_query_skip\"],\"href\":\"/api\"}],\"actions\":[{\"name\":\"rel-name\",\"method\":\"POST\",\"href\":\"/api/test\",\"type\":\"application/x-www-form-urlencoded\"}]}"));
+            Assume.That(result, Is.EqualTo("{\"properties\":{\"Id\":1,\"Name\":\"test\",\"Price\":3.0,\"EMailAddress\":\"aa.bb@ccc\"},\"links\":[{\"rel\":[\"get_modelsample_by_id_name_query_skip\"],\"href\":\"/api\"}],\"actions\":[{\"name\":\"rel-name\",\"method\":\"POST\",\"href\":\"/api/test\",\"type\":\"application/x-www-form-urlencoded\"}]}"));
         }
     }
 }
