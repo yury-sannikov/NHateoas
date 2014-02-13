@@ -98,6 +98,7 @@
     <Compile Include="Routes\DefaultRouteValueSubstitutionTest.cs" />
     <Compile Include="Routes\ActionFieldsGeneratorTest.cs" />
     <Compile Include="Routes\ActionsGeneratorTest.cs" />
+    <Compile Include="Routes\LinksGeneratorTest.cs" />
     <Compile Include="SampleModelController.cs" />
   </ItemGroup>
   <ItemGroup>
