@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace NHateoas.Configuration
 {
@@ -16,6 +17,12 @@ namespace NHateoas.Configuration
             new Dictionary<MethodInfo, IActionConfiguration>();
 
         private ActionConfiguration _currentActionConfiguration = null;
+        private HttpConfiguration _httpConfiguration;
+        
+        public HypermediaConfigurationLogic(HttpConfiguration httpConfiguration)
+        {
+            _httpConfiguration = httpConfiguration;
+        }
 
         public void SetCurrentAction(Expression methodExpression)
         {
@@ -30,7 +37,7 @@ namespace NHateoas.Configuration
         public void AddNewRule(Expression expression)
         {
             var methodExpression = (MethodCallExpression) expression;
-            var rule = new MappingRule(methodExpression);
+            var rule = new MappingRule(methodExpression, _httpConfiguration.Services.GetApiExplorer());
             ActionConfiguration.AddMappingRule(rule);
         }
 

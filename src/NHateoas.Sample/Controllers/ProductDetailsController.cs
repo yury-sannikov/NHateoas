@@ -13,9 +13,9 @@ namespace NHateoas.Sample.Controllers
 {
     public class ProductDetailsControllerHypermediaConfigurator : IHypermediaApiControllerConfigurator
     {
-        public void ConfigureHypermedia()
+        public void ConfigureHypermedia(HttpConfiguration httpConfiguration)
         {
-            new HypermediaConfigurator<ProductDetails, ProductDetailsController>()
+            new HypermediaConfigurator<ProductDetails, ProductDetailsController>(httpConfiguration)
                 .For((model, controller) => controller.Get(model.Id))
                     .Map((model, controller) => controller.GetByProductId(model.ProductId))
                     .Map((model, controller) => controller.Post(model))

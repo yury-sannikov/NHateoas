@@ -33,10 +33,10 @@ namespace NHateoas.Sample.Controllers
         
         };
 
-        public void ConfigureHypermedia()
+        public void ConfigureHypermedia(HttpConfiguration httpConfiguration)
         {
             // Set up model-controller mapping.
-            new HypermediaConfigurator<Product, ProductsController>()
+            new HypermediaConfigurator<Product, ProductsController>(httpConfiguration)
                 .For((model, controller) => controller.Get(model.Id))
                     .UseSirenSpecification()
                     .Map((model, controller) => controller.Get(model.Id))

@@ -34,7 +34,7 @@ namespace NHateoas.Configuration
 
         private RuleType _ruleType = RuleType.Default;
 
-        public MappingRule(MethodCallExpression methodExpression, IApiExplorer apiExplorer = null)
+        public MappingRule(MethodCallExpression methodExpression, IApiExplorer apiExplorer)
         {
             _methodExpression = methodExpression;
             _parametersDelegates = ParametersDelegateBuilder.Build(methodExpression);
@@ -54,9 +54,6 @@ namespace NHateoas.Configuration
 
         private void MapApiDesctiption(IApiExplorer apiExplorer)
         {
-            if (apiExplorer == null)
-                apiExplorer = GlobalConfiguration.Configuration.Services.GetApiExplorer();
-
             foreach (var description in apiExplorer.ApiDescriptions)
             {
                 var actionDescriptor = description.ActionDescriptor as ReflectedHttpActionDescriptor;

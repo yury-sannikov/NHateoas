@@ -15,13 +15,15 @@ namespace NHateoas
         [SecuritySafeCritical]
         public static void InitializeHypermedia(this HttpConfiguration configuration)
         {
+            configuration.EnsureInitialized();
+
             IAssembliesResolver assembliesResolver = configuration.Services.GetAssembliesResolver();
 
             var initResolver = new HypermediaInitializerTypeResolver();
 
             var resolvedInitializers = initResolver.GetControllerTypes(assembliesResolver);
 
-            resolvedInitializers.ToList().ForEach(t => ((IHypermediaApiControllerConfigurator)Activator.CreateInstance(t)).ConfigureHypermedia());
+            resolvedInitializers.ToList().ForEach(t => ((IHypermediaApiControllerConfigurator)Activator.CreateInstance(t)).ConfigureHypermedia(configuration));
         }
     }
 }

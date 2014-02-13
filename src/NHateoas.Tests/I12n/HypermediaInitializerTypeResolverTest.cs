@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
+using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using Moq;
 using NHateoas.Dynamic;
@@ -86,7 +87,7 @@ namespace NHateoas.Tests.I12n
             
             tb.AddInterfaceImplementation(typeof(IHypermediaApiControllerConfigurator));
 
-            var mb = tb.DefineMethod("ConfigureHypermedia", MethodAttributes.Public | MethodAttributes.Virtual, null, null);
+            var mb = tb.DefineMethod("ConfigureHypermedia", MethodAttributes.Public | MethodAttributes.Virtual, null, new Type[] {typeof(HttpConfiguration)});
 
             var il = mb.GetILGenerator();
             

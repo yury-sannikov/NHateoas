@@ -17,13 +17,13 @@ namespace NHateoas.Configuration
     [SecuritySafeCritical]
     public class HypermediaConfigurator<TModel, TController>
     {
-        private readonly HypermediaConfigurationLogic<TModel, TController> _logic =
-            new HypermediaConfigurationLogic<TModel, TController>();
+        private readonly HypermediaConfigurationLogic<TModel, TController> _logic;
 
         private readonly SirenConfigurator<TModel, TController> _sirenConfigurator;
 
-        public HypermediaConfigurator()
+        public HypermediaConfigurator(HttpConfiguration configuration)
         {
+            _logic = new HypermediaConfigurationLogic<TModel, TController>(configuration);
             _sirenConfigurator = new SirenConfigurator<TModel, TController>(this, _logic);    
         }
 
