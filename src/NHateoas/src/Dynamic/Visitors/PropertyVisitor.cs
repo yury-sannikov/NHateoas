@@ -15,12 +15,6 @@ namespace NHateoas.Dynamic.Visitors
         
         private readonly string _propertyName;
         
-        public PropertyVisitor(PropertyInfo propertyInfo)
-        {
-            _propertyType = propertyInfo.PropertyType;
-            _propertyName = propertyInfo.Name;
-        }
-
         public PropertyVisitor(Type propertyType, string propertyName)
         {
             _propertyType = propertyType;
