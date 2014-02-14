@@ -1,0 +1,17 @@
+<div >
+    <h4>Action invoker for "{{params.title}}"</h4>
+    <h5>{{params.method}} -&gt; {{params.href}}</h5>
+   
+   
+    <ul class="thumbnails">
+        <div class="well"">
+            <form id="{{params.name}}" method="{{params.method}}" enctype="{{params.type}}">
+                <fieldset ng-repeat="field in params.fieldsData">
+                    <label for="{{params.name+field.name}}">{{field.name}}</label>
+                    <input id="{{params.name+field.name}}" type="{{field.type}}" value="{{field.value}}" required />
+                </fieldset>
+                <button type="submit" class="btn btn-primary" ng-click="submit()">Submit</button>
+            </form>
+        </div>
+    </ul>
+</div>

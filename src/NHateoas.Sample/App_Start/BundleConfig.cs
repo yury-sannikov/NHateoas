@@ -30,6 +30,7 @@ namespace NHateoas.Sample
                         "~/content/js/app.js",
                         "~/content/js/controllers/ApiDiscoveryController.js",
                         "~/content/js/controllers/MainMenuController.js",
+                        "~/content/js/controllers/ActionController.js",
                         "~/content/js/services/ApiData.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(

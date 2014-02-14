@@ -2,8 +2,27 @@
 nhateoasSampleApp.factory('apiData', function ($resource, $q, $timeout) {
     var resource = $resource('/api/product/:id', {id: '@id'});
     return {
-        getAllEvents: function() {
-            return resource.query();
+        getApiByPath: function (path) {
+            
+            if (path == 'api')
+                return resource.query();
+
+            var isQuery = path.indexOf("/__query__") !== -1;
+
+            if (isQuery) {
+                path = path.replace("/__query__", "");
+                return $resource('/' + path, {}).query();
+            } else {
+                return $resource('/' + path, { }).get();
+            }
+        },
+        doAction : function(json, url, method) {
+            var res = $resource('/' + url, json,
+                {invokeAction: {
+                        method: method
+                }});
+
+            return res.invokeAction(json, json).$promise;
         }
     };
 });

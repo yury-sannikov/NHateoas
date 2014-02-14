@@ -112,7 +112,7 @@ angular.module("hateoas", ["ngResource"])
 							var key = item[keyItem];
 							if (angular.isArray(key))
 								angular.forEach(key, function (innerKey) {
-									obj[innerKey] = { href: item[valueItem], original : key };
+								    obj[innerKey] = { href: item[valueItem], original : key, isQuery : (key.indexOf("__query") !== -1) };
 								});
 							else
 								obj[item[keyItem]] = item[valueItem];
@@ -190,7 +190,7 @@ angular.module("hateoas", ["ngResource"])
 			            var href, isQuery = false;
 			            if (angular.isObject(hrefOrObject)) {
 			                href = hrefOrObject.href;
-			                isQuery = hrefOrObject.original.indexOf("__query") !== -1;
+			                isQuery = hrefOrObject.isQuery;
 			            } else {
 			                href = hrefOrObject;
 			            }
@@ -201,7 +201,7 @@ angular.module("hateoas", ["ngResource"])
 
 			    var queryLinksBuilder = function (linksArray) {
 			        var relLinks = arrayToObject("rel", "href", linksArray);
-			        delete relLinks.query;
+			        delete relLinks.__query;
 			        return function () {
 			            return relLinks;
 			        };
