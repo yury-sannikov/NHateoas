@@ -79,6 +79,13 @@ namespace NHateoas.Sample.Controllers
                     .UseSirenSpecification()
                     .Map((model, controller) => controller.Get(model.Id))
                     .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                
+                .For((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
+                    .UseSirenSpecification()
+                    .Map((model, controller) => controller.Get())
+                        .AsSelfLink()
+                    .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                        .AsAction()
 
             .Configure();
         }

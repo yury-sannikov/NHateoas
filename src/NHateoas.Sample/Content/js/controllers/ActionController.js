@@ -1,7 +1,7 @@
 'use strict';
 
 nhateoasSampleApp.controller('ActionController',
-    function ActionController($scope, $location, $route, apiData) {
+    function ActionController($scope, $location, $route, apiData, $window) {
 
         var decodeURIStr = function (param) {
             return param.replace(/\+/g, " ");
@@ -32,17 +32,29 @@ nhateoasSampleApp.controller('ActionController',
             for (var index in data)
                 json[data[index].name] = $("#" + $scope.params.name + data[index].name).val();
 
-            var promice = apiData.doAction(json, $scope.params.href, $scope.params.method);
 
-            promice.then(function() {
-                alert("Success");
-            }, function(reason) {
-                alert("Error: " + reason.data.MessageDetail);
-            }, function() {
-                alert("Notify");
-            });
+
+            var successFn = function success(data, status, headers, config) {
+                var result = JSON.stringify(status(), undefined, 2);
+                result += "\n\n";
+                result += JSON.stringify(data, undefined, 2);
+                $scope.responseSuccess = result;
+            };
+            var errorFn = function error(data, status, headers, config) {
+                var result = JSON.stringify(status(), undefined, 2);
+                result += "\n\n";
+                result += JSON.stringify(data, undefined, 2);
+                $scope.responseError = result;
+            };
+
+            var isArray = ($scope.params["class[]"] || new Array()).indexOf("__query") !== -1;
+
+            apiData.doAction(json, $scope.params.href, isArray, $scope.params.method, successFn, errorFn);
 
             return false;
+        };
+        $scope.goBack = function () {
+            $window.history.back();
         };
     }
 );

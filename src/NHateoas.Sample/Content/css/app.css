@@ -28,3 +28,7 @@ select, textarea {
   padding-left:6px;
   cursor:pointer;
 }
+
+.response-error {
+    background-color: #ea9988;
+}

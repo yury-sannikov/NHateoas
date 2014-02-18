@@ -16,13 +16,17 @@ nhateoasSampleApp.factory('apiData', function ($resource, $q, $timeout) {
                 return $resource('/' + path, { }).get();
             }
         },
-        doAction : function(json, url, method) {
+        doAction: function (json, url, isArray, method, success, error) {
             var res = $resource('/' + url, json,
                 {invokeAction: {
-                        method: method
+                    method: method,
+                    isArray: isArray
                 }});
 
-            return res.invokeAction(json, json).$promise;
+            if (method.toLocaleLowerCase() == "get")
+                return res.invokeAction(json, success, error);
+            else
+                return res.invokeAction(json, json, success, error);
         }
     };
 });

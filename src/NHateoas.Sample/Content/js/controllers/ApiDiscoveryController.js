@@ -40,7 +40,13 @@ nhateoasSampleApp.controller('ApiDiscoveryController',
 
         $scope.navigateToAction = function(event, action) {
             var actionLink = event.queryActions()[action.name];
-            var href = actionLink.href + "/__action__?" + $.param(actionLink);
+            var href = actionLink.href;
+
+            var idx = href.indexOf("?");
+            if (idx != -1) href = href.substring(0, idx);
+
+            href += "/__action__?" + $.param(actionLink);
+
             $location.url(href);
         };
     }
