@@ -1,8 +1,8 @@
-<div >
+<div>
     <h4>Action invoker for "{{params.title}}"</h4>
     <h5>{{params.method}} -&gt; {{params.href}}</h5>
-    <ul class="thumbnails">
-        <div class="well">
+    <div class="row">
+        <div class="span10 well">
             <form id="{{params.name}}" method="{{params.method}}" enctype="{{params.type}}">
                 <fieldset ng-repeat="field in params.fieldsData">
                     <label for="{{params.name+field.name}}">{{field.name}}</label>
@@ -10,16 +10,15 @@
                 </fieldset>
                 <button type="submit" class="btn btn-primary" ng-click="submit()">Submit</button>
             </form>
-        </div>
-    </ul>
-    <p ng-hide="responseError || responseSuccess">Response will appear here</p>
-    <ul class="thumbnails">
-        <pre ng-show="responseSuccess" ng-bind="responseSuccess" ></pre>
-    </ul>
-    <ul class="thumbnails">
-        <pre class="response-error" ng-show="responseError" ng-bind="responseError" ></pre>
-    </ul>
 
-    <a href="#" ng-click="goBack()">Go Back</a>
-    <br/><br/>
+
+            <p ng-hide="responseError || responseSuccess">Response will appear here</p>
+            <pre ng-show="responseSuccess" ng-bind="responseSuccess"></pre>
+            <pre class="response-error" ng-show="responseError" ng-bind="responseError"></pre>
+            <br />
+            <a href="#" ng-click="goBack()">Go Back</a>
+            <br />
+            <br />
+        </div>
+    </div>
 </div>

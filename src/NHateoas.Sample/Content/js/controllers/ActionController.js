@@ -26,33 +26,43 @@ nhateoasSampleApp.controller('ActionController',
 
         $scope.params = unwrapParams($route.current.params);
 
-        $scope.submit = function() {
+        var getMethodInvoker = function (isQuery, json) {
+            var href = $scope.params.href;
+            var match = href.match(/:[^&]+/g);
+            angular.forEach(match, function (item, index) {
+                var paramName = item.substring(1, item.length);
+                href = href.replace(item, json[paramName]);
+            });
+            if (isQuery)
+                href = href.replace("?", "/__query__?");
+            $location.url(href);
+        };
+
+        $scope.submit = function () {
             var json = {};
             var data = $scope.params.fieldsData;
             for (var index in data)
                 json[data[index].name] = $("#" + $scope.params.name + data[index].name).val();
 
+            var isQuery = ($scope.params["class[]"] || new Array()).indexOf("__query") !== -1;
 
 
-            var successFn = function success(data, status, headers, config) {
-                var result = JSON.stringify(status(), undefined, 2);
-                result += "\n\n";
-                result += JSON.stringify(data, undefined, 2);
-                $scope.responseSuccess = result;
-            };
-            var errorFn = function error(data, status, headers, config) {
-                var result = JSON.stringify(status(), undefined, 2);
-                result += "\n\n";
-                result += JSON.stringify(data, undefined, 2);
-                $scope.responseError = result;
+            if ($scope.params.method.toUpperCase() == "GET") {
+                getMethodInvoker(isQuery, json);
+                return false;
+            }
+
+            var convertFn = function success(data, status, headers, config) {
+                return JSON.stringify(status(), undefined, 2) + "\n\n" + JSON.stringify(data, undefined, 2);
             };
 
-            var isArray = ($scope.params["class[]"] || new Array()).indexOf("__query") !== -1;
+            var successFn = function success(data, status, headers, config) { $scope.responseSuccess = convertFn(data, status, headers, config); };
+            var errorFn = function error(data, status, headers, config) { $scope.responseError = convertFn(data, status, headers, config); };
 
-            apiData.doAction(json, $scope.params.href, isArray, $scope.params.method, successFn, errorFn);
-
+            apiData.doAction(json, $scope.params.href, isQuery, $scope.params.method, successFn, errorFn);
             return false;
         };
+
         $scope.goBack = function () {
             $window.history.back();
         };
