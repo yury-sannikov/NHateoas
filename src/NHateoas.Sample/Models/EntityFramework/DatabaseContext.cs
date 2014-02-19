@@ -16,10 +16,19 @@ namespace NHateoas.Sample.Models.EntityFramework
         /// </summary>
         public DbSet<DbProduct> Products { get; set; }
 
+        public DbSet<DbProductDetail> ProductDetails { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder mb)
         {
-            mb.Entity<DbProduct>()
+            mb.Entity<DbProductDetail>()
                 .HasKey(p => p.Id);
+
+            mb.Entity<DbProduct>()
+                .HasKey(p => p.Id)
+                .HasMany(p => p.ProductDetails)
+                    .WithRequired()
+                    .HasForeignKey(d => d.ProductId);
+
         }
     }
 }

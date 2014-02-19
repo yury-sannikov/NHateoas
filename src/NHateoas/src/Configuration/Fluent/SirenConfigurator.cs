@@ -67,6 +67,7 @@ namespace NHateoas.Configuration.Fluent
             _logic.AddNewRule(expression.Body);
             return this;
         }
+
         public SirenConfigurator<TModel, TController> MapReference<TOtherController>(Expression<Action<TModel, TOtherController>> expression)
         {
             _logic.AddNewRule(expression.Body);

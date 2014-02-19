@@ -199,8 +199,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\DatabaseContext.cs" />
+    <Compile Include="Models\EntityFramework\DbProductDetail.cs" />
     <Compile Include="Models\EntityFramework\Initializer.cs" />
-    <Compile Include="Models\EntityFramework\Product.cs" />
+    <Compile Include="Models\EntityFramework\DbProduct.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

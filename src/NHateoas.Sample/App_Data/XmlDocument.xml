@@ -550,6 +550,12 @@
             Products table
             </summary>
         </member>
+        <member name="M:NHateoas.Sample.Models.EntityFramework.DbProductDetail.#ctor(NHateoas.Sample.Models.ProductDetails)">
+            <summary>
+            
+            </summary>
+            <param name="product"></param>
+        </member>
         <member name="T:NHateoas.Sample.Models.EntityFramework.Initializer">
             <summary>
             

@@ -33,8 +33,13 @@ nhateoasSampleApp.controller('ActionController',
                 var paramName = item.substring(1, item.length);
                 href = href.replace(item, json[paramName]);
             });
-            if (isQuery)
-                href = href.replace("?", "/__query__?");
+            if (isQuery) {
+                if (href.indexOf("?") == -1) {
+                    href = href+ "/__query__";
+                } else {
+                    href = href.replace("?", "/__query__?");
+                }
+            }
             $location.url(href);
         };
 

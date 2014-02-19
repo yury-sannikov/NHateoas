@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace NHateoas.Sample.Models.EntityFramework
 {
@@ -24,5 +26,8 @@ namespace NHateoas.Sample.Models.EntityFramework
             Name = product.Name;
             Price = product.Price;
         }
+
+        [JsonIgnore]
+        public virtual ICollection<DbProductDetail> ProductDetails { get; set; } 
     }
 }

@@ -8,6 +8,7 @@ using NHateoas.Attributes;
 using NHateoas.Configuration;
 using NHateoas.Sample.Models;
 using NHateoas;
+using NHateoas.Sample.Models.EntityFramework;
 
 namespace NHateoas.Sample.Controllers
 {
@@ -17,15 +18,23 @@ namespace NHateoas.Sample.Controllers
         {
             new HypermediaConfigurator<ProductDetails, ProductDetailsController>(httpConfiguration)
                 .For((model, controller) => controller.Get(model.Id))
+                    .UseSirenSpecification()    
                     .Map((model, controller) => controller.GetByProductId(model.ProductId))
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
                     .Map((model, controller) => controller.Delete(model.Id))
+                    .MapReference<ProductsController>((model, other) => other.Get(model.ProductId))
+                        .AsParentLink()
                 .For((model, controller) => controller.GetByProductId(model.ProductId))
+                    .UseSirenSpecification()
                     .Map((model, controller) => controller.GetByProductId(model.ProductId))
+                    .Map((model, controller) => controller.Get(model.Id))
+                        .AsSelfLink()
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
                     .Map((model, controller) => controller.Delete(model.Id))
+                    .MapReference<ProductsController>((model, other) => other.Get(model.ProductId))
+                        .AsParentLink()
                 .Configure();
         }
     }
@@ -34,26 +43,35 @@ namespace NHateoas.Sample.Controllers
     [RoutePrefix("api/ProductDetails")]
     public class ProductDetailsController : ApiController
     {
-        private static readonly ProductDetails[] Details = { new ProductDetails() { Id = 1, ProductId = 1, Details = "Cup details" } };
+        private readonly DatabaseContext _dbContext = new DatabaseContext();
+
+        protected override void Dispose(bool disposing)
+        {
+            _dbContext.Dispose();
+            base.Dispose(disposing);
+        }
 
         // GET api/productdetails
         [Route("")]
+        [Hypermedia]
         public IEnumerable<ProductDetails> Get()
         {
-            return Details;
+            return _dbContext.ProductDetails.ToList();
         }
 
         // GET api/productdetails/5
         [Route("{id:int}")]
+        [Hypermedia]
         public ProductDetails Get(int id)
         {
-            return Details.First();
+            return _dbContext.ProductDetails.FirstOrDefault(p => p.Id == id);
         }
 
         [Route("~/api/Product/{id}/Details")]
-        public ProductDetails GetByProductId(int id)
+        [Hypermedia]
+        public IEnumerable<ProductDetails> GetByProductId(int id)
         {
-            return Details.First();
+            return _dbContext.ProductDetails.Where(p => p.ProductId == id).ToList();
         }
 
         // POST api/productdetails
