@@ -11,7 +11,8 @@ using System.Web.Http.Description;
 using System.Web.ModelBinding;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
-using NHateoas.Sample.Models;
+using NHateoas.Sample.Models.EntityFramework;
+using Product = NHateoas.Sample.Models.Product;
 
 namespace NHateoas.Sample.Controllers
 {
@@ -23,15 +24,7 @@ namespace NHateoas.Sample.Controllers
     [RoutePrefix("api/Product")]
     public class ProductsController : ApiController, IHypermediaApiControllerConfigurator
     {
-        private static readonly Product[] Products =
-        {
-            new Product() { Id = 1, Name = "Item1", Price = 2.99m } ,
-            new Product() { Id = 2, Name = "Item2", Price = 3.99m } ,
-            new Product() { Id = 3, Name = "Item3", Price = 4.99m } ,
-            new Product() { Id = 4, Name = "Item4", Price = 5.99m } ,
-            new Product() { Id = 5, Name = "Item5", Price = 6.99m } 
-        
-        };
+        private  readonly DatabaseContext _dbContext = new DatabaseContext();
 
         public void ConfigureHypermedia(HttpConfiguration httpConfiguration)
         {
@@ -90,6 +83,11 @@ namespace NHateoas.Sample.Controllers
             .Configure();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            _dbContext.Dispose();
+            base.Dispose(disposing);
+        }
         /// <summary>
         /// Get products collection
         /// </summary>
@@ -98,7 +96,7 @@ namespace NHateoas.Sample.Controllers
         [Route("")]
         public IEnumerable<Product> Get()
         {
-            return Products;
+            return _dbContext.Products.ToList();
         }
         
         /// <summary>
@@ -112,7 +110,13 @@ namespace NHateoas.Sample.Controllers
         [Route("")]
         public IEnumerable<Product> Get(string query, int skip, int limit)
         {
-            return Products;
+            var res = (from p in _dbContext.Products
+                where p.Name.Contains(query)
+                orderby p.Name
+                select p).Skip(skip);
+            if (limit == 0)
+                return res.ToList();
+            return res.Take(limit).ToList();
         }
 
         /// <summary>
@@ -124,7 +128,7 @@ namespace NHateoas.Sample.Controllers
         [Route("{id:int}")]
         public Product Get(int id)
         {
-            return Products.First();
+            return _dbContext.Products.FirstOrDefault(p => p.Id == id);
         }
         
         /// <summary>
@@ -137,7 +141,9 @@ namespace NHateoas.Sample.Controllers
         [Hypermedia]
         public HttpResponseMessage Get(string name)
         {
-            return Request.CreateResponse<Product>(HttpStatusCode.OK, Products.First());
+            var prod = _dbContext.Products.FirstOrDefault(p => p.Name == name);
+            
+            return Request.CreateResponse<Product>(HttpStatusCode.OK, prod);
         }
 
 
@@ -152,7 +158,10 @@ namespace NHateoas.Sample.Controllers
         [Hypermedia(Names = new []{"create-product"})]
         public HttpResponseMessage Post([FromBody]Product product)
         {
-            return Request.CreateResponse<Product>(HttpStatusCode.Created, Products.First());
+            var prod = new NHateoas.Sample.Models.EntityFramework.DbProduct(product);
+            _dbContext.Products.Add(prod);
+            _dbContext.SaveChanges();
+            return Request.CreateResponse<Product>(HttpStatusCode.Created, prod);
         }
 
         /// <summary>
@@ -165,6 +174,16 @@ namespace NHateoas.Sample.Controllers
         [Hypermedia]
         public void Put(int id, [FromBody]Product product)
         {
+            var prod = _dbContext.Products.FirstOrDefault(p => p.Id == product.Id);
+            if (prod == null)
+            {
+                Request.CreateResponse(HttpStatusCode.NotFound);
+                return;
+            }
+            prod.Name = product.Name ?? prod.Name;
+            prod.Price = product.Price;
+            _dbContext.SaveChanges();
+
         }
 
         /// <summary>
@@ -173,8 +192,16 @@ namespace NHateoas.Sample.Controllers
         /// <param name="id">Product ID</param>
         [Route("{id:int}")]
         [Hypermedia]
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
+            var prod = _dbContext.Products.FirstOrDefault(p => p.Id == id);
+            if (prod == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            _dbContext.Products.Remove(prod);
+            _dbContext.SaveChanges();
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }

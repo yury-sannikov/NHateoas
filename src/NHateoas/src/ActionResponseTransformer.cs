@@ -46,6 +46,9 @@ namespace NHateoas
 
             var payload = objectContent.Value;
 
+            if (payload == null)
+                return null;
+
             var responseTransformer = actionConfiguration.ResponseTransformerFactory.Get(payload);
 
             if (responseTransformer == null)

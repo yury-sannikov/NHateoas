@@ -4,6 +4,11 @@
         <name>NHateoas.Sample</name>
     </assembly>
     <members>
+        <member name="T:NHateoas.Sample.DatabaseConfig">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:NHateoas.Sample.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
             <summary>
             Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
@@ -535,6 +540,26 @@
             </summary>
             <param name="id">Product ID</param>
         </member>
+        <member name="T:NHateoas.Sample.Models.EntityFramework.DatabaseContext">
+            <summary>
+            Entity Framework database context
+            </summary>
+        </member>
+        <member name="P:NHateoas.Sample.Models.EntityFramework.DatabaseContext.Products">
+            <summary>
+            Products table
+            </summary>
+        </member>
+        <member name="T:NHateoas.Sample.Models.EntityFramework.Initializer">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:NHateoas.Sample.Models.EntityFramework.DbProduct">
+            <summary>
+            Product DB model
+            </summary>
+        </member>
         <member name="T:NHateoas.Sample.Models.Product">
             <summary>
             This class represent Product
@@ -554,6 +579,12 @@
             <summary>
             Product price
             </summary>
+        </member>
+        <member name="M:NHateoas.Sample.Models.EntityFramework.DbProduct.#ctor(NHateoas.Sample.Models.Product)">
+            <summary>
+            
+            </summary>
+            <param name="product"></param>
         </member>
     </members>
 </doc>

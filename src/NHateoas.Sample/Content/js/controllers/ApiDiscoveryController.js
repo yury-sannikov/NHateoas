@@ -3,7 +3,14 @@
 nhateoasSampleApp.controller('ApiDiscoveryController',
     function EventListController($scope, $location, $route, apiData) {
 
-        $scope.events = apiData.getApiByPath($route.current.params.apipath);
+        var request = $scope.events = apiData.getApiByPath($route.current.params.apipath, $location.absUrl());
+
+        request.$promise.then(function () {
+            $scope.failResponse = undefined;
+        }, function (reason) {
+            $scope.failResponse = JSON.stringify(reason, undefined, 2);
+        }, function () {
+        });
 
         $scope.makeArray = function (events) {
             if (angular.isArray(events))

@@ -2,13 +2,16 @@
 nhateoasSampleApp.factory('apiData', function ($resource, $q, $timeout) {
     var resource = $resource('/api/product/:id', {id: '@id'});
     return {
-        getApiByPath: function (path) {
+        getApiByPath: function (path, absUrl) {
             
             if (path == 'api')
                 return resource.query();
+            var qIndex;
+            if ((qIndex = absUrl.indexOf("?")) !== -1) {
+                path = path + absUrl.substring(qIndex, absUrl.length);
+            }
 
             var isQuery = path.indexOf("/__query__") !== -1;
-
             if (isQuery) {
                 path = path.replace("/__query__", "");
                 return $resource('/' + path, {}).query();

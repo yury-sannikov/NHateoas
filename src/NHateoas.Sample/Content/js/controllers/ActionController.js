@@ -52,12 +52,19 @@ nhateoasSampleApp.controller('ActionController',
                 return false;
             }
 
-            var convertFn = function success(data, status, headers, config) {
-                return JSON.stringify(status(), undefined, 2) + "\n\n" + JSON.stringify(data, undefined, 2);
+            var convertFn = function success(d, status, headers, config) {
+                var noop = function() {};
+                return JSON.stringify((status||noop)(), undefined, 2) + "\n\n" + JSON.stringify(d, undefined, 2);
             };
 
-            var successFn = function success(data, status, headers, config) { $scope.responseSuccess = convertFn(data, status, headers, config); };
-            var errorFn = function error(data, status, headers, config) { $scope.responseError = convertFn(data, status, headers, config); };
+            var successFn = function success(d, status, headers, config) {
+                $scope.responseError = undefined;
+                $scope.responseSuccess = convertFn(d, status, headers, config);
+            };
+            var errorFn = function error(d, status, headers, config) {
+                $scope.responseSuccess = undefined;
+                $scope.responseError = convertFn(d, status, headers, config);
+            };
 
             apiData.doAction(json, $scope.params.href, isQuery, $scope.params.method, successFn, errorFn);
             return false;
