@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace NHateoas.Sample.Models
 {
@@ -23,5 +24,8 @@ namespace NHateoas.Sample.Models
         /// Product price
         /// </summary>
         public decimal Price { get; set; }
+        
+        [JsonIgnore]
+        public IEnumerable<ProductDetails> ProductDetailsFromModel { get; set; }
     }
 }

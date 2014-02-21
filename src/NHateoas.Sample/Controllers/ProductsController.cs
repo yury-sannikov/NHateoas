@@ -12,6 +12,7 @@ using System.Web.ModelBinding;
 using NHateoas.Attributes;
 using NHateoas.Configuration;
 using NHateoas.Sample.Models.EntityFramework;
+using WebGrease.Css.Extensions;
 using Product = NHateoas.Sample.Models.Product;
 
 namespace NHateoas.Sample.Controllers
@@ -44,6 +45,8 @@ namespace NHateoas.Sample.Controllers
                     .Map((model, controller) => controller.Delete(model.Id))
                     .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
                         .AsLink()
+                    .MapEmbeddedEntity<Models.ProductDetails, ProductDetailsController>(model => model.ProductDetailsFromModel,
+                        (model, controller) => controller.GetByProductId(model.Id))
                     
                  .For((model, controller) => controller.Get(model.Name))
                     .UseSirenSpecification()
@@ -128,7 +131,11 @@ namespace NHateoas.Sample.Controllers
         [Route("{id:int}")]
         public Product Get(int id)
         {
-            return _dbContext.Products.FirstOrDefault(p => p.Id == id);
+            var prod = _dbContext.Products.FirstOrDefault(p => p.Id == id);
+            var pd = new List<NHateoas.Sample.Models.ProductDetails>();
+            pd.AddRange(prod.ProductDetails);
+            prod.ProductDetailsFromModel = pd;
+            return prod;
         }
         
         /// <summary>
