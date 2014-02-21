@@ -1,4 +1,7 @@
-﻿namespace NHateoas.Integration.Tests.Models
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace NHateoas.Integration.Tests.Models
 {
     
     /// <summary>
@@ -18,5 +21,9 @@
         /// Product price
         /// </summary>
         public decimal Price { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<ProductDetails> ProductDetailsFromModel { get; set; }
+
     }
 }

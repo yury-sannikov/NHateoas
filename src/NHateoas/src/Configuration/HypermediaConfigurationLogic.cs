@@ -41,6 +41,14 @@ namespace NHateoas.Configuration
             ActionConfiguration.AddMappingRule(rule);
         }
 
+        public void AddNewEmbeddedEntityMapping(Expression embeddedEntityExpression, Expression actionSelector)
+        {
+            var entitySelector = embeddedEntityExpression as MemberExpression;
+            var handlingSelector = actionSelector as MethodCallExpression;
+            var rule = new EntityRule(entitySelector, handlingSelector);
+            ActionConfiguration.AddEntityRule(rule);
+        }
+
         public ActionConfiguration ActionConfiguration
         {
             get { return _currentActionConfiguration; }

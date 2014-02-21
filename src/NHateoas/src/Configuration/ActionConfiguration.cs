@@ -21,6 +21,7 @@ namespace NHateoas.Configuration
         private readonly Type _controllerType;
         private readonly MethodInfo _actionMethodInfo;
         private readonly List<MappingRule> _mappingRules = new List<MappingRule>();
+        private readonly List<EntityRule> _entityRules = new List<EntityRule>();
         private IMetadataProvider _metadataProvider = null;
         private IResponseTransformerFactory _responseTransformerFactory = null;
         private IStrategyBuilderFactory _strategyBuilderFactory;
@@ -63,9 +64,19 @@ namespace NHateoas.Configuration
             _mappingRules.Add(rule);
         }
 
+        public void AddEntityRule(EntityRule entityRule)
+        {
+            _entityRules.Add(entityRule);
+        }
+
         public IEnumerable<MappingRule> MappingRules
         {
             get { return _mappingRules; }
+        }
+
+        public IEnumerable<EntityRule> EntityRules
+        {
+            get { return _entityRules; }
         }
 
         public IMetadataProvider MetadataProvider

@@ -46,6 +46,8 @@ namespace NHateoas.Integration.Tests.Controllers
                     .Map((model, controller) => controller.Delete(model.Id))
                     .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
                         .AsLink()
+                    .MapEmbeddedEntity<ProductDetails, ProductDetailsController>(model => model.ProductDetailsFromModel,
+                        (model, controller) => controller.GetByProductId(model.Id))
                     
                  .For((model, controller) => controller.Get(model.Name))
                     .UseSirenSpecification()
@@ -112,7 +114,17 @@ namespace NHateoas.Integration.Tests.Controllers
         [Route("{id:int}")]
         public Product Get(int id)
         {
-            return Products.First();
+            var prod = Products.First();
+            prod.ProductDetailsFromModel = new List<ProductDetails>()
+            {
+                new ProductDetails()
+                {
+                    Details = "D1",
+                    Id = 1,
+                    ProductId = 1
+                }
+            };
+            return prod;
         }
         
         /// <summary>

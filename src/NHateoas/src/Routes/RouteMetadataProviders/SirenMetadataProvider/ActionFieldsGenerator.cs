@@ -8,6 +8,7 @@ using System.Security;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Newtonsoft.Json;
 using NHateoas.Configuration;
 
 namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
@@ -29,6 +30,8 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
             result.AddRange(from property in fromBodyParameterType.GetProperties()
                 let fieldName = GetFieldName(property)
                 let propVal = property.GetValue(originalObject)
+                let jsonIgnore = property.GetCustomAttribute<JsonIgnoreAttribute>()
+                where jsonIgnore == null
                 select new MetadataPlainObjects.Field
                 {
                     FieldName = fieldName,

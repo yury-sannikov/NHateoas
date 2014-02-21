@@ -47,17 +47,24 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
                 return LinksGenerator.Generate(_actionConfiguration, _apiDescriptionToRouteNameDictionary, values[0]);
             if (typeof(MetadataPlainObjects.Actions).IsAssignableFrom(metadataType))
                 return ActionsGenerator.Generate(_actionConfiguration, _apiDescriptionToRouteNameDictionary, values[0]);
+            if (typeof(MetadataPlainObjects.Entities).IsAssignableFrom(metadataType))
+                return EntitiesGenerator.Generate(_actionConfiguration, _apiDescriptionToRouteNameDictionary, values[0]);
             
             throw new NotImplementedException();
         }
 
         public IList<Type> GetRegisteredMetadataTypes()
         {
-            return new List<Type>
+            var result = new List<Type>
             {
                 typeof (MetadataPlainObjects.Links),
                 typeof (MetadataPlainObjects.Actions)
             };
+            
+            if (_actionConfiguration.EntityRules.Any())
+                result.Add(typeof(MetadataPlainObjects.Entities));
+
+            return result;
         }
     }
 }

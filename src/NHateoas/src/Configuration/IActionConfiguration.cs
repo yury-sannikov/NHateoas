@@ -18,6 +18,8 @@ namespace NHateoas.Configuration
 
         IEnumerable<MappingRule> MappingRules { get; }
 
+        IEnumerable<EntityRule> EntityRules { get; }
+
         IMetadataProvider MetadataProvider { get; }
 
         IResponseTransformerFactory ResponseTransformerFactory { get; }

@@ -132,6 +132,19 @@ namespace NHateoas.Configuration.Fluent
             return this;
         }
 
+        public SirenConfigurator<TModel, TController> MapEmbeddedEntity<TMappingEntity, TOtherController>(Expression<Func<TModel, TMappingEntity>> embeddedEntityExpression,
+            Expression<Func<TMappingEntity, TOtherController, Object>> actionSelector)
+        {
+            _logic.AddNewEmbeddedEntityMapping(embeddedEntityExpression.Body, actionSelector.Body);
+            return this;
+        }
+        public SirenConfigurator<TModel, TController> MapEmbeddedEntity<TMappingEntity, TOtherController>(Expression<Func<TModel, IEnumerable<TMappingEntity>>> embeddedEntityExpression,
+            Expression<Func<TMappingEntity, TOtherController, Object>> actionSelector)
+        {
+            _logic.AddNewEmbeddedEntityMapping(embeddedEntityExpression.Body, actionSelector.Body);
+            return this;
+        }
+
         public void Configure()
         {
             _hypermediaConfigurator.Configure();

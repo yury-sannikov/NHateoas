@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Description;
 using NHateoas.Attributes;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
@@ -38,6 +41,33 @@ namespace NHateoas.Tests
         public ModelSample ControllerMethodPut(int id, [FromBody] ModelSample model)
         {
             return null;
+        }
+
+        public void ControllerVoidMethod()
+        {
+            
+        }
+        
+        public HttpResponseMessage ControllerHttpResponseMessageMethod()
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+        
+        [ResponseType(typeof(string))]
+        public HttpResponseMessage ControllerHttpResponseMessageMethodWithType()
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        public HttpResponseMessage ControllerHttpResponseMessageMethodParam(int id)
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        [ResponseType(typeof(string))]
+        public HttpResponseMessage ControllerHttpResponseMessageMethodWithTypeParam(double price)
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         public static int SomeMethod()

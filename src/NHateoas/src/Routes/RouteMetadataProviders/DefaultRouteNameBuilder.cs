@@ -41,7 +41,7 @@ namespace NHateoas.Routes.RouteMetadataProviders
 
             name.Append(methodName);
 
-            if (returnType != typeof(void))
+            if (returnType != typeof(void) && !returnType.IsAssignableFrom(typeof(HttpResponseMessage)))
                 name.AppendFormat("_{0}", returnType.Name.ToLower());
 
             var parameters = actionMethodInfo.GetParameters();

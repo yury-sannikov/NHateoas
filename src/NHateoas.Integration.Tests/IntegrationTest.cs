@@ -109,5 +109,27 @@ namespace NHateoas.Integration.Tests
 
             }
         }
+
+        [Test]
+        public void GetProductById()
+        {
+            string baseAddress = "http://dummyname/";
+            var request = new HttpRequestMessage();
+            request.RequestUri = new Uri(baseAddress + "api/product/1");
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Method = HttpMethod.Get;
+
+            var cts = new CancellationTokenSource();
+
+            using (HttpResponseMessage response = _httpMessageInvoker.SendAsync(request, cts.Token).Result)
+            {
+                Assume.That(response.Content, Is.Not.Null);
+                var result = response.Content.ReadAsAsync<Object>(cts.Token).Result;
+                Assume.That(result, Is.Not.Null);
+                var asText = JsonConvert.SerializeObject(result);
+                Assume.That(asText, Is.EqualTo("{\"properties\":{\"Id\":1,\"Name\":\"Item1\",\"Price\":2.99},\"links\":[{\"rel\":[\"self\"],\"href\":\"api/Product/1\"},{\"rel\":[\"parent\",\"__query\"],\"href\":\"api/Product\"},{\"rel\":[\"get_product_by_name\"],\"href\":\"api/Product/Item1\"},{\"rel\":[\"get_productdetails_by_id\"],\"href\":\"api/Product/1/Details\"}],\"actions\":[{\"name\":\"query_product_by_query_skip_limit\",\"class\":[\"__query\"],\"method\":\"GET\",\"href\":\"api/Product?query=:query&skip=:skip&limit=:limit\",\"fields\":[{\"name\":\"query\"},{\"name\":\"skip\"},{\"name\":\"limit\"}]},{\"name\":\"create-product\",\"method\":\"POST\",\"href\":\"api/Product\",\"type\":\"application/x-www-form-urlencoded\",\"fields\":[{\"name\":\"Id\",\"value\":\"1\"},{\"name\":\"Name\",\"value\":\"Item1\"},{\"name\":\"Price\",\"value\":\"2.99\"}]},{\"name\":\"put_by_id_product\",\"method\":\"PUT\",\"href\":\"api/Product/1\",\"fields\":[{\"name\":\"Id\",\"value\":\"1\"},{\"name\":\"Name\",\"value\":\"Item1\"},{\"name\":\"Price\",\"value\":\"2.99\"}]},{\"name\":\"delete_by_id\",\"method\":\"DELETE\",\"href\":\"api/Product/1\"}],\"entities\":[{\"properties\":{\"Id\":1,\"ProductId\":1,\"Details\":\"D1\"},\"links\":[{\"rel\":[\"get_productdetails_by_id\"],\"href\":\"api/Product/1/Details\"}],\"actions\":[{\"name\":\"post_by_value\",\"method\":\"POST\",\"href\":\"api/ProductDetails\",\"type\":\"application/x-www-form-urlencoded\",\"fields\":[{\"name\":\"Id\",\"value\":\"1\"},{\"name\":\"ProductId\",\"value\":\"1\"},{\"name\":\"Details\",\"value\":\"D1\"}]},{\"name\":\"put_by_id_value\",\"method\":\"PUT\",\"href\":\"api/ProductDetails/1\",\"fields\":[{\"name\":\"Id\",\"value\":\"1\"},{\"name\":\"ProductId\",\"value\":\"1\"},{\"name\":\"Details\",\"value\":\"D1\"}]},{\"name\":\"delete_by_id\",\"method\":\"DELETE\",\"href\":\"api/ProductDetails/1\"}]}]}"));
+            }
+        }
+
     }
 }

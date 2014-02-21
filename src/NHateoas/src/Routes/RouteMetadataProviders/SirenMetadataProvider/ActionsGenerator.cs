@@ -73,7 +73,7 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
                 return true;
             
             if (type.IsGenericType && typeof (IEnumerable<>).IsAssignableFrom(type.GetGenericTypeDefinition()))
-                return IsOrContains(searchType.GetGenericTypeDefinition(), type);
+                return IsOrContains(searchType, type.GetGenericArguments()[0]);
             
             if (!type.IsClass)
                 return false;

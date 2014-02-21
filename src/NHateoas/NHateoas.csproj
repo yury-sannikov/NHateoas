@@ -54,6 +54,7 @@
     <Compile Include="src\Attributes\HypermediaAttribute.cs" />
     <Compile Include="src\Attributes\HypermediaSourceAttribute.cs" />
     <Compile Include="src\Configuration\ControllerConfiguration.cs" />
+    <Compile Include="src\Configuration\EntityRule.cs" />
     <Compile Include="src\Configuration\Fluent\SirenConfigurator.cs" />
     <Compile Include="src\Configuration\HypermediaConfigurationLogic.cs" />
     <Compile Include="src\Configuration\Fluent\HypermediaConfigurator.cs" />
@@ -99,8 +100,10 @@
     <Compile Include="src\Routes\RouteMetadataProviders\SimpleMetadataProvider\SimpleMetadataProvider.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\ActionFieldsGenerator.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\ActionsGenerator.cs" />
+    <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\EntitiesGenerator.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\LinksGenerator.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\MetadataPlainObjects\Actions.cs" />
+    <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\MetadataPlainObjects\Entities.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\MetadataPlainObjects\Links.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\SirenRelNameBuilder.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\SirenRoutesBuilder.cs" />

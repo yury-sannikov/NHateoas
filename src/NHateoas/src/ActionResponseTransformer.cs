@@ -49,6 +49,13 @@ namespace NHateoas
             if (payload == null)
                 return null;
 
+            var transformed = TransformPayload(actionConfiguration, payload);
+
+            return new ObjectContent(transformed.GetType(), transformed, objectContent.Formatter);
+        }
+
+        public static object TransformPayload(IActionConfiguration actionConfiguration, object payload)
+        {
             var responseTransformer = actionConfiguration.ResponseTransformerFactory.Get(payload);
 
             if (responseTransformer == null)
@@ -56,9 +63,7 @@ namespace NHateoas
                 throw new Exception(string.Format("Unable to get response transformer for response type {0}", payload.GetType()));
             }
 
-            var transformed = responseTransformer.Transform(actionConfiguration, payload);
-
-            return new ObjectContent(transformed.GetType(), transformed, objectContent.Formatter);
+            return responseTransformer.Transform(actionConfiguration, payload);
         }
 
     }

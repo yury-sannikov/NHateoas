@@ -39,7 +39,8 @@ namespace NHateoas.Configuration
             _methodExpression = methodExpression;
             _parametersDelegates = ParametersDelegateBuilder.Build(methodExpression);
 
-            MapApiDesctiption(apiExplorer);
+            if (apiExplorer != null)
+                MapApiDesctiption(apiExplorer);
 
             AddRelsFromAttribute(methodExpression);
         }
