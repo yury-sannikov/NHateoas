@@ -1,6 +1,6 @@
 # NHateoas
 
-> **Tip:**   Currently NHateoas is in a **prototying stage**. We are considering different mediatype formats at this moment.
+> **Tip:**   Currently NHateoas in development stage.
 
 HATEOAS (Hypermedia as the engine of application state) implementation for ASP.Net WebAPI
 
@@ -101,46 +101,77 @@ public class ValuesControllerConfigurator : IHypermediaApiControllerConfigurator
 {
     public void ConfigureHypermedia()
     {
-        new HypermediaConfigurator<Product, ValuesController>()
-            .For((model, controller) => controller.Get())
-                .Map((model, controller) => controller.Get(model.Id))
-                .MapReference<ProductDetailsController>((model, referencedController) 
-                    => referencedController.GetByProductId(model.Id))
-
+        new HypermediaConfigurator<Product, ProductsController>(httpConfiguration)
+            // Define rules for Get method receiving ID
             .For((model, controller) => controller.Get(model.Id))
+            // Use Siren specification https://github.com/kevinswiber/siren
+            .UseSirenSpecification()
+                // A 'self' link will be added to the response.
+                .Map((model, controller) => controller.Get(model.Id))
+                    .AsSelfLink()
+                // A 'parent' link will be added.
                 .Map((model, controller) => controller.Get())
-                .Map((model, controller) 
-                    => controller.Get(
-                        QueryParameter.Is<string>(), 
-                        QueryParameter.Is<int>(), 
-                        QueryParameter.Is<int>()))
+                    .AsParentLink()
+                // A HTTM 'GET' action will be added.
+                .Map((model, controller) => 
+                        controller.Get(QueryParameter.Is<string>(), 
+                            QueryParameter.Is<int>(), QueryParameter.Is<int>()))
+                    .AsAction()
+                // A link to prodcut will be added. Instead od Id name will be used
                 .Map((model, controller) => controller.Get(model.Name))
+                // Post action will be added
                 .Map((model, controller) => controller.Post(model))
+                // Put action will be added
                 .Map((model, controller) => controller.Put(model.Id, model))
+                // Delete action will be added
                 .Map((model, controller) => controller.Delete(model.Id))
-                .MapReference<ProductDetailsController>((model, referencedController) 
-                    => referencedController.GetByProductId(model.Id))
-
+                // MapReference will insert a link to ProductDetailsController.GetByProductId
+                // using current product id
+                .MapReference<ProductDetailsController>((model, referencedController) => 
+                        referencedController.GetByProductId(model.Id))
+                    .AsLink()
+                // Add Procduct details as entities https://github.com/kevinswiber/siren#entities-1
+                // Each object from ProductDetailsFromModel collection will be handled against
+                // rules applied for ProductDetailsController.GetByProductId(int)
+                .MapEmbeddedEntity<Models.ProductDetails, ProductDetailsController>(model => 
+                        model.ProductDetailsFromModel,(model, controller) => 
+                        controller.GetByProductId(model.Id))
+                
              .For((model, controller) => controller.Get(model.Name))
-                .MapReference<ProductDetailsController>((model, referencedController) 
-                    => referencedController.GetByProductId(model.Id))
+                .UseSirenSpecification()
+                .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                    .AsLink()
                 .Map((model, controller) => controller.Get())
-                .Map((model, controller) 
-                    => controller.Get(
-                        QueryParameter.Is<string>(), 
-                        QueryParameter.Is<int>(), 
-                        QueryParameter.Is<int>()))
+                    .AsParentLink()
+                .Map((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
+                    .AsAction()
                 .Map((model, controller) => controller.Get(model.Id))
                 .Map((model, controller) => controller.Get(model.Name))
+                    .AsSelfLink()
                 .Map((model, controller) => controller.Post(model))
                 .Map((model, controller) => controller.Put(model.Id, model))
                 .Map((model, controller) => controller.Delete(model.Id))
-
-            .For((model, controller) => controller.Post(model))
+                
+            .For((model, controller) => controller.Get())
+                .UseSirenSpecification()
+                .Map((model, controller) => controller.Get())
+                    .AsSelfLink()
                 .Map((model, controller) => controller.Get(model.Id))
-                .MapReference<ProductDetailsController>((model, referencedController) 
-                    => referencedController.GetByProductId(model.Id))
-
+                .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                    .AsAction()
+    
+            .For((model, controller) => controller.Post(model))
+                .UseSirenSpecification()
+                .Map((model, controller) => controller.Get(model.Id))
+                .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+            
+            .For((model, controller) => controller.Get(QueryParameter.Is<string>(), QueryParameter.Is<int>(), QueryParameter.Is<int>()))
+                .UseSirenSpecification()
+                .Map((model, controller) => controller.Get())
+                    .AsSelfLink()
+                .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                    .AsAction()
+    
         .Configure();
     }
 }
@@ -148,54 +179,160 @@ public class ValuesControllerConfigurator : IHypermediaApiControllerConfigurator
 Then call `InitializeHypermedia` method when you configure WebAPI. This will automatically discover all `IHypermediaApiControllerConfigurator` implementations and invoke `ConfigureHypermedia` method on it.
 
 ```C#
-public static class WebApiConfig
+public class WebApiApplication : System.Web.HttpApplication
 {
-    public static void Register(HttpConfiguration config)
+    protected void Application_Start()
     {
-        config.Routes.MapHttpRoute ...
+        AreaRegistration.RegisterAllAreas();
 
-        config.InitializeHypermedia();
+        GlobalConfiguration.Configure(WebApiConfig.Register);
+        FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+        RouteConfig.RegisterRoutes(RouteTable.Routes);
+        BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+        GlobalConfiguration.Configure(config => config.InitializeHypermedia());
     }
 }
 ```
 
-After doing that your GET `http://localhost:*/api/values` request you will yield the following response:
+After doing that your GET `http://localhost/api/product/1` request you will yield the following response:
 
 ```json
 [
-    {
-        "Id":1,
-        "Name":"Item1",
-        "Price":2.99,
-        "get_product_by_id":"api/Values/1",
-        "get_productdetails_by_id":"api/Values/1/ProductDetails"    
-    },
-    {
-        "Id":2,
-        "Name":"Item2",
-        "Price":3.99,"get_product_by_id":"api/Values/2",
-        "get_productdetails_by_id":"api/Values/2/ProductDetails"
-    }
-]
-```
-
-After doing that your GET `http://localhost:*/api/values/1` request you will yield the following response:
-
-```json
 {
-    "Id":1,
-    "Name":"Item1",
-    "Price":2.99,
-    "get_productdetails_by_id":"api/Values/1/ProductDetails",
-    "query_product":"api/Values",
-    "query_product_by_query_skip_limit":"api/Values?query=:query&skip=:skip&limit=:limit",
-    "get_product_by_id":"api/Values/1",
-    "get_product_by_name":"api/Values/Item1",
-    "post_product_by_product":"api/Values"
-}
+    "properties": {
+		"Id": 1,
+		"Name": "Item1",
+		"Price": 2.99
+	},
+	"links": [{
+		"rel": ["self"],
+		"href": "api/Product/1"
+	},
+	{
+		"rel": ["parent", "__query"],
+		"href": "api/Product"
+	},
+	{
+		"rel": ["get_product_by_name"],
+		"href": "api/Product/Item1"
+	},
+	{
+		"rel": ["get_productdetails_by_id"],
+		"href": "api/Product/1/Details"
+	}],
+	"actions": [{
+		"name": "query_product_by_query_skip_limit",
+		"class": ["__query"],
+		"method": "GET",
+		"href": "api/Product?query=:query&skip=:skip&limit=:limit",
+		"fields": [{
+			"name": "query"
+		},
+		{
+			"name": "skip"
+		},
+		{
+			"name": "limit"
+		}]
+	},
+	{
+		"name": "create-product",
+		"method": "POST",
+		"href": "api/Product",
+		"type": "application/x-www-form-urlencoded",
+		"fields": [{
+			"name": "Id",
+			"value": "1"
+		},
+		{
+			"name": "Name",
+			"value": "Item1"
+		},
+		{
+			"name": "Price",
+			"value": "2.99"
+		}]
+	},
+	{
+		"name": "put_by_id_product",
+		"method": "PUT",
+		"href": "api/Product/1",
+		"fields": [{
+			"name": "Id",
+			"value": "1"
+		},
+		{
+			"name": "Name",
+			"value": "Item1"
+		},
+		{
+			"name": "Price",
+			"value": "2.99"
+		}]
+	},
+	{
+		"name": "delete_by_id",
+		"method": "DELETE",
+		"href": "api/Product/1"
+	}],
+	"entities": [{
+		"properties": {
+			"Id": 1,
+			"ProductId": 1,
+			"Details": "D1"
+		},
+		"links": [{
+			"rel": ["get_productdetails_by_id"],
+			"href": "api/Product/1/Details"
+		}],
+		"actions": [{
+			"name": "post_by_value",
+			"method": "POST",
+			"href": "api/ProductDetails",
+			"type": "application/x-www-form-urlencoded",
+			"fields": [{
+				"name": "Id",
+				"value": "1"
+			},
+			{
+				"name": "ProductId",
+				"value": "1"
+			},
+			{
+				"name": "Details",
+				"value": "D1"
+			}]
+		},
+		{
+			"name": "put_by_id_value",
+			"method": "PUT",
+			"href": "api/ProductDetails/1",
+			"fields": [{
+				"name": "Id",
+				"value": "1"
+			},
+			{
+				"name": "ProductId",
+				"value": "1"
+			},
+			{
+				"name": "Details",
+				"value": "D1"
+			}]
+		},
+		{
+			"name": "delete_by_id",
+			"method": "DELETE",
+			"href": "api/ProductDetails/1"
+		}]
+	}]
+}]
 ```
+Also there is [AngularJS Siren Provider](https://github.com/yury-sannikov/angular-hateoas-siren) which works in conjunction with NHateoas.
 
-> **Tip:**   Currently NHateoas is in a **prototying stage**. We are considering different mediatype formats at this moment. We considering [Siren](https://github.com/kevinswiber/siren) as a main hypermedia format. Hypermedia information format will be configured per action basis.
+> **Tip:**   You can see rel or class marked as `__query`. This is a hint for [AngularJS Siren Provider](https://github.com/yury-sannikov/angular-hateoas-siren) to pick right $resource method.
+
 
 
 ## More information
