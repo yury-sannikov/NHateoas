@@ -7,7 +7,7 @@
     <authors>Terence Parr</authors>
     <owners>Terence Parr</owners>
     <licenseUrl>http://www.antlr3.org/license.html</licenseUrl>
-    <projectUrl>http://www.antlr3.org/</projectUrl>
+    <projectUrl>http://www.antlr3.org</projectUrl>
     <iconUrl>http://www.antlr.org/images/antlr-link.gif</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>ANother Tool for Language Recognition, is a language tool that provides a framework for constructing recognizers, interpreters, compilers, and translators from grammatical descriptions containing actions in a variety of target languages.</description>

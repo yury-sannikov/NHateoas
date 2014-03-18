@@ -4,8 +4,8 @@
     <id>jQuery</id>
     <version>2.1.0</version>
     <title>jQuery</title>
-    <authors>jQuery Foundation,  Inc.</authors>
-    <owners>jQuery Foundation,  Inc.</owners>
+    <authors>jQuery Foundation, Inc.</authors>
+    <owners>jQuery Foundation, Inc.</owners>
     <licenseUrl>http://jquery.org/license</licenseUrl>
     <projectUrl>http://jquery.com/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
