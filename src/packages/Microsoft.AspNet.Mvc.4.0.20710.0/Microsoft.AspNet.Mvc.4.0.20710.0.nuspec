@@ -10,7 +10,6 @@
     <projectUrl>http://www.asp.net/mvc</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>This package contains the runtime assemblies for ASP.NET MVC. ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that enables a clean separation of concerns and that gives you full control over markup.</description>
-    <language>en-US</language>
     <tags>Microsoft AspNet Mvc AspNetMvc</tags>
     <dependencies>
       <dependency id="Microsoft.AspNet.WebPages" version="[2.0.20710.0, 2.1)" />
