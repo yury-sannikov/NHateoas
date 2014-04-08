@@ -27,11 +27,11 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
                 let apiDescription = mappingRule.ApiDescriptions.OrderBy(d => d.RelativePath.Length).FirstOrDefault()
                 let isAction = mappingRule.Type == MappingRule.RuleType.ActionRule || (mappingRule.Type == MappingRule.RuleType.Default && apiDescription.HttpMethod != HttpMethod.Get)
                 where apiDescription != null && isAction
-                let absolutePath = LinkHelper.MakeAbsolutePath(apiDescription)
+                let absolutePath = LinkHelper.MakeAbsolutePath(routeNameSubstitution.Substitute(apiDescription.RelativePath, mappingRule, originalObject))
                 let routeNames = routeRelations[apiDescription.ID]
                 select new MetadataPlainObjects.Action()
                 {
-                    Href = routeNameSubstitution.Substitute(absolutePath, mappingRule, originalObject),
+                    Href = absolutePath,
                     Method = apiDescription.HttpMethod.Method,
                     Title = apiDescription.Documentation,
                     ActionName = routeNames.FirstOrDefault(),

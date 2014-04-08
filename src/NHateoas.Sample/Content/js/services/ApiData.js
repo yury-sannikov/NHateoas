@@ -14,13 +14,13 @@ nhateoasSampleApp.factory('apiData', function ($resource, $q, $timeout) {
             var isQuery = path.indexOf("/__query__") !== -1;
             if (isQuery) {
                 path = path.replace("/__query__", "");
-                return $resource('/' + path, {}).query();
+                return $resource(path, {}).query();
             } else {
-                return $resource('/' + path, { }).get();
+                return $resource(path, { }).get();
             }
         },
         doAction: function (json, url, isArray, method, success, error) {
-            var res = $resource('/' + url, json,
+            var res = $resource(url, json,
                 {invokeAction: {
                     method: method,
                     isArray: isArray

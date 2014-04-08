@@ -95,7 +95,7 @@ namespace NHateoas.Tests.Routes
             var actions = ActionsGenerator.Generate(_actionConfiguration, routeRelations, payload);
 
             var serialized = JsonConvert.SerializeObject(actions);
-            Assume.That(serialized, Is.EqualTo("[{\"name\":\"get-query\",\"class\":[\"__query\"],\"method\":\"GET\",\"href\":\"http://localhost/api/%7Bid%7D%3Fquery=%7Bquery%7D\",\"fields\":[{\"name\":\"id\",\"value\":\"1\"},{\"name\":\"name\",\"value\":\"test\"},{\"name\":\"query\"},{\"name\":\"skip\"}]},{\"name\":\"put-prod\",\"method\":\"PUT\",\"href\":\"http://localhost/api/prod/%7Bid%7D\",\"fields\":[{\"name\":\"Id\",\"value\":\"1\"},{\"name\":\"Name\",\"value\":\"test\"},{\"name\":\"Price\",\"value\":\"5\"},{\"name\":\"email_address\",\"type\":\"email\",\"value\":\"abc@def.com\"}]}]"));
+            Assume.That(serialized, Is.EqualTo("[{\"name\":\"get-query\",\"class\":[\"__query\"],\"method\":\"GET\",\"href\":\"http://localhost/api/1?query=:query\",\"fields\":[{\"name\":\"id\",\"value\":\"1\"},{\"name\":\"name\",\"value\":\"test\"},{\"name\":\"query\"},{\"name\":\"skip\"}]},{\"name\":\"put-prod\",\"method\":\"PUT\",\"href\":\"http://localhost/api/prod/1\",\"fields\":[{\"name\":\"Id\",\"value\":\"1\"},{\"name\":\"Name\",\"value\":\"test\"},{\"name\":\"Price\",\"value\":\"5\"},{\"name\":\"email_address\",\"type\":\"email\",\"value\":\"abc@def.com\"}]}]"));
         }
     }
 }

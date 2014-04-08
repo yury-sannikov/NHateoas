@@ -28,10 +28,10 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
                 let isLink = mappingRule.Type == MappingRule.RuleType.LinkRule || (mappingRule.Type == MappingRule.RuleType.Default && apiDescription.HttpMethod == HttpMethod.Get)
                 where apiDescription != null && isLink
                 let routeNames = routeRelations[apiDescription.ID]
-                let absolutePath = LinkHelper.MakeAbsolutePath(apiDescription)
+                let absolutePath = LinkHelper.MakeAbsolutePath(routeNameSubstitution.Substitute(apiDescription.RelativePath, mappingRule, originalObject))
                 select new MetadataPlainObjects.SirenLink()
                 {
-                    Href = routeNameSubstitution.Substitute(absolutePath, mappingRule, originalObject),
+                    Href = absolutePath,
                     RelList = GetRelList(mappingRule, apiDescription, routeRelations[apiDescription.ID])
                 });
 

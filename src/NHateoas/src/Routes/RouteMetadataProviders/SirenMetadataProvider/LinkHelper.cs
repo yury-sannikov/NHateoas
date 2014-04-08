@@ -10,17 +10,13 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
 {
     internal static class LinkHelper
     {
-        public static string MakeAbsolutePath(ApiDescription apiDescription)
+        public static string MakeAbsolutePath(string relativePath)
         {
             var virtualRoot = System.Web.Http.GlobalConfiguration.Configuration.VirtualPathRoot ?? string.Empty;
 
-            if (!string.IsNullOrEmpty(virtualRoot) && !virtualRoot.EndsWith("/"))
-                virtualRoot = virtualRoot + "/";
-
             var builder = new UriBuilder
             {
-                Path =
-                    string.Format("{0}{1}", virtualRoot, apiDescription.RelativePath)
+                Path = virtualRoot
             };
 
             var actionExecutedContext = ActionCallContext.Get<HttpActionExecutedContext>();
@@ -35,7 +31,11 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
                     builder.Port = requestUri.Port;
             }
 
-            return builder.ToString();
+            if (relativePath.StartsWith("/"))
+                relativePath = relativePath.Remove(0, 1);
+
+            var result = builder.ToString() + relativePath;
+            return result;
         }
     }
 }
