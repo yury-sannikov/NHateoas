@@ -52,6 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\ActionCallContext.cs" />
     <Compile Include="src\ActionResponseTransformer.cs" />
     <Compile Include="src\Attributes\HypermediaAttribute.cs" />
     <Compile Include="src\Attributes\HypermediaSourceAttribute.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\ActionFieldsGenerator.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\ActionsGenerator.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\EntitiesGenerator.cs" />
+    <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\LinkHelper.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\LinksGenerator.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\MetadataPlainObjects\Actions.cs" />
     <Compile Include="src\Routes\RouteMetadataProviders\SirenMetadataProvider\MetadataPlainObjects\Entities.cs" />
@@ -116,7 +118,9 @@
     <None Include="NuGetSetup.ps1" />
     <None Include="NuGet.exe" />
     <None Include="NuGet.config" />
-    <None Include="Package.nuspec" />
+    <None Include="NHateoas.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="tools\init.ps1" />
     <None Include="tools\install.ps1" />
@@ -130,7 +134,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\Genesis\src\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

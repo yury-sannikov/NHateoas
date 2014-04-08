@@ -24,7 +24,13 @@ namespace NHateoas.Sample.Models
         /// Product price
         /// </summary>
         public decimal Price { get; set; }
-        
+
+        [JsonIgnore]
+        public Product ThisProduct
+        {
+            get {return this;}
+        }
+
         [JsonIgnore]
         public IEnumerable<ProductDetails> ProductDetailsFromModel { get; set; }
     }

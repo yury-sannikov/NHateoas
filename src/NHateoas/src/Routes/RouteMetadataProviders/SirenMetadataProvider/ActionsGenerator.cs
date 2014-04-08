@@ -27,10 +27,11 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
                 let apiDescription = mappingRule.ApiDescriptions.OrderBy(d => d.RelativePath.Length).FirstOrDefault()
                 let isAction = mappingRule.Type == MappingRule.RuleType.ActionRule || (mappingRule.Type == MappingRule.RuleType.Default && apiDescription.HttpMethod != HttpMethod.Get)
                 where apiDescription != null && isAction
+                let absolutePath = LinkHelper.MakeAbsolutePath(apiDescription)
                 let routeNames = routeRelations[apiDescription.ID]
                 select new MetadataPlainObjects.Action()
                 {
-                    Href = routeNameSubstitution.Substitute(apiDescription.RelativePath, mappingRule, originalObject),
+                    Href = routeNameSubstitution.Substitute(absolutePath, mappingRule, originalObject),
                     Method = apiDescription.HttpMethod.Method,
                     Title = apiDescription.Documentation,
                     ActionName = routeNames.FirstOrDefault(),
@@ -61,8 +62,8 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
             if (apiDescription.HttpMethod != HttpMethod.Post)
                 return null;
 
-            if (IsOrContains(typeof(System.Web.HttpPostedFileBase), originalObject.GetType()))
-                return "multipart/form-data";
+            //if (IsOrContains(typeof(System.Web.HttpPostedFileBase), originalObject.GetType()))
+            //    return "multipart/form-data";
 
             return "application/x-www-form-urlencoded";
         }

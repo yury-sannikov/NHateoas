@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.Remoting.Messaging;
 using System.Security;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
@@ -48,6 +50,8 @@ namespace NHateoas
 
             if (payload == null)
                 return null;
+
+            ActionCallContext.Set(actionExecutedContext);
 
             var transformed = TransformPayload(actionConfiguration, payload);
 

@@ -2,17 +2,17 @@
 <package >
   <metadata>
     <id>NHateoas</id>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <title>NHateoas</title>
     <authors>yxs0</authors>
     <owners>NRECA</owners>
     <description>
-      A long description of the package. This shows up in the right pane of the Add Package Dialog as well as in the Package Manager Console when listing packages using the Get-Package command.
+      .Net hypermedia library
     </description>
     <releaseNotes>
     </releaseNotes>
     <summary>
-      A short description of the package. If specified, this shows up in the middle pane of the Add Package Dialog. If not specified, a truncated version of the description is used instead.
+      .Net hypermedia library
     </summary>
     <language>en-US</language>
     <projectUrl>https://nuget.org/packages/NHateoas</projectUrl>
@@ -21,8 +21,8 @@
     <licenseUrl>http://opensource.org/licenses/Apache-2.0</licenseUrl>
     <copyright>Copyright NRECA 2014</copyright>
     <dependencies>
-        <group targetFramework="net40">
-          <dependency id="log4net" version="1.2.10" />
+        <group targetFramework="net45">
+          <dependency id="Newtonsoft.Json" version="6.0.2"/>
         </group>
     </dependencies>
     <references></references>

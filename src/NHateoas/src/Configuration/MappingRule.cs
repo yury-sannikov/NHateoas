@@ -97,5 +97,7 @@ namespace NHateoas.Configuration
         }
 
         public ContentType ContentType { get; set; }
+
+        public string BaseUri { get; set; }
     }
 }

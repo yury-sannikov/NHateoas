@@ -6,6 +6,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Description;
+using System.Web.Http.Filters;
 using NHateoas.Configuration;
 using NHateoas.Routes.RouteValueSubstitution;
 
@@ -27,9 +28,10 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
                 let isLink = mappingRule.Type == MappingRule.RuleType.LinkRule || (mappingRule.Type == MappingRule.RuleType.Default && apiDescription.HttpMethod == HttpMethod.Get)
                 where apiDescription != null && isLink
                 let routeNames = routeRelations[apiDescription.ID]
+                let absolutePath = LinkHelper.MakeAbsolutePath(apiDescription)
                 select new MetadataPlainObjects.SirenLink()
                 {
-                    Href = routeNameSubstitution.Substitute(apiDescription.RelativePath, mappingRule, originalObject),
+                    Href = routeNameSubstitution.Substitute(absolutePath, mappingRule, originalObject),
                     RelList = GetRelList(mappingRule, apiDescription, routeRelations[apiDescription.ID])
                 });
 

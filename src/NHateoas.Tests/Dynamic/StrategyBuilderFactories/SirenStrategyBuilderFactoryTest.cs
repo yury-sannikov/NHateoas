@@ -136,7 +136,7 @@ namespace NHateoas.Tests.Dynamic.StrategyBuilderFactories
             strategy.ActivateInstance(instance, original, _actionConfiguration.MetadataProvider);
 
             var result = JsonConvert.SerializeObject(instance);
-            Assume.That(result, Is.EqualTo("{\"properties\":{\"Id\":1,\"Name\":\"test\",\"Price\":3.0,\"EMailAddress\":\"aa.bb@ccc\"},\"links\":[{\"rel\":[\"get_modelsample_by_id_name_query_skip\"],\"href\":\"/api\"}],\"actions\":[{\"name\":\"rel-name\",\"method\":\"POST\",\"href\":\"/api/test\",\"type\":\"application/x-www-form-urlencoded\"}]}"));
+            Assume.That(result, Is.EqualTo("{\"properties\":{\"Id\":1,\"Name\":\"test\",\"Price\":3.0,\"EMailAddress\":\"aa.bb@ccc\"},\"links\":[{\"rel\":[\"get_modelsample_by_id_name_query_skip\"],\"href\":\"http://localhost/api\"}],\"actions\":[{\"name\":\"rel-name\",\"method\":\"POST\",\"href\":\"http://localhost/api/test\",\"type\":\"application/x-www-form-urlencoded\"}]}"));
         }
     }
 }

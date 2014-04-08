@@ -229,3 +229,4 @@ _PrecompiledWeb/**
 src/**/*.dll
 src/**/*.pdb
 artifacts/
+src/packages/

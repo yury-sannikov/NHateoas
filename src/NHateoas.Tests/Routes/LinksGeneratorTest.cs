@@ -95,7 +95,7 @@ namespace NHateoas.Tests.Routes
             var links = LinksGenerator.Generate(_actionConfiguration, routeRelations, payload);
 
             var serialized = JsonConvert.SerializeObject(links);
-            Assume.That(serialized, Is.EqualTo("[{\"rel\":[\"get-query\",\"__query\"],\"href\":\"/api/1?query=:query\"}]"));
+            Assume.That(serialized, Is.EqualTo("[{\"rel\":[\"get-query\",\"__query\"],\"href\":\"http://localhost/api/%7Bid%7D%3Fquery=%7Bquery%7D\"}]"));
         }
     }
 }

@@ -47,6 +47,8 @@ namespace NHateoas.Sample.Controllers
                         .AsLink()
                     .MapEmbeddedEntity<Models.ProductDetails, ProductDetailsController>(model => model.ProductDetailsFromModel,
                         (model, controller) => controller.GetByProductId(model.Id))
+                    .MapEmbeddedEntity<Models.Product, ProductsController>(model => model.ThisProduct,
+                        (model, controller) => controller.Get(model.Name))
                     
                  .For((model, controller) => controller.Get(model.Name))
                     .UseSirenSpecification()
