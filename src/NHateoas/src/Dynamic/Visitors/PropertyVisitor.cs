@@ -14,7 +14,8 @@ namespace NHateoas.Dynamic.Visitors
         private readonly Type _propertyType;
         
         private readonly string _propertyName;
-        
+        private List<Func<CustomAttributeBuilder>> _customAttributes;
+
         public PropertyVisitor(Type propertyType, string propertyName)
         {
             _propertyType = propertyType;
@@ -24,6 +25,14 @@ namespace NHateoas.Dynamic.Visitors
         public static string PropertyFieldName(string propertyName)
         {
             return string.Format("_{0}", propertyName.ToLower());
+        }
+
+        public void AddCustomAttributeFactory(Func<CustomAttributeBuilder> factory)
+        {
+            if (_customAttributes == null)
+                _customAttributes = new List<Func<CustomAttributeBuilder>>() {factory};
+            else
+                _customAttributes.Add(factory);
         }
 
         public void Visit(ITypeBuilderProvider provider)
@@ -36,6 +45,9 @@ namespace NHateoas.Dynamic.Visitors
 
             PropertyBuilder propertyBuilder = typeBuilder.DefineProperty(_propertyName, PropertyAttributes.HasDefault,
                                                                          _propertyType, null);
+
+            if (_customAttributes != null)
+                _customAttributes.ForEach(factory => propertyBuilder.SetCustomAttribute(factory()));
 
             AddGetter(typeBuilder, fieldBuilder, propertyBuilder);
 

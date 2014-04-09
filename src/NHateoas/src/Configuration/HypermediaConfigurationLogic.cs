@@ -45,7 +45,14 @@ namespace NHateoas.Configuration
         {
             var entitySelector = embeddedEntityExpression as MemberExpression;
             var handlingSelector = actionSelector as MethodCallExpression;
-            var rule = new EntityRule(entitySelector, handlingSelector);
+            var rule = new EntityRule(entitySelector, handlingSelector, EntityRule.EmbeddingRule.Embedded);
+            ActionConfiguration.AddEntityRule(rule);
+        }
+
+        public void AddNewLinkedEntityMapping(Expression actionSelector)
+        {
+            var handlingSelector = actionSelector as MethodCallExpression;
+            var rule = new EntityRule(handlingSelector);
             ActionConfiguration.AddEntityRule(rule);
         }
 

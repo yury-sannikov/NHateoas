@@ -11,13 +11,21 @@ namespace NHateoas.Configuration
 {
     internal class EntityRule
     {
-        private MemberExpression _entitySelector;
-        private MethodCallExpression _actionSelector;
-        private Delegate _entityGetter;
-        public EntityRule(MemberExpression entitySelector, MethodCallExpression actionSelector)
+        public enum EmbeddingRule
+        {
+            Embedded,
+            Linked
+        }
+        
+        private readonly MemberExpression _entitySelector;
+        private readonly MethodCallExpression _actionSelector;
+        private readonly Delegate _entityGetter;
+
+        public EntityRule(MemberExpression entitySelector, MethodCallExpression actionSelector, EmbeddingRule embeddingRule)
         {
             _entitySelector = entitySelector;
             _actionSelector = actionSelector;
+            EntityEmbeddingRule = embeddingRule;
 
             var paramExpression = (ParameterExpression)entitySelector.Expression;
             if (paramExpression == null)
@@ -26,6 +34,12 @@ namespace NHateoas.Configuration
             var expression = Expression.Lambda(entitySelector, paramExpression);
 
             _entityGetter = expression.Compile();
+        }
+        
+        public EntityRule(MethodCallExpression actionSelector)
+        {
+            _actionSelector = actionSelector;
+            EntityEmbeddingRule = EmbeddingRule.Linked;
         }
 
         public Type ControllerType
@@ -42,5 +56,7 @@ namespace NHateoas.Configuration
         {
             return _entityGetter.DynamicInvoke(sourceObject);
         }
+
+        public EmbeddingRule EntityEmbeddingRule { get; internal set; }
     }
 }

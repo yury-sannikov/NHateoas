@@ -145,6 +145,17 @@ namespace NHateoas.Configuration.Fluent
             return this;
         }
 
+        public SirenConfigurator<TModel, TController> MapLinkedEntity<TOtherController>(Expression<Func<TModel, TOtherController, Object>> actionSelector)
+        {
+            _logic.AddNewLinkedEntityMapping(actionSelector.Body);
+            return this;
+        }
+        public SirenConfigurator<TModel, TController> MapLinkedEntity<TOtherController>(Expression<Action<TModel, TOtherController>> actionSelector)
+        {
+            _logic.AddNewLinkedEntityMapping(actionSelector.Body);
+            return this;
+        }
+
         public void Configure()
         {
             _hypermediaConfigurator.Configure();

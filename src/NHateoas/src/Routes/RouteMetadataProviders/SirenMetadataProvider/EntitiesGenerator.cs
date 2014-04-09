@@ -22,6 +22,24 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
         private static IEnumerable<object> GenerateForRule(EntityRule rule, IActionConfiguration actionConfiguration,
             Dictionary<string, List<string>> routeRelations, object originalObject)
         {
+            if (rule.EntityEmbeddingRule == EntityRule.EmbeddingRule.Embedded)
+                return GenerateForEmbeddedRule(rule, actionConfiguration, routeRelations, originalObject);
+
+            return GenerateForLinkedRule(rule, actionConfiguration, routeRelations, originalObject);
+
+        }
+
+        private static IEnumerable<object> GenerateForLinkedRule(EntityRule rule,
+            IActionConfiguration actionConfiguration,
+            Dictionary<string, List<string>> routeRelations, object originalObject)
+        {
+            return new List<object>();
+        }
+
+
+        private static IEnumerable<object> GenerateForEmbeddedRule(EntityRule rule, IActionConfiguration actionConfiguration,
+            Dictionary<string, List<string>> routeRelations, object originalObject)
+        {
             var entityActionConfiguration = HypermediaControllerConfiguration.Instance.GetcontrollerActionConfiguration(rule.ControllerType, rule.ControllerAction);
             if (entityActionConfiguration == null)
                 return null;

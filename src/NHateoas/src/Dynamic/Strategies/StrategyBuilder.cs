@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using NHateoas.Dynamic.Interfaces;
@@ -69,6 +70,14 @@ namespace NHateoas.Dynamic.Strategies
             _compositeStrategiesList.Add(
                 new PayloadPropertyStrategy(metadataType, propertyName)
                 );
+            return this;
+        }
+
+        public StrategyBuilder WithSimpleAttributedPropertyStrategy(Type propType, string propName,
+            Func<CustomAttributeBuilder>[] attributeFactories)
+        {
+            _compositeStrategiesList.Add(
+                new SimplePropertyStrategy(propType, propName, attributeFactories));
             return this;
         }
 
