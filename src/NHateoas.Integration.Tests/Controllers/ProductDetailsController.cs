@@ -13,15 +13,22 @@ namespace NHateoas.Integration.Tests.Controllers
         {
             new HypermediaConfigurator<ProductDetails, ProductDetailsController>(httpConfiguration)
                 .For((model, controller) => controller.Get(model.Id))
+                .UseSirenSpecification()
                     .Map((model, controller) => controller.GetByProductId(model.ProductId))
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
                     .Map((model, controller) => controller.Delete(model.Id))
+                    .Map((model, controller) => controller.Get(model.Id))
+                        .AsSelfLink()
                 .For((model, controller) => controller.GetByProductId(model.ProductId)).UseSirenSpecification()
                     .Map((model, controller) => controller.GetByProductId(model.ProductId))
+                        .AsSelfLink()
                     .Map((model, controller) => controller.Post(model))
                     .Map((model, controller) => controller.Put(model.Id, model))
                     .Map((model, controller) => controller.Delete(model.Id))
+                // put has no 'self' link
+                .For((model, controller) => controller.Put(model.ProductId, model)).UseSirenSpecification()
+                    .Map((model, controller) => controller.Put(model.Id, model))
                 .Configure();
         }
     }
@@ -61,8 +68,9 @@ namespace NHateoas.Integration.Tests.Controllers
 
         // PUT api/productdetails/5
         [Route("{id:int}")]
-        public void Put(int id, [FromBody]ProductDetails value)
+        public ProductDetails Put(int id, [FromBody]ProductDetails value)
         {
+            return value;
         }
 
         // DELETE api/productdetails/5

@@ -45,10 +45,10 @@ namespace NHateoas.Sample.Controllers
                     .Map((model, controller) => controller.Delete(model.Id))
                     .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
                         .AsLink()
-                    .MapEmbeddedEntity<Models.ProductDetails, ProductDetailsController>(model => model.ProductDetailsFromModel,
-                        (model, controller) => controller.GetByProductId(model.Id))
+                    .MapEmbeddedEntity<Models.ProductDetails, ProductDetailsController>(model => model.ProductDetailsFromModel.First(),
+                        (model, controller) => controller.GetByProductId(model.Id)).WitRel("details")
                     .MapEmbeddedEntity<Models.Product, ProductsController>(model => model.ThisProduct,
-                        (model, controller) => controller.Get(model.Name))
+                        (model, controller) => controller.Get(model.Name)).WitRel("product")
                     
                  .For((model, controller) => controller.Get(model.Name))
                     .UseSirenSpecification()

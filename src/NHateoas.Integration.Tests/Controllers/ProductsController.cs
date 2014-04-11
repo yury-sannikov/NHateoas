@@ -33,7 +33,7 @@ namespace NHateoas.Integration.Tests.Controllers
             // Set up model-controller mapping.
             new HypermediaConfigurator<Product, ProductsController>(httpConfiguration)
                 .For((model, controller) => controller.Get(model.Id))
-                    .UseSirenSpecification()
+                    .UseSirenSpecification().WithClassName("product")
                     .Map((model, controller) => controller.Get(model.Id))
                         .AsSelfLink()
                     .Map((model, controller) => controller.Get())
@@ -46,9 +46,13 @@ namespace NHateoas.Integration.Tests.Controllers
                     .Map((model, controller) => controller.Delete(model.Id))
                     .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
                         .AsLink()
-                    .MapEmbeddedEntity<ProductDetails, ProductDetailsController>(model => model.ProductDetailsFromModel,
-                        (model, controller) => controller.GetByProductId(model.Id))
-                    .MapLinkedEntity<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
+                    .MapEmbeddedEntity<ProductDetails, ProductDetailsController>(model => model.ProductDetailsFromModel.First(),
+                        (model, controller) => controller.GetByProductId(model.ProductId))
+                        .WitRel("details")
+                    .MapLinkedEntity<ProductDetails, ProductDetailsController>(
+                        model => new ProductDetails() {ProductId = model.Id}, 
+                        (model, referencedController) => referencedController.GetByProductId(model.ProductId))
+                        .WitRel("linked-details")
                     
                  .For((model, controller) => controller.Get(model.Name))
                     .UseSirenSpecification()
@@ -77,7 +81,10 @@ namespace NHateoas.Integration.Tests.Controllers
                     .UseSirenSpecification()
                     .Map((model, controller) => controller.Get(model.Id))
                     .MapReference<ProductDetailsController>((model, referencedController) => referencedController.GetByProductId(model.Id))
-
+                    .MapLinkedEntity<ProductDetails, ProductDetailsController>(
+                        model => new ProductDetails() { ProductId = model.Id },
+                        (model, referencedController) => referencedController.Put(model.ProductId, model))
+                        .WitRel("entity-with-no-self-should-throw")
             .Configure();
         }
 

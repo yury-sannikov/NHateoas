@@ -115,13 +115,20 @@ namespace NHateoas.Tests.Dynamic.StrategyBuilderFactories
             var propNames = new List<string>();
             props.ToList().ForEach(p =>
             {   propNames.Add(p.Name);
+                
+                if (p.PropertyType == typeof(string))
+                    return;
+                
+                if (p.PropertyType.IsArray && p.PropertyType.GetElementType() == typeof(string))
+                    return;
+                
                 var pt = (p.PropertyType.BaseType != null && p.PropertyType.BaseType.IsGenericType) ? 
                     p.PropertyType.BaseType.GetGenericArguments()[0] : p.PropertyType;
                 pt.GetProperties().ToList().ForEach(sp => propNames.Add(sp.Name));
             });
 
-            Assume.That(propNames, Is.EquivalentTo(new[] { "properties", "Id", "Name", "Price", "EMailAddress", "links", "RelList", "Href", "actions", "ActionName", "Class", "Title", "Method", "Href", "ContentType", "ActionFields" }));
-            var propTypes = props.ToList().ConvertAll(p => p.PropertyType.Name);
+            Assume.That(propNames, Is.EquivalentTo(new[] { "properties", "Id", "Name", "Price", "EMailAddress", "class", "href","rel", "links", "RelList", "Href", "actions", "ActionName", "Class", "Title", "Method", "Href", "ContentType", "ActionFields" }));
+            var propTypes = props.Where(p => !p.PropertyType.IsArray && p.PropertyType != typeof(string)).ToList().ConvertAll(p => p.PropertyType.Name);
             Assume.That(propTypes, Is.EquivalentTo(new[] { "ModelSample", "Links", "Actions"}));
 
 
@@ -133,7 +140,7 @@ namespace NHateoas.Tests.Dynamic.StrategyBuilderFactories
                 Price = 3.0,
                 EMailAddress = "aa.bb@ccc"
             };
-            strategy.ActivateInstance(instance, original, _actionConfiguration.MetadataProvider);
+            strategy.ActivateInstance(instance, original, _actionConfiguration);
 
             var result = JsonConvert.SerializeObject(instance);
             Assume.That(result, Is.EqualTo("{\"properties\":{\"Id\":1,\"Name\":\"test\",\"Price\":3.0,\"EMailAddress\":\"aa.bb@ccc\"},\"links\":[{\"rel\":[\"get_modelsample_by_id_name_query_skip\"],\"href\":\"http://localhost/api\"}],\"actions\":[{\"name\":\"rel-name\",\"method\":\"POST\",\"href\":\"http://localhost/api/test\",\"type\":\"application/x-www-form-urlencoded\"}]}"));

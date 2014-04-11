@@ -99,7 +99,7 @@ namespace NHateoas.Tests.Dynamic.StrategyBuilderFactories
 
             var instance = Activator.CreateInstance(type);
             var original = _fixture.CreateAnonymous<ModelSample>();
-            strategy.ActivateInstance(instance, original, _actionConfiguration.MetadataProvider);
+            strategy.ActivateInstance(instance, original, _actionConfiguration);
 
             var propValues = props.ToList().ConvertAll(p => p.GetValue(instance).ToString());
             Assume.That(propValues, Is.EquivalentTo(new[] { original.Id.ToString(), original.Name, original.Price.ToString(), original.EMailAddress, "/api" }));

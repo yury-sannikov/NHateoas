@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using NHateoas.Configuration;
 using NHateoas.Dynamic.Interfaces;
 using NHateoas.Dynamic.Visitors;
 using NHateoas.Routes;
@@ -22,7 +23,7 @@ namespace NHateoas.Dynamic.Strategies
             return string.Format("PP{0}",originalType.FullName.GetHashCode());
         }
 
-        public override void ActivateInstance(object proxyInstance, object originalInstance, IMetadataProvider metadataProvider)
+        public override void ActivateInstance(object proxyInstance, object originalInstance, IActionConfiguration actionConfiguration)
         {
             var aggregateFieldInfo = proxyInstance.GetType().GetField(PropertyVisitor.PropertyFieldName(_propertyName),
                          BindingFlags.NonPublic |

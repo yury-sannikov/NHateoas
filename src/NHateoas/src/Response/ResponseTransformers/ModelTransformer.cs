@@ -23,7 +23,7 @@ namespace NHateoas.Response.ResponseTransformers
 
             var newinstance = Activator.CreateInstance(proxyType);
 
-            strategy.ActivateInstance(newinstance, payload, actionConfiguration.MetadataProvider);
+            strategy.ActivateInstance(newinstance, payload, actionConfiguration);
 
             return newinstance;
         }

@@ -16,30 +16,26 @@ namespace NHateoas.Configuration
             Embedded,
             Linked
         }
-        
-        private readonly MemberExpression _entitySelector;
+
         private readonly MethodCallExpression _actionSelector;
         private readonly Delegate _entityGetter;
 
-        public EntityRule(MemberExpression entitySelector, MethodCallExpression actionSelector, EmbeddingRule embeddingRule)
+        public EntityRule(Expression entitySelector, MethodCallExpression actionSelector, EmbeddingRule rule, string[] rel)
         {
-            _entitySelector = entitySelector;
+            Rel = rel;
+            EntityEmbeddingRule = rule;
             _actionSelector = actionSelector;
-            EntityEmbeddingRule = embeddingRule;
-
-            var paramExpression = (ParameterExpression)entitySelector.Expression;
-            if (paramExpression == null)
-                throw new Exception("Controller arguments must be model member expressions");
-
-            var expression = Expression.Lambda(entitySelector, paramExpression);
-
-            _entityGetter = expression.Compile();
+            _entityGetter = CreateDelegateFromExpression(entitySelector);
         }
-        
-        public EntityRule(MethodCallExpression actionSelector)
+
+        static Delegate CreateDelegateFromExpression(Expression expr)
         {
-            _actionSelector = actionSelector;
-            EntityEmbeddingRule = EmbeddingRule.Linked;
+            var expression = expr as LambdaExpression;
+            
+            if (expression == null)
+                throw new Exception("Unsupported expression for Embedded Entity selector");
+
+            return expression.Compile();     
         }
 
         public Type ControllerType
@@ -58,5 +54,7 @@ namespace NHateoas.Configuration
         }
 
         public EmbeddingRule EntityEmbeddingRule { get; internal set; }
+
+        public string[] Rel { get; internal set; }
     }
 }

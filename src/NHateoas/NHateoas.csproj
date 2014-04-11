@@ -59,6 +59,7 @@
     <Compile Include="src\Configuration\ControllerConfiguration.cs" />
     <Compile Include="src\Configuration\EntityRule.cs" />
     <Compile Include="src\Configuration\Fluent\SirenConfigurator.cs" />
+    <Compile Include="src\Configuration\Fluent\SirenEntityConfigurator.cs" />
     <Compile Include="src\Configuration\HypermediaConfigurationLogic.cs" />
     <Compile Include="src\Configuration\Fluent\HypermediaConfigurator.cs" />
     <Compile Include="src\Configuration\IActionConfiguration.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="src\Configuration\ParametersDelegateBuilder.cs" />
     <Compile Include="src\Configuration\QueryParameter.cs" />
     <Compile Include="src\Dynamic\Interfaces\IStrategyBuilderFactory.cs" />
+    <Compile Include="src\Dynamic\Strategies\CustomActivatorStrategy.cs" />
     <Compile Include="src\Dynamic\Strategies\PayloadPropertyStrategy.cs" />
     <Compile Include="src\Dynamic\Strategies\SimplePropertyStrategy.cs" />
     <Compile Include="src\Dynamic\Strategies\TypedMetadataPropertyStrategy.cs" />

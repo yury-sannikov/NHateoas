@@ -34,12 +34,21 @@ namespace NHateoas.Dynamic.StrategyBuilderFactories
                             new[] {type.GetProperty("NullValueHandling")}, new object[] {NullValueHandling.Ignore});
                     };
 
+                    // Do not use IActionConfiguration from parameter list as configuration might be altered on call
+                    Action<object, object, IActionConfiguration> classNameAssigner =
+                        (proxyObject, originalObject, configuration) =>
+                        {
+                            var classProp = proxyObject.GetType().GetProperty("class");
+                            classProp.SetValue(proxyObject, configuration.Class);
+                        };
+
                     var strategyBuilder = new StrategyBuilder()
                         .For(returnType)
                         .WithPayloadPropertyStrategy(returnType, "properties")
                         .WithSimpleAttributedPropertyStrategy(typeof(string[]), "class", new [] { jsonPropAttrNullValueHandling })
                         .WithSimpleAttributedPropertyStrategy(typeof(string), "href", new[] { jsonPropAttrNullValueHandling })
-                        .WithSimpleAttributedPropertyStrategy(typeof(string[]), "rel", new[] { jsonPropAttrNullValueHandling });
+                        .WithSimpleAttributedPropertyStrategy(typeof(string[]), "rel", new[] { jsonPropAttrNullValueHandling })
+                        .WithCustomActivationStrategy(classNameAssigner);
 
                     sirenMetadataTypes.ForEach(metadataType => strategyBuilder.WithTypedMetadataProperty(metadataType, metadataType.Name.ToLower()));
 

@@ -132,28 +132,30 @@ namespace NHateoas.Configuration.Fluent
             return this;
         }
 
-        public SirenConfigurator<TModel, TController> MapEmbeddedEntity<TMappingEntity, TOtherController>(Expression<Func<TModel, TMappingEntity>> embeddedEntityExpression,
-            Expression<Func<TMappingEntity, TOtherController, Object>> actionSelector)
+        public SirenConfigurator<TModel, TController> WithClassName(string className)
         {
-            _logic.AddNewEmbeddedEntityMapping(embeddedEntityExpression.Body, actionSelector.Body);
-            return this;
-        }
-        public SirenConfigurator<TModel, TController> MapEmbeddedEntity<TMappingEntity, TOtherController>(Expression<Func<TModel, IEnumerable<TMappingEntity>>> embeddedEntityExpression,
-            Expression<Func<TMappingEntity, TOtherController, Object>> actionSelector)
-        {
-            _logic.AddNewEmbeddedEntityMapping(embeddedEntityExpression.Body, actionSelector.Body);
+            _logic.ActionConfiguration.Class = new[] {className};
             return this;
         }
 
-        public SirenConfigurator<TModel, TController> MapLinkedEntity<TOtherController>(Expression<Func<TModel, TOtherController, Object>> actionSelector)
+        public SirenConfigurator<TModel, TController> WithClassName(string[] classNames)
         {
-            _logic.AddNewLinkedEntityMapping(actionSelector.Body);
+            _logic.ActionConfiguration.Class = classNames;
             return this;
         }
-        public SirenConfigurator<TModel, TController> MapLinkedEntity<TOtherController>(Expression<Action<TModel, TOtherController>> actionSelector)
+
+        public SirenEntityConfigurator<TModel, TController> MapEmbeddedEntity<TMappingEntity, TOtherController>(
+            Expression<Func<TModel, TMappingEntity>> embeddedEntityExpression,
+            Expression<Func<TMappingEntity, TOtherController, Object>> actionSelector)
         {
-            _logic.AddNewLinkedEntityMapping(actionSelector.Body);
-            return this;
+            return new SirenEntityConfigurator<TModel, TController>(this, _logic, embeddedEntityExpression, actionSelector.Body, false);
+        }
+
+        public SirenEntityConfigurator<TModel, TController> MapLinkedEntity<TMappingEntity, TOtherController>(
+            Expression<Func<TModel, TMappingEntity>> embeddedEntityExpression,
+            Expression<Func<TMappingEntity, TOtherController, Object>> actionSelector)
+        {
+            return new SirenEntityConfigurator<TModel, TController>(this, _logic, embeddedEntityExpression, actionSelector.Body, true);
         }
 
         public void Configure()

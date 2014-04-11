@@ -1,9 +1,6 @@
-﻿using NHateoas.Routes;
+﻿using NHateoas.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace NHateoas.Dynamic.Interfaces
 {
@@ -29,6 +26,6 @@ namespace NHateoas.Dynamic.Interfaces
         /// <param name="proxyInstance"></param>
         /// <param name="originalInstance"></param>
         /// <param name="metadataProvider"></param>
-        void ActivateInstance(object proxyInstance, object originalInstance, IMetadataProvider metadataProvider);
+        void ActivateInstance(object proxyInstance, object originalInstance, IActionConfiguration metadataProvider);
     }
 }

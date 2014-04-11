@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using NHateoas.Configuration;
 using NHateoas.Dynamic.Interfaces;
 using NHateoas.Dynamic.Strategies;
 using NHateoas.Dynamic.Visitors;
@@ -39,9 +40,9 @@ namespace NHateoas.Dynamic.Strategies
         }
 
         public override void ActivateInstance(object proxyInstance, object originalInstance,
-            IMetadataProvider metadataProvider)
+            IActionConfiguration actionConfiguration)
         {
-            var routes = (Dictionary<string, string>)metadataProvider.GetMetadataByType(typeof(Dictionary<string, string>), originalInstance);
+            var routes = (Dictionary<string, string>)actionConfiguration.MetadataProvider.GetMetadataByType(typeof(Dictionary<string, string>), originalInstance);
 
             proxyInstance.GetType().GetProperties().Where(p => routes.ContainsKey(p.Name)).ToList()
                 .ForEach(prop => prop.SetValue(proxyInstance, routes[prop.Name]));

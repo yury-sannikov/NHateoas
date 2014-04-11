@@ -79,6 +79,8 @@ namespace NHateoas.Configuration
             get { return _entityRules; }
         }
 
+        public string[] Class { get; set; }
+
         public IMetadataProvider MetadataProvider
         {
             get { return _metadataProvider; }

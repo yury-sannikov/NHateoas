@@ -41,18 +41,17 @@ namespace NHateoas.Configuration
             ActionConfiguration.AddMappingRule(rule);
         }
 
-        public void AddNewEmbeddedEntityMapping(Expression embeddedEntityExpression, Expression actionSelector)
+        public void AddNewEmbeddedEntityMapping(Expression embeddedEntityExpression, Expression actionSelector, string[] rel)
         {
-            var entitySelector = embeddedEntityExpression as MemberExpression;
             var handlingSelector = actionSelector as MethodCallExpression;
-            var rule = new EntityRule(entitySelector, handlingSelector, EntityRule.EmbeddingRule.Embedded);
+            var rule = new EntityRule(embeddedEntityExpression, handlingSelector, EntityRule.EmbeddingRule.Embedded, rel);
             ActionConfiguration.AddEntityRule(rule);
         }
 
-        public void AddNewLinkedEntityMapping(Expression actionSelector)
+        public void AddNewLinkedEntityMapping(Expression embeddedEntityExpression, Expression actionSelector, string[] rel)
         {
             var handlingSelector = actionSelector as MethodCallExpression;
-            var rule = new EntityRule(handlingSelector);
+            var rule = new EntityRule(embeddedEntityExpression, handlingSelector, EntityRule.EmbeddingRule.Linked, rel);
             ActionConfiguration.AddEntityRule(rule);
         }
 
