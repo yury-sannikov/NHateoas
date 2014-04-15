@@ -100,6 +100,10 @@ namespace NHateoas.Routes.RouteMetadataProviders.SimpleMetadataProvider
             get { return _routeNameSubstitution ?? (_routeNameSubstitution = new DefaultRouteValueSubstitution()); }
             set { _routeNameSubstitution = value; }
         }
-
+        
+        public string ContentType
+        {
+            get { return "application/json"; }
+        }
     }
 }

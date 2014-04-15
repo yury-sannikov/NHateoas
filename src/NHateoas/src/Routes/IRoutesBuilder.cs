@@ -12,5 +12,7 @@ namespace NHateoas.Routes
         object GetMetadataByType(Type metadataType, params object[] values);
         
         IList<Type> GetRegisteredMetadataTypes();
+
+        string ContentType { get; }
     }
 }

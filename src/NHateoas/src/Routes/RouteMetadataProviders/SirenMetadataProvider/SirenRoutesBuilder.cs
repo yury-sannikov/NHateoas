@@ -66,5 +66,10 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
 
             return result;
         }
+
+        public string ContentType
+        {
+            get { return "application/vnd.siren+json"; }
+        }
     }
 }

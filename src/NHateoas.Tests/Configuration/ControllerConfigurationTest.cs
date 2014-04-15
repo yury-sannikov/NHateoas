@@ -30,7 +30,7 @@ namespace NHateoas.Tests.Configuration
             
             var instance = HypermediaControllerConfiguration.Instance;
             Assume.That(instance.IsConfigured(moqType.Object), Is.False);
-            Assume.That(instance.GetcontrollerActionConfiguration(moqType.Object, moqMethodInfo.Object), Is.Null);
+            Assume.That(instance.GetcontrollerActionConfiguration(moqType.Object, moqMethodInfo.Object, null), Is.Null);
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace NHateoas.Tests.Configuration
             var moqType = GetType();
             instance.Setup(moqType, new Dictionary<MethodInfo, IActionConfiguration>());
             Assume.That(instance.IsConfigured(moqType), Is.True);
-            Assume.That(instance.GetcontrollerActionConfiguration(moqType, moqMethodInfo.Object), Is.Null);
+            Assume.That(instance.GetcontrollerActionConfiguration(moqType, moqMethodInfo.Object, null), Is.Null);
         }
         [Test]
         public void ControllerConfigurationWithSetOfRules()
@@ -52,7 +52,7 @@ namespace NHateoas.Tests.Configuration
             var instance = HypermediaControllerConfiguration.Instance;
             instance.Setup(moqType, new Dictionary<MethodInfo, IActionConfiguration> { { moqMethodInfo, moqActionConfig } });
             Assume.That(instance.IsConfigured(moqType), Is.True);
-            Assume.That(instance.GetcontrollerActionConfiguration(moqType, moqMethodInfo), Is.EqualTo(moqActionConfig));
+            Assume.That(instance.GetcontrollerActionConfiguration(moqType, moqMethodInfo, null), Is.EqualTo(moqActionConfig));
         }
     }
 }

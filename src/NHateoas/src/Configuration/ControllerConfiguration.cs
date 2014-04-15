@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -31,7 +32,7 @@ namespace NHateoas.Configuration
             _controllerRules.TryAdd(controllerType, rules);
         }
 
-        public IActionConfiguration GetcontrollerActionConfiguration(Type controllerType, MethodInfo actionMethodInfo)
+        public IActionConfiguration GetcontrollerActionConfiguration(Type controllerType, MethodInfo actionMethodInfo, HttpHeaderValueCollection<MediaTypeWithQualityHeaderValue> acceptHeaders)
         {
             if (!_controllerRules.ContainsKey(controllerType))
                 return null;
@@ -40,7 +41,12 @@ namespace NHateoas.Configuration
             if (!controller.ContainsKey(actionMethodInfo))
                 return null;
 
-            return controller[actionMethodInfo];
+            var result = controller[actionMethodInfo];
+
+            if ((acceptHeaders != null) && !acceptHeaders.Contains(new MediaTypeWithQualityHeaderValue(result.MetadataProvider.ContentType)))
+                return null;
+
+            return result;
         }
 
     }

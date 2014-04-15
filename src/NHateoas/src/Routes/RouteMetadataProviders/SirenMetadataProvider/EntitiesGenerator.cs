@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http.Filters;
 using Newtonsoft.Json;
 using NHateoas.Configuration;
 using NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider.MetadataPlainObjects;
@@ -51,7 +52,8 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
             IActionConfiguration actionConfiguration,
             Dictionary<string, List<string>> routeRelations, object originalObject)
         {
-            var entityActionConfiguration = HypermediaControllerConfiguration.Instance.GetcontrollerActionConfiguration(rule.ControllerType, rule.ControllerAction);
+            var actionExecutedContext = ActionCallContext.Get<HttpActionExecutedContext>();
+            var entityActionConfiguration = HypermediaControllerConfiguration.Instance.GetcontrollerActionConfiguration(rule.ControllerType, rule.ControllerAction, actionExecutedContext.Request.Headers.Accept);
             if (entityActionConfiguration == null)
                 return null;
             
@@ -87,7 +89,8 @@ namespace NHateoas.Routes.RouteMetadataProviders.SirenMetadataProvider
         private static object GenerateForEmbeddedRule(EntityRule rule, IActionConfiguration actionConfiguration,
             Dictionary<string, List<string>> routeRelations, object originalObject)
         {
-            var entityActionConfiguration = HypermediaControllerConfiguration.Instance.GetcontrollerActionConfiguration(rule.ControllerType, rule.ControllerAction);
+            var actionExecutedContext = ActionCallContext.Get<HttpActionExecutedContext>();
+            var entityActionConfiguration = HypermediaControllerConfiguration.Instance.GetcontrollerActionConfiguration(rule.ControllerType, rule.ControllerAction, actionExecutedContext.Request.Headers.Accept);
             if (entityActionConfiguration == null)
                 return null;
 

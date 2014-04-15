@@ -282,7 +282,8 @@ angular.module("hateoas", ["ngResource"])
 		return {
 			
 			transformAllResponses: function () {
-				$httpProvider.interceptors.push("HateoasInterceptor");
+			    $httpProvider.interceptors.push("HateoasInterceptor");
+			    $httpProvider.defaults.headers.common['Accept'] = 'application/vnd.siren+json, application/json, text/javascript, text/html, application/xml, text/xml, */*';
 			},
 
 			$get: ["HateoasInterface", "$q", function (HateoasInterface, $q) {

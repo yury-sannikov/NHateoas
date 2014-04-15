@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.Remoting.Messaging;
 using System.Security;
 using System.Text;
@@ -39,7 +40,7 @@ namespace NHateoas
                 return null;
             }
 
-            var actionConfiguration = HypermediaControllerConfiguration.Instance.GetcontrollerActionConfiguration(controllerType, actionDescriptor.MethodInfo);
+            var actionConfiguration = HypermediaControllerConfiguration.Instance.GetcontrollerActionConfiguration(controllerType, actionDescriptor.MethodInfo, actionExecutedContext.Request.Headers.Accept);
 
             if (actionConfiguration == null)
                 return null;
@@ -55,7 +56,7 @@ namespace NHateoas
 
             var transformed = TransformPayload(actionConfiguration, payload);
 
-            return new ObjectContent(transformed.GetType(), transformed, objectContent.Formatter);
+            return new ObjectContent(transformed.GetType(), transformed, objectContent.Formatter, new MediaTypeHeaderValue(actionConfiguration.MetadataProvider.ContentType));
         }
 
         public static object TransformPayload(IActionConfiguration actionConfiguration, object payload)
